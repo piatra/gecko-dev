@@ -1,0 +1,11 @@
+# Running the tests
+
+## Unit tests
+
+## Functional tests
+
+Set `LOOP_SERVER` environment variable to a (loop server clone)[https://github.com/mozilla-services/loop-server]
+
+From the top level directory run
+
+`./mach marionette-test browser/components/loop/test/functional`
