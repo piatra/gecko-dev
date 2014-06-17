@@ -49,6 +49,13 @@ loop.panel = (function(_, mozL10n) {
     }
   });
 
+  var ToSView = sharedViews.BaseView.extend({
+    template: _.template([
+      '<p data-l10n-id="tos"',
+      'data-l10n-args=\'{"tos_url": "https://accounts.firefox.com/en-us/legal/terms"}\'></p>'
+    ].join(''))
+  });
+
   /**
    * Panel view.
    */
@@ -63,6 +70,7 @@ loop.panel = (function(_, mozL10n) {
       '    <button type="submit" class="get-url btn btn-success"',
       '       data-l10n-id="get_a_call_url"></button>',
       '  </form>',
+      '  <p class="tos"></p>',
       '  <p class="result hide">',
       '    <input id="call-url" type="url" readonly>',
       '    <a class="go-back btn btn-info" href="" data-l10n-id="new_url"></a>',
@@ -158,6 +166,7 @@ loop.panel = (function(_, mozL10n) {
       this.$el.html(this.template());
       // Do not Disturb sub view
       this.dndView = new DoNotDisturbView({el: this.$(".dnd")}).render();
+      this.tosView = new ToSView({el: this.$(".tos")}).render();
       return this;
     }
   });
@@ -243,6 +252,7 @@ loop.panel = (function(_, mozL10n) {
     init: init,
     PanelView: PanelView,
     DoNotDisturbView: DoNotDisturbView,
-    PanelRouter: PanelRouter
+    PanelRouter: PanelRouter,
+    ToSView: ToSView
   };
 })(_, document.mozL10n);

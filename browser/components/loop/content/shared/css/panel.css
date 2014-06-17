@@ -76,6 +76,11 @@
   padding-top: 6px;
 }
 
+.tos {
+  font-size: .6rem;
+  color: #a8a8a8;
+}
+
 /* Specific cases */
 
 .panel #messages .alert {

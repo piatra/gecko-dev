@@ -323,5 +323,33 @@ describe("loop.panel", function() {
         sinon.assert.calledOnce(renderDnD);
       });
     });
+
+    describe('loop.panel.ToSView', function() {
+
+      var view;
+
+      beforeEach(function() {
+        $("#fixtures").append('<div id="tos-view"></div>');
+
+        view = new loop.panel.ToSView({el: $("#tos-view")});
+      });
+
+      it("should render ToS view", function() {
+        var renderToS = sandbox.stub(loop.panel.ToSView.prototype,
+                                             "render");
+        view.render();
+
+        sinon.assert.calledOnce(renderToS);
+      });
+
+      it("should have text with legal guidance", function() {
+
+        view.render();
+
+        expect(view.$('.tos').text().length).to.be.gt(0);
+
+      });
+
+    });
   });
 });
