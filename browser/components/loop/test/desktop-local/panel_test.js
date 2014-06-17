@@ -326,30 +326,20 @@ describe("loop.panel", function() {
 
     describe('loop.panel.ToSView', function() {
 
-      var view;
-
       beforeEach(function() {
         $("#fixtures").append('<div id="tos-view"></div>');
-
-        view = new loop.panel.ToSView({el: $("#tos-view")});
       });
 
-      it("should render ToS view", function() {
-        var renderToS = sandbox.stub(loop.panel.ToSView.prototype,
-                                             "render");
-        view.render();
+      it("should call render on the BaseView to ensure " +
+        "localized content rendered", function() {
+        var renderSpy = sandbox.spy(loop.shared.views.BaseView.prototype,
+          "render");
 
-        sinon.assert.calledOnce(renderToS);
+        new loop.panel.ToSView({el: $("#tos-view")}).render();
+
+        sinon.assert.calledOnce(renderSpy);
+        sinon.assert.calledWithExactly(renderSpy);
       });
-
-      it("should have text with legal guidance", function() {
-
-        view.render();
-
-        expect(view.$('.tos').text().length).to.be.gt(0);
-
-      });
-
     });
   });
 });
