@@ -56,7 +56,13 @@ loop.panel = (function(_, mozL10n) {
       '    {"terms_of_use_url": "https://accounts.firefox.com/legal/terms",',
       '     "privacy_notice_url": "https://accounts.firefox.com/legal/privacy"',
       '    }\'></p>'
-    ].join(''))
+    ].join('')),
+
+    render: function() {
+      this.$el.html(this.template());
+      navigator.mozLoop.setLoopCharPref('seenToS', 'seen');
+      return this;
+    }
   });
 
   /**

@@ -45,7 +45,8 @@ describe("loop.panel", function() {
       },
       get locale() {
         return "en-US";
-      }
+      },
+      setLoopCharPref: sinon.stub()
     };
     document.mozL10n.initialize(navigator.mozLoop);
   });
@@ -336,9 +337,28 @@ describe("loop.panel", function() {
     });
 
     describe('loop.panel.ToSView', function() {
+
+        beforeEach(function() {
+
+            $('#fixtures').append('<div id="#tos-view"></div>');
+
+        });
+
       // XXX Until it's possible to easily test creation of text
       // leaving this blank.  As it stands, the magic in the L10nView
       // class makes stubbing BaseView.render impractical.
+
+      it("should set the value of the loop.seenToS preference to 'seen'", function() {
+
+        var ToSView = new loop.panel.ToSView({el: $("#tos-view")});
+
+        ToSView.render();
+
+        sinon.assert.calledOnce(navigator.mozLoop.setLoopCharPref);
+        sinon.assert.calledWithExactly(navigator.mozLoop.setLoopCharPref, 'seenToS', 'seen');
+
+      });
+
     });
   });
 });
