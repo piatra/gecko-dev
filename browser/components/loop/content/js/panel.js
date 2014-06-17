@@ -51,8 +51,11 @@ loop.panel = (function(_, mozL10n) {
 
   var ToSView = sharedViews.BaseView.extend({
     template: _.template([
-      '<p data-l10n-id="tos"',
-      'data-l10n-args=\'{"tos_url": "https://accounts.firefox.com/en-us/legal/terms"}\'></p>'
+      '<p data-l10n-id="legal_text_and_links"',
+      '  data-l10n-args=\'',
+      '    {"terms_of_use_url": "https://accounts.firefox.com/legal/terms",',
+      '     "privacy_notice_url": "https://accounts.firefox.com/legal/privacy"',
+      '    }\'></p>'
     ].join(''))
   });
 

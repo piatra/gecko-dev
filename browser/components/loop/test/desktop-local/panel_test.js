@@ -324,22 +324,21 @@ describe("loop.panel", function() {
       });
     });
 
+    describe("#render", function() {
+      it("should render a ToSView", function() {
+        var renderToS = sandbox.stub(loop.panel.ToSView.prototype, "render");
+        var view = new loop.panel.PanelView({notifier: notifier});
+
+        view.render();
+
+        sinon.assert.calledOnce(renderToS);
+      });
+    });
+
     describe('loop.panel.ToSView', function() {
-
-      beforeEach(function() {
-        $("#fixtures").append('<div id="tos-view"></div>');
-      });
-
-      it("should call render on the BaseView to ensure " +
-        "localized content rendered", function() {
-        var renderSpy = sandbox.spy(loop.shared.views.BaseView.prototype,
-          "render");
-
-        new loop.panel.ToSView({el: $("#tos-view")}).render();
-
-        sinon.assert.calledOnce(renderSpy);
-        sinon.assert.calledWithExactly(renderSpy);
-      });
+      // XXX Until it's possible to easily test creation of text
+      // leaving this blank.  As it stands, the magic in the L10nView
+      // class makes stubbing BaseView.render impractical.
     });
   });
 });
