@@ -5,7 +5,7 @@
 /*global loop, sinon */
 
 var expect = chai.expect;
-var fakePref = 0;
+var fakeSeenToSPref = 0; // simulate a seenToS pref
 
 describe("loop.panel", function() {
   "use strict";
@@ -52,7 +52,7 @@ describe("loop.panel", function() {
     };
 
     sinon.stub(navigator.mozLoop, 'getLoopCharPref', function() {
-        if (fakePref == 0) {
+        if (fakeSeenToSPref == 0) {
             return null;
         }
         return 'seen';
@@ -382,9 +382,8 @@ describe("loop.panel", function() {
 
       it("should not render when the value of loop.seenToS is set to 'seen'", function() {
 
-        var renderToS = sandbox.spy(loop.panel.ToSView.prototype, "render");
         var ToSView = new loop.panel.ToSView({el: $('#tos-view')});
-        fakePref = 1;
+        fakeSeenToSPref = 1;
 
         ToSView.render();
 
