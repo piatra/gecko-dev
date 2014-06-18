@@ -59,8 +59,10 @@ loop.panel = (function(_, mozL10n) {
     ].join('')),
 
     render: function() {
-      this.$el.html(this.template());
-      navigator.mozLoop.setLoopCharPref('seenToS', 'seen');
+      if (navigator.mozLoop.getLoopCharPref('seenToS') === null) {
+        this.$el.html(this.template());
+        navigator.mozLoop.setLoopCharPref('seenToS', 'seen');
+      }
       return this;
     }
   });

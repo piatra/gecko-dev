@@ -5,6 +5,7 @@
 /*global loop, sinon */
 
 var expect = chai.expect;
+var fakePref = 0;
 
 describe("loop.panel", function() {
   "use strict";
@@ -46,8 +47,17 @@ describe("loop.panel", function() {
       get locale() {
         return "en-US";
       },
-      setLoopCharPref: sinon.stub()
+      setLoopCharPref: sinon.stub(),
+      getLoopCharPref: function () {}
     };
+
+    sinon.stub(navigator.mozLoop, 'getLoopCharPref', function() {
+        if (fakePref == 0) {
+            return null;
+        }
+        return 'seen';
+    })
+
     document.mozL10n.initialize(navigator.mozLoop);
   });
 
@@ -356,6 +366,29 @@ describe("loop.panel", function() {
 
         sinon.assert.calledOnce(navigator.mozLoop.setLoopCharPref);
         sinon.assert.calledWithExactly(navigator.mozLoop.setLoopCharPref, 'seenToS', 'seen');
+
+      });
+
+      it("should render when the value of loop.seenToS is not set", function() {
+
+        var renderToS = sandbox.spy(loop.panel.ToSView.prototype, "render");
+        var ToSView = new loop.panel.ToSView({el: $('#tos-view')});
+
+        ToSView.render();
+
+        sinon.assert.calledOnce(renderToS);
+
+      });
+
+      it("should not render when the value of loop.seenToS is set to 'seen'", function() {
+
+        var renderToS = sandbox.spy(loop.panel.ToSView.prototype, "render");
+        var ToSView = new loop.panel.ToSView({el: $('#tos-view')});
+        fakePref = 1;
+
+        ToSView.render();
+
+        expect(navigator.mozLoop.setLoopCharPref.callCount).to.equal(0);
 
       });
 
