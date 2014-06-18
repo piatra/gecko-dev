@@ -26,7 +26,9 @@ describe("loop.shared.models", function() {
       apiKey:       "apiKey"
     };
     fakeSession = _.extend({
-      connect: sandbox.spy(),
+      connect: function () {},
+      endSession: sandbox.stub(),
+      set: sandbox.stub(),
       disconnect: sandbox.spy(),
       unpublish: sandbox.spy()
     }, Backbone.Events);
@@ -163,13 +165,39 @@ describe("loop.shared.models", function() {
           sinon.assert.calledOnce(fakeSDK.initSession);
         });
 
-        describe("Session events", function() {
-          it("should trigger a session:connected event on sessionConnected",
-            function(done) {
-              model.once("session:connected", function(){ done(); });
+        it("should call connect", function() {
+          sandbox.stub(fakeSession, "connect");
 
-              fakeSession.trigger("sessionConnected");
+          model.startSession();
+
+          sinon.assert.calledOnce(fakeSession.connect);
+        });
+
+        it("should set ongoing to true when no error is called back", function() {
+          sandbox.stub(fakeSession, "connect", function(key, token, cb) {
+            cb(null);
+          });
+          sinon.stub(model, "set");
+
+          model.startSession();
+
+          sinon.assert.calledWith(model.set, "ongoing", true);
+        });
+
+        describe("Session events", function() {
+
+          it("should trigger a fail event when an error is called back", function() {
+            sandbox.stub(fakeSession, "connect", function(key, token, cb) {
+              cb({
+                error: true
+              });
             });
+            sinon.stub(model, "endSession");
+
+            model.startSession();
+
+            sinon.assert.calledOnce(model.endSession);
+          });
 
           it("should trigger a session:ended event on sessionDisconnected",
             function(done) {

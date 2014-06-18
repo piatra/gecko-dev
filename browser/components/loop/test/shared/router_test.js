@@ -125,6 +125,12 @@ describe("loop.shared.router", function() {
         });
       });
 
+      it("should warn the user when .connect() call fails", function() {
+        conversation.trigger("session:connection-error");
+
+        sinon.assert.calledOnce(notifier.error);
+      });
+
       it("should call startCall() once the call session is ready", function() {
         conversation.trigger("session:ready");
 
