@@ -185,18 +185,17 @@ describe("loop.shared.models", function() {
               sinon.assert.calledWith(model.set, "ongoing", true);
             });
 
-        //it("should trigger session:connected when no error is called back",
-            //function() {
-              //fakeSession.connect = function(key, token, cb) {
-                //cb(null);
-              //};
-              //sandbox.stub(model, "trigger");
+        it("should trigger session:connected when no error is called back",
+            function() {
+              fakeSession.connect = function(key, token, cb) {
+                cb(null);
+              };
+              sandbox.stub(model, "trigger");
 
-              //model.startSession();
+              model.startSession();
 
-              //sinon.assert.calledOnce(model.trigger);
-              //sinon.assert.calledWith(model.trigger, "session:connected");
-            //});
+              sinon.assert.calledWithExactly(model.trigger, "session:connected");
+            });
 
         describe("Session events", function() {
 
