@@ -111,10 +111,11 @@ loop.shared.router = (function(l10n) {
 
     /**
      * Notify the user that the connection was not possible
+     * @param {{code: number, message: string}} error
      */
     _notifyError: function(error) {
       console.log(error);
-      this._notifier.error("An error has occured while trying to connect");
+      this._notifier.errorL10n("connection_error_see_console_notification");
       this.endCall();
     },
 

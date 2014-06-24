@@ -166,38 +166,70 @@ describe("loop.shared.models", function() {
         });
 
         it("should call connect", function() {
-          sandbox.stub(fakeSession, "connect");
+          fakeSession.connect = sandbox.stub();
 
           model.startSession();
 
           sinon.assert.calledOnce(fakeSession.connect);
         });
 
-        it("should set ongoing to true when no error is called back", function() {
-          sandbox.stub(fakeSession, "connect", function(key, token, cb) {
-            cb(null);
-          });
-          sinon.stub(model, "set");
+        it("should set ongoing to true when no error is called back",
+            function() {
+              fakeSession.connect = function(key, token, cb) {
+                cb(null);
+              };
+              sinon.stub(model, "set");
 
-          model.startSession();
+              model.startSession();
 
-          sinon.assert.calledWith(model.set, "ongoing", true);
-        });
+              sinon.assert.calledWith(model.set, "ongoing", true);
+            });
+
+        //it("should trigger session:connected when no error is called back",
+            //function() {
+              //fakeSession.connect = function(key, token, cb) {
+                //cb(null);
+              //};
+              //sandbox.stub(model, "trigger");
+
+              //model.startSession();
+
+              //sinon.assert.calledOnce(model.trigger);
+              //sinon.assert.calledWith(model.trigger, "session:connected");
+            //});
 
         describe("Session events", function() {
 
-          it("should trigger a fail event when an error is called back", function() {
-            sandbox.stub(fakeSession, "connect", function(key, token, cb) {
-              cb({
-                error: true
-              });
+          it("should trigger a fail event when an error is called back",
+            function() {
+              fakeSession.connect = function(key, token, cb) {
+                cb({
+                  error: true
+                });
+              };
+              sinon.stub(model, "endSession");
+
+              model.startSession();
+
+              sinon.assert.calledOnce(model.endSession);
+              sinon.assert.calledWithExactly(model.endSession);
             });
-            sinon.stub(model, "endSession");
 
-            model.startSession();
+          it("should trigger session:connection-error event when an error is" +
+            " called back", function() {
+              fakeSession.connect = function(key, token, cb) {
+                cb({
+                  error: true
+                });
+              };
+              sandbox.stub(model, "trigger");
 
-            sinon.assert.calledOnce(model.endSession);
-          });
+              model.startSession();
+
+              sinon.assert.calledOnce(model.trigger);
+              sinon.assert.calledWithExactly(model.trigger,
+                          "session:connection-error", sinon.match.object);
+            });
 
           it("should trigger a session:ended event on sessionDisconnected",
             function(done) {

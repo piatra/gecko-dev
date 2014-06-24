@@ -63,8 +63,7 @@ describe("loop.shared.views", function() {
       };
       fakeSDK = {
         initPublisher: sandbox.stub().returns(fakePublisher),
-        initSession: sandbox.stub().returns(fakeSession),
-        on: sandbox.stub()
+        initSession: sandbox.stub().returns(fakeSession)
       };
       model = new sharedModels.ConversationModel(fakeSessionData, {
         sdk: fakeSDK

@@ -125,10 +125,22 @@ describe("loop.shared.router", function() {
         });
       });
 
-      it("should warn the user when .connect() call fails", function() {
-        conversation.trigger("session:connection-error");
+      describe("session:connection-error", function() {
 
-        sinon.assert.calledOnce(notifier.error);
+        it("should warn the user when .connect() call fails", function() {
+          conversation.trigger("session:connection-error");
+
+          sinon.assert.calledOnce(notifier.errorL10n);
+          sinon.assert.calledWithExactly(notifier.errorL10n, sinon.match.string);
+        });
+
+        it("should invoke endCall()", function() {
+          conversation.trigger("session:connection-error");
+
+          sinon.assert.calledOnce(router.endCall);
+          sinon.assert.calledWithExactly(router.endCall);
+        });
+
       });
 
       it("should call startCall() once the call session is ready", function() {
