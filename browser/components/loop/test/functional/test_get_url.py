@@ -54,7 +54,10 @@ class TestGetUrl(MarionetteTestCase):
         button.click()
 
         # switch to the frame
-        frame = self.marionette.find_element("id", "loop-panel-frame")
+        #from ipdb import set_trace
+        #set_trace()
+        frame = self.marionette.find_element("id", "loop")
+        #fs = self.marionette.find_elements("tag name", "iframe")
         self.marionette.switch_to_frame(frame)
 
     # taken from https://github.com/mozilla-b2g/gaia/blob/master/tests/python/gaia-ui-tests/gaiatest/gaia_test.py#L858
