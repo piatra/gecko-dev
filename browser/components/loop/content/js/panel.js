@@ -23,27 +23,57 @@ loop.panel = (function(_, mozL10n) {
    */
   var DoNotDisturbView = sharedViews.BaseView.extend({
     template: _.template([
-      '<label>',
-      '  <input type="checkbox" <%- checked %>>',
-      '  <span data-l10n-id="do_not_disturb"></span>',
-      '</label>',
+      '<div class="do-not-disturb">',
+      '  <p class="dnd-status"><i class="status <%- statusIcon %>">',
+      '    </i><%- currentUserStatus %>',
+      '  </p>',
+      '  <ul class="dnd-menu hide">',
+      '    <li class="dnd-menu-item dnd-make-available">',
+      '      <i class="status status-available"></i>',
+      '      <span data-l10n-id="display_name_available_status"></span>',
+      '    </li>',
+      '    <li class="dnd-menu-item dnd-make-unavailable">',
+      '      <i class="status status-unavailable"></i>',
+      '      <span data-l10n-id="display_name_unavailable_status"></span>',
+      '    </li>',
+      '  </ul>',
+      '</div>'
     ].join('')),
 
     events: {
-      "click input[type=checkbox]": "toggle"
+      "click .dnd-make-available": "toggleAvailable",
+      "click .dnd-make-unavailable": "toggleUnavailable",
+      "click .dnd-status": "displayDnDMenu",
+      "mouseleave": "hideDnDMenu"
+    },
+
+    displayDnDMenu: function() {
+      $('.dnd-menu', this.$el).removeClass('hide');
+    },
+
+    hideDnDMenu: function() {
+      $('.dnd-menu', this.$el).addClass('hide');
     },
 
     /**
      * Toggles mozLoop activation status.
      */
-    toggle: function() {
-      navigator.mozLoop.doNotDisturb = !navigator.mozLoop.doNotDisturb;
+    toggleAvailable: function() {
+      navigator.mozLoop.doNotDisturb = false;
+      this.hideDnDMenu();
+      this.render();
+    },
+
+    toggleUnavailable: function() {
+      navigator.mozLoop.doNotDisturb = true;
+      this.hideDnDMenu();
       this.render();
     },
 
     render: function() {
       this.$el.html(this.template({
-        checked: navigator.mozLoop.doNotDisturb ? "checked" : ""
+        currentUserStatus: navigator.mozLoop.doNotDisturb ? "Unavailable" : "Available",
+        statusIcon: navigator.mozLoop.doNotDisturb ? "status-unavailable" : "status-available"
       }));
       return this;
     }
@@ -55,20 +85,24 @@ loop.panel = (function(_, mozL10n) {
   var PanelView = sharedViews.BaseView.extend({
     template: _.template([
       '<div class="description">',
-      '  <p data-l10n-id="get_link_to_share"></p>',
+      '  <p data-l10n-id="get_link_to_share" class="description-content"></p>',
       '</div>',
       '<div class="action">',
-      '  <form class="invite">',
-      '    <input type="text" name="caller" data-l10n-id="caller" required>',
-      '    <button type="submit" class="get-url btn btn-success"',
-      '       data-l10n-id="get_a_call_url"></button>',
+      '  <form class="invite spacer">',
+      '    <div class="input-controls">',
+      '      <input type="text" class="input-call-url" name="caller"',
+      '             data-l10n-id="caller" required>',
+      '    </div>',
       '  </form>',
-      '  <p class="result hide">',
-      '    <input id="call-url" type="url" readonly>',
-      '    <a class="go-back btn btn-info" href="" data-l10n-id="new_url"></a>',
-      '  </p>',
-      '  <p class="dnd"></p>',
+      '  <div class="result hide spacer">',
+      '    <div class="input-controls">',
+      '      <input id="input-call-url" type="url" readonly>',
+      '    </div>',
+      '  </div>',
       '</div>',
+      '<div class="footer">',
+      '  <p class="dnd"></p>',
+      '</div>'
     ].join("")),
 
     className: "share generate-url",
@@ -79,12 +113,6 @@ loop.panel = (function(_, mozL10n) {
      */
     dndView: undefined,
 
-    events: {
-      "keyup input[name=caller]": "changeButtonState",
-      "submit form.invite": "getCallUrl",
-      "click a.go-back": "goBack"
-    },
-
     initialize: function(options) {
       options = options || {};
       if (!options.notifier) {
@@ -94,15 +122,19 @@ loop.panel = (function(_, mozL10n) {
       this.client = new loop.shared.Client({
         baseServerUrl: navigator.mozLoop.serverUrl
       });
+
+      // Get a conversation URL as soon as the menu drops down
+      this.getCallUrl();
     },
 
+    // XXX will go away
+    // required for backend server
     getNickname: function() {
-      return this.$("input[name=caller]").val();
+      return Math.random().toString(36).substring(5);
     },
 
-    getCallUrl: function(event) {
+    getCallUrl: function() {
       this.notifier.clear();
-      event.preventDefault();
       var callback = function(err, callUrlData) {
         this.clearPending();
         if (err) {
@@ -117,20 +149,12 @@ loop.panel = (function(_, mozL10n) {
       this.client.requestCallUrl(this.getNickname(), callback);
     },
 
-    goBack: function(event) {
-      event.preventDefault();
-      this.$(".action .result").hide();
-      this.$(".action .invite").show();
-      this.$(".description p").text(__("get_link_to_share"));
-      this.changeButtonState();
-    },
-
     onCallUrlReceived: function(callUrlData) {
       this.notifier.clear();
-      this.$(".action .invite").hide();
+      this.$(".action .invite").addClass('hide');
       this.$(".action .invite input").val("");
       this.$(".action .result input").val(callUrlData.call_url);
-      this.$(".action .result").show();
+      this.$(".action .result").removeClass('hide');
       this.$(".description p").text(__("share_link_url"));
     },
 

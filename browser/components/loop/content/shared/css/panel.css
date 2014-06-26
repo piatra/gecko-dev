@@ -15,13 +15,11 @@
 }
 
 .share {
-  background: #f2f2f2;
+  background: #fbfbfb;
 }
 
 .share .description {
-  background: #f7f7f7 url("../img/icon_32.png") no-repeat 1em 1.5em;
-  border-bottom: 1px solid #c3c3c3;
-  padding: 1em 1em 0 4em;
+  padding: 0.4em 1em;
 }
 
 .share .description .field {
@@ -39,18 +37,18 @@
   width: 180px;
 }
 
+.description-content {
+  margin: .5em 0;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: Open Sans,sans-serif;
+  color: #666;
+}
+
 .share .action {
   clear: right;
-  padding: 1em;
-  border-top: 1px solid #fafafa;
-}
-
-.share .action p {
-  margin: 0 0 1em 0;
-}
-
-.share .action p.dnd {
-  margin-top: 1em;
+  padding: 0 1em;
+  /*border-top: 1px solid #fafafa;*/
 }
 
 .share .action input[type="text"],
@@ -59,7 +57,7 @@
                              below) resets its borders to a weird beveled style;
                              defining a default 1px border solves the issue. */
   font-size: .9em;
-  width: 65%;
+  width: 100%;
   padding: .5em;
 }
 
@@ -81,3 +79,86 @@
 .panel #messages .alert {
   margin-bottom: 0;
 }
+
+/* Call URL input */
+
+.input-controls {
+  display: flex;
+  align-items: center;
+}
+
+.input-call-url {
+  flex: 4;
+  border: 1px solid #CCC;
+  border-radius: 2px;
+}
+
+/* DnD menu */
+
+.dnd-status {
+  border: 1px solid transparent;
+  padding: .1em .2em;
+  margin: .3em 0;
+}
+
+.dnd-status:hover {
+  border: 1px solid #DDD;
+  background: #F1F1F1;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.do-not-disturb {
+  position: relative;
+}
+
+.dnd-menu {
+  position: absolute;
+  top: -32px;
+  left: 0;
+  background: #fdfdfd;
+  box-shadow: 0 1px 3px rgba(0,0,0,.3);
+  list-style: none;
+  padding: .1em;
+  width: 110px;
+}
+
+.dnd-menu-item {
+  text-align: left;
+  margin: .3em 0;
+  padding: .2em .5em;
+  cursor: pointer;
+}
+
+/* Status badges -- Available/Unavailable */
+
+.status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 .3em;
+}
+
+.status-available {
+  background: #6cb23e;
+}
+
+.status-unavailable {
+  border: 2px solid #ddd;
+}
+
+/* Footer */
+
+.footer {
+  padding: 0 10px;
+  font-size: 12px;
+  border-top: 1px solid #D1D1D1;
+  background: #EAEAEA;
+  color: #7F7F7F;
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+  flex-direction: row;
+}
+

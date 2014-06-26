@@ -45,7 +45,8 @@ describe("loop.panel", function() {
       },
       get locale() {
         return "en-US";
-      }
+      },
+      ensureRegistered: sandbox.stub()
     };
     document.mozL10n.initialize(navigator.mozLoop);
   });
@@ -97,7 +98,9 @@ describe("loop.panel", function() {
         it("should clear all pending notifications", function() {
           router.reset();
 
-          sinon.assert.calledOnce(notifier.clear);
+          // once called by PanelRouter once by PanelView
+          // when it calls for a new url
+          sinon.assert.calledTwice(notifier.clear);
         });
 
         it("should load the home view", function() {
@@ -171,34 +174,36 @@ describe("loop.panel", function() {
         navigator.mozLoop.doNotDisturb = false;
       });
 
-      it("should toggle the value of mozLoop.doNotDisturb", function() {
-        view.toggle();
+      it("should toggle the value of mozLoop.doNotDisturb to available", function() {
+        navigator.mozLoop.doNotDisturb = true;
+
+        view.toggleAvailable();
+
+        expect(navigator.mozLoop.doNotDisturb).eql(false);
+      });
+
+      it("should update the DnD checkbox value to unavailable", function() {
+        navigator.mozLoop.doNotDisturb = false;
+
+        view.toggleUnavailable();
 
         expect(navigator.mozLoop.doNotDisturb).eql(true);
       });
 
-      it("should update the DnD checkbox value", function() {
-        view.toggle();
+      it("should hide the menu when you select available state", function() {
+        var hideDnDMenu = sandbox.stub(loop.panel.DoNotDisturbView.prototype,
+                                     "hideDnDMenu");
+        view.toggleAvailable();
 
-        expect(view.$("input").is(":checked")).eql(true);
-      });
-    });
-
-    describe("render", function() {
-      it("should check the dnd checkbox when dnd is enabled", function() {
-        navigator.mozLoop.doNotDisturb = false;
-
-        view.render();
-
-        expect(view.$("input").is(":checked")).eql(false);
+        sinon.assert.calledOnce(hideDnDMenu);
       });
 
-      it("should uncheck the dnd checkbox when dnd is disabled", function() {
-        navigator.mozLoop.doNotDisturb = true;
+      it("should hide the menu when you select unavailable state", function() {
+        var hideDnDMenu = sandbox.stub(loop.panel.DoNotDisturbView.prototype,
+                                     "hideDnDMenu");
+        view.toggleUnavailable();
 
-        view.render();
-
-        expect(view.$("input").is(":checked")).eql(true);
+        sinon.assert.calledOnce(hideDnDMenu);
       });
     });
   });
@@ -209,12 +214,28 @@ describe("loop.panel", function() {
     });
 
     describe("#getCallUrl", function() {
+      it("should make a request for getCallUrl as soon as the panel opens",
+          function(){
+            var getCallUrl = sandbox.stub(loop.panel.PanelView.prototype,
+                                          "getCallUrl");
+
+            var view = new loop.panel.PanelView({notifier: notifier});
+
+            sinon.assert.calledOnce(getCallUrl);
+          });
+
+      it("should set a pending state while fetching the url", function() {
+        var setPending = sandbox.stub(loop.panel.PanelView.prototype,
+                                          "setPending");
+        var view = new loop.panel.PanelView({notifier: notifier}).render();
+
+        sinon.assert.calledOnce(setPending);
+      });
+
       it("should reset all pending notifications", function() {
         var requestCallUrl = sandbox.stub(loop.shared.Client.prototype,
                                           "requestCallUrl");
         var view = new loop.panel.PanelView({notifier: notifier}).render();
-
-        view.getCallUrl({preventDefault: sandbox.spy()});
 
         sinon.assert.calledOnce(view.notifier.clear, "clear");
       });
@@ -223,12 +244,10 @@ describe("loop.panel", function() {
         var requestCallUrl = sandbox.stub(loop.shared.Client.prototype,
                                           "requestCallUrl");
         var view = new loop.panel.PanelView({notifier: notifier});
-        sandbox.stub(view, "getNickname").returns("foo");
-
-        view.getCallUrl({preventDefault: sandbox.spy()});
+        sandbox.stub(view, "getNickname");
 
         sinon.assert.calledOnce(requestCallUrl);
-        sinon.assert.calledWith(requestCallUrl, "foo");
+        sinon.assert.calledWith(requestCallUrl, sinon.match.string);
       });
 
       it("should set the call url form in a pending state", function() {
@@ -237,8 +256,6 @@ describe("loop.panel", function() {
         sandbox.stub(loop.panel.PanelView.prototype, "setPending");
 
         var view = new loop.panel.PanelView({notifier: notifier});
-
-        view.getCallUrl({preventDefault: sandbox.spy()});
 
         sinon.assert.calledOnce(view.setPending);
       });
@@ -253,8 +270,6 @@ describe("loop.panel", function() {
             });
           var view = new loop.panel.PanelView({notifier: notifier});
 
-          view.getCallUrl({preventDefault: sandbox.spy()});
-
           sinon.assert.calledOnce(view.clearPending);
         });
 
@@ -264,8 +279,6 @@ describe("loop.panel", function() {
             cb("fake error");
           });
         var view = new loop.panel.PanelView({notifier: notifier});
-
-        view.getCallUrl({preventDefault: sandbox.spy()});
 
         sinon.assert.calledOnce(view.notifier.errorL10n);
         sinon.assert.calledWithExactly(view.notifier.errorL10n,
@@ -289,23 +302,17 @@ describe("loop.panel", function() {
 
         view.onCallUrlReceived(callUrlData);
 
-        expect(view.$("#call-url").val()).eql("http://call.me/");
+        expect(view.$("#input-call-url").val()).eql("http://call.me/");
       });
 
       it("should reset all pending notifications", function() {
         var view = new loop.panel.PanelView({notifier: notifier}).render();
-
-        view.onCallUrlReceived(callUrlData);
 
         sinon.assert.calledOnce(view.notifier.clear);
       });
     });
 
     describe("events", function() {
-      describe("goBack", function() {
-        it("should update the button state");
-      });
-
       describe("changeButtonState", function() {
          it("should do set the disabled state if there is no text");
          it("should do set the enabled state if there is text");
@@ -325,3 +332,4 @@ describe("loop.panel", function() {
     });
   });
 });
+
