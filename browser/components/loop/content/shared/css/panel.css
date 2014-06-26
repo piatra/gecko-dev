@@ -101,10 +101,65 @@
   border-radius: 2px;
 }
 
+/* DnD menu */
+
+.dnd-status {
+  border: 1px solid transparent;
+  padding: .1em .2em;
+  margin: .3em 0;
+}
+
+.dnd-status:hover {
+  border: 1px solid #DDD;
+  background: #F1F1F1;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.do-not-disturb {
+  position: relative;
+}
+
+.dnd-menu {
+  position: absolute;
+  top: -30px;
+  left: 0;
+  background: #fdfdfd;
+  box-shadow: 0 1px 3px rgba(0,0,0,.3);
+  list-style: none;
+  padding: .1em;
+  width: 110px;
+}
+
+.dnd-menu-item {
+  text-align: left;
+  margin: .3em 0;
+  padding: .2em .5em;
+  cursor: pointer;
+}
+
+/* Status badges -- Available/Unavailable */
+
+.status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 .3em;
+}
+
+.status-available {
+  background: #6cb23e;
+}
+
+.status-unavailable {
+  border: 2px solid #ddd;
+}
+
 /* Footer */
 
 .footer {
-  padding: 5px 10px;
+  padding: 0 10px;
   font-size: 12px;
   border-top: 1px solid #D1D1D1;
   background: #EAEAEA;

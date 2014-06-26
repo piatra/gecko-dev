@@ -23,27 +23,54 @@ loop.panel = (function(_, mozL10n) {
    */
   var DoNotDisturbView = sharedViews.BaseView.extend({
     template: _.template([
-      '<label>',
-      '  <input type="checkbox" <%- checked %>>',
-      '  <span data-l10n-id="do_not_disturb"></span>',
-      '</label>',
+      //'<label>',
+      //'  <input type="checkbox" <%- checked %>>',
+      //'  <span data-l10n-id="do_not_disturb"></span>',
+      //'</label>',
+      '<div class="do-not-disturb">',
+      '  <p class="dnd-status"><i class="status <%- statusIcon %>"></i><%- currentUserStatus %></p>',
+      //'  <input type="checkbox" class="hide" <%- checked %>>',
+      '  <ul class="dnd-menu hide">',
+      '    <li class="dnd-menu-item dnd-make-available"><i class="status status-available"></i>Available</li>',
+      '    <li class="dnd-menu-item dnd-make-unavailable"><i class="status status-unavailable"></i>Unavailable</li>',
+      '  </ul>',
+      '</div>'
     ].join('')),
 
     events: {
-      "click input[type=checkbox]": "toggle"
+      "click .dnd-make-available": "toggleAvailable",
+      "click .dnd-make-unavailable": "toggleUnavailable",
+      "click .dnd-status": "displayDnDMenu",
+      "mouseleave": "hideDnDMenu"
+    },
+
+    displayDnDMenu: function() {
+      $('.dnd-menu', this.$el).removeClass('hide');
+    },
+
+    hideDnDMenu: function() {
+      $('.dnd-menu', this.$el).addClass('hide');
     },
 
     /**
      * Toggles mozLoop activation status.
      */
-    toggle: function() {
-      navigator.mozLoop.doNotDisturb = !navigator.mozLoop.doNotDisturb;
+    toggleAvailable: function() {
+      navigator.mozLoop.doNotDisturb = true;
+      this.hideDnDMenu();
+      this.render();
+    },
+
+    toggleUnavailable: function() {
+      navigator.mozLoop.doNotDisturb = false;
+      this.hideDnDMenu();
       this.render();
     },
 
     render: function() {
       this.$el.html(this.template({
-        checked: navigator.mozLoop.doNotDisturb ? "checked" : ""
+        currentUserStatus: navigator.mozLoop.doNotDisturb ? "Available" : "Unavailable",
+        statusIcon: navigator.mozLoop.doNotDisturb ? "status-available" : "status-unavailable"
       }));
       return this;
     }
