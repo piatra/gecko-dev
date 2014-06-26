@@ -15,13 +15,11 @@
 }
 
 .share {
-  background: #f2f2f2;
+  background: #fbfbfb;
 }
 
 .share .description {
-  /*background: #f7f7f7 url("../img/icon_32.png") no-repeat 1em 1.5em;*/
-  /*border-bottom: 1px solid #c3c3c3;*/
-  padding: 0 1em;
+  padding: 0.4em 1em;
 }
 
 .share .description .field {
@@ -90,6 +88,19 @@
   margin-bottom: 0;
 }
 
+/* Call URL input */
+
+.input-controls {
+  display: flex;
+  align-items: center;
+}
+
+.input-call-url {
+  flex: 4;
+  border: 1px solid #CCC;
+  border-radius: 2px;
+}
+
 /* Footer */
 
 .footer {
@@ -100,7 +111,7 @@
   color: #7F7F7F;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   margin-top: auto;
   flex-direction: row;
 }
+

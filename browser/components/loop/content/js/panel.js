@@ -59,22 +59,30 @@ loop.panel = (function(_, mozL10n) {
       '</div>',
       '<div class="action">',
       '  <form class="invite">',
-      '    <input type="text" name="caller" data-l10n-id="caller" required>',
+      '    <div class="input-controls">',
+      '      <input type="text" class="input-call-url" name="caller"',
+      '             data-l10n-id="caller" required>',
+      '    </div>',
       '    <div class="button-group">',
-      '      <button type="submit" class="get-url btn btn-info button-group-item"',
+      '      <button type="submit" class="get-url btn btn-info',
+      '              button-group-item"',
       '         data-l10n-id="get_a_call_url"></button>',
-      '      <button class="btn btn-info button-group-item"',
+      '      <button class="btn btn-info button-group-item hide"',
       '         data-l10n-id="copy_call_url_button"></button>',
       '    </div>',
       '  </form>',
-      '  <p class="result hide">',
-      '    <input id="call-url" type="url" readonly>',
-      '    <a class="go-back btn btn-info" href="" data-l10n-id="new_url"></a>',
-      '  </p>',
-      '  <p class="dnd"></p>',
+      '  <div class="result hide">',
+      '    <div class="input-controls">',
+      '      <input id="input-call-url" type="url" readonly>',
+      '    </div>',
+      '    <div class="button-group">',
+      '      <button class="button-group-item go-back btn btn-info"',
+      '              data-l10n-id="new_url"></button>',
+      '    </div>',
+      '  </div>',
       '</div>',
       '<div class="footer">',
-      ' Guest - available ',
+      '  <p class="dnd"></p>',
       '</div>'
     ].join("")),
 
@@ -89,7 +97,7 @@ loop.panel = (function(_, mozL10n) {
     events: {
       "keyup input[name=caller]": "changeButtonState",
       "submit form.invite": "getCallUrl",
-      "click a.go-back": "goBack"
+      "click .go-back": "goBack"
     },
 
     initialize: function(options) {
@@ -126,18 +134,18 @@ loop.panel = (function(_, mozL10n) {
 
     goBack: function(event) {
       event.preventDefault();
-      this.$(".action .result").hide();
-      this.$(".action .invite").show();
+      this.$(".action .result").addClass('hide');
+      this.$(".action .invite").removeClass('hide');
       this.$(".description p").text(__("get_link_to_share"));
       this.changeButtonState();
     },
 
     onCallUrlReceived: function(callUrlData) {
       this.notifier.clear();
-      this.$(".action .invite").hide();
+      this.$(".action .invite").addClass('hide');
       this.$(".action .invite input").val("");
       this.$(".action .result input").val(callUrlData.call_url);
-      this.$(".action .result").show();
+      this.$(".action .result").removeClass('hide');
       this.$(".description p").text(__("share_link_url"));
     },
 
