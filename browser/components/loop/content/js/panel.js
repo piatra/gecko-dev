@@ -55,13 +55,17 @@ loop.panel = (function(_, mozL10n) {
   var PanelView = sharedViews.BaseView.extend({
     template: _.template([
       '<div class="description">',
-      '  <p data-l10n-id="get_link_to_share"></p>',
+      '  <p data-l10n-id="get_link_to_share" class="description-content"></p>',
       '</div>',
       '<div class="action">',
       '  <form class="invite">',
       '    <input type="text" name="caller" data-l10n-id="caller" required>',
-      '    <button type="submit" class="get-url btn btn-success"',
-      '       data-l10n-id="get_a_call_url"></button>',
+      '    <div class="button-group">',
+      '      <button type="submit" class="get-url btn btn-info button-group-item"',
+      '         data-l10n-id="get_a_call_url"></button>',
+      '      <button class="btn btn-info button-group-item"',
+      '         data-l10n-id="copy_call_url_button"></button>',
+      '    </div>',
       '  </form>',
       '  <p class="result hide">',
       '    <input id="call-url" type="url" readonly>',
@@ -69,6 +73,9 @@ loop.panel = (function(_, mozL10n) {
       '  </p>',
       '  <p class="dnd"></p>',
       '</div>',
+      '<div class="footer">',
+      ' Guest - available ',
+      '</div>'
     ].join("")),
 
     className: "share generate-url",
