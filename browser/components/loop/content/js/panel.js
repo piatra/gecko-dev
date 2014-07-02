@@ -41,7 +41,7 @@ loop.panel = (function(_, mozL10n) {
       var status = this.state.doNotDisturb ? 'Unavailable' : 'Available';
       // XXX https://github.com/facebook/react/issues/310 for === htmlFor
       return (
-        React.DOM.div(null, 
+        React.DOM.div(null,
           React.DOM.input( {type:"checkbox", checked:this.state.doNotDisturb,
                  id:"dnd-component", onChange:this.handleCheckboxChange} ),
           React.DOM.label( {htmlFor:"dnd-component"}, status)
@@ -59,8 +59,8 @@ loop.panel = (function(_, mozL10n) {
 
     render: function() {
       return (
-        React.DOM.div( {className:"share generate-url"}, 
-          React.DOM.div( {className:"description"}, 
+        React.DOM.div( {className:"share generate-url"},
+          React.DOM.div( {className:"description"},
             React.DOM.p(null, this.props.summary)
           ),
           React.DOM.div(null, this.props.children)
@@ -87,7 +87,7 @@ loop.panel = (function(_, mozL10n) {
       // readOnly attr will suppress a warning regarding this issue
       // from the react lib.
       return (
-        PanelContainer( {summary:__("share_link_url")}, 
+        PanelContainer( {summary:__("share_link_url")},
           React.DOM.input( {value:this.props.callUrl, readOnly:"true"} ),
           React.DOM.button( {className:"btn btn-success", 'data-l10n-id':"new_url",
                   onClick:this.handleButtonClick} )
@@ -113,7 +113,7 @@ loop.panel = (function(_, mozL10n) {
       var callback = function(err, callUrlData) {
         this.setState({pending: false});
         if (err) {
-          this.notifier.errorL10n("unable_retrieve_url");
+          this.props.notifier.errorL10n("unable_retrieve_url");
           return;
         }
         this.onCallUrlReceived(callUrlData);
@@ -139,7 +139,7 @@ loop.panel = (function(_, mozL10n) {
       // If we don't display the form
       var cx = React.addons.classSet;
       return (
-        PanelContainer( {summary:__("get_link_to_share")}, 
+        PanelContainer( {summary:__("get_link_to_share")},
           React.DOM.form( {className:"invite", onSubmit:this.handleFormSubmit}, 
             React.DOM.input( {type:"text", name:"caller", ref:"caller", required:"required",
                    className:cx({'pending': this.state.pending}),
@@ -183,7 +183,7 @@ loop.panel = (function(_, mozL10n) {
 
     render: function() {
       return (
-        React.DOM.div(null, 
+        React.DOM.div(null,
           CallUrlForm( {client:this.client, notifier:this.notifier} ),
           DoNotDisturb(null )
         )
