@@ -14,6 +14,7 @@ describe("loop.shared.views", function() {
 
   var sharedModels = loop.shared.models,
       sharedViews = loop.shared.views,
+      getReactElementByClass = TestUtils.findRenderedDOMComponentWithClass,
       sandbox;
 
   beforeEach(function() {
@@ -43,23 +44,39 @@ describe("loop.shared.views", function() {
   });
 
   describe("ConversationToolbar", function() {
-    var hangup;
+    var hangup, publisher, ConversationToolbar, conversationToolbar;
 
     beforeEach(function() {
       hangup = sandbox.stub();
+      publisher = {};
+
+      ConversationToolbar = sharedViews.ConversationToolbar(
+        {hangup: hangup, publisher: publisher});
+      conversationToolbar =
+        TestUtils.renderIntoDocument(ConversationToolbar);
     });
 
     it("should call the hangup callback when the hangup button is clicked",
         function() {
-          var ConversationToolbar = sharedViews.ConversationToolbar({hangup: hangup});
-          var conversationToolbar = TestUtils.renderIntoDocument(ConversationToolbar);
-          var button = TestUtils.findRenderedDOMComponentWithTag(conversationToolbar, "button");
+          var button = getReactElementByClass(conversationToolbar,
+            "btn-hangup");
 
           TestUtils.Simulate.click(button);
 
           sinon.assert.calledOnce(hangup);
           sinon.assert.calledWithExactly(hangup);
         });
+
+    it("should stop publishing audio when the mute audio button is pressed " +
+       " and audio is being published",
+      function() {
+        var button = getReactElementByClass(conversationToolbar,
+          "btn-mute-audio");
+
+        TestUtils.Simulate.click(button);
+
+        // XXX verify here
+      });
   });
 
   describe("ConversationView", function() {

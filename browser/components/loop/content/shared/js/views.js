@@ -98,6 +98,7 @@ loop.shared.views = (function(_, OT, l10n) {
 
     propTypes: {
       hangup: React.PropTypes.func.isRequired,
+      publisher: React.PropTypes.object.isRequired
     },
 
     handleClickHangup: function() {
@@ -106,9 +107,19 @@ loop.shared.views = (function(_, OT, l10n) {
 
     render: function() {
       return (
-        React.DOM.nav( {className:"controls"}, 
-          React.DOM.button( {className:"btn stop",
-                  onClick:this.handleClickHangup}, "__(\"stop\")")
+        React.DOM.ul( {className:"controls cf"}, 
+          React.DOM.li(null, React.DOM.button( {className:"btn btn-hangup",
+                      onClick:this.handleClickHangup}, 
+                "__(\"hangup_button\")"
+              )),
+          React.DOM.li(null, React.DOM.button( {className:"btn media-control btn-mute-video",
+                      onClick:this.handlerClickMuteVideo}, 
+                "__(\"mute_local_video_button\")"
+              )),
+          React.DOM.li(null, React.DOM.button( {className:"btn media-control btn-mute-audio",
+                      onClick:this.handlerClickMuteAudio}, 
+                "__(\"mute_local_audio_button\")"
+              ))
         )
         );
       }
