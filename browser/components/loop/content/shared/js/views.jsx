@@ -90,7 +90,7 @@ loop.shared.views = (function(_, OT, l10n) {
     }
   });
 
-  var ConversationView = React.createClass({displayName: 'ConversationView',
+  var ConversationView = React.createClass({
       mixins: [Backbone.Events],
 
       componentDidMount: function() {
@@ -98,28 +98,17 @@ loop.shared.views = (function(_, OT, l10n) {
       },
 
       render: function () {
-        return React.DOM.div(null );
+        return <div />;
       }
   });
 
   var OldConversationView = BaseView.extend({
     className: "conversation",
 
-    /**
-     * Local stream object.
-     * @type {OT.Stream|null}
-     */
-    localStream: null,
-
     template: _.template([
-      '<ul class="controls cf">',
-      '  <li><button class="btn btn-hangup" ',
-      '              data-l10n-id="hangup_button"></button></li>',
-      '  <li><button class="btn media-control btn-mute-video"',
-      '              data-l10n-id="mute_local_video_button"></button></li>',
-      '  <li><button class="btn media-control btn-mute-audio"',
-      '              data-l10n-id="mute_local_audio_button"></button></li>',
-      '</ul>',
+      '<nav class="controls">',
+      '  <button class="btn stop" data-l10n-id="stop"></button>',
+      '</nav>',
       '<div class="media nested">',
       // Both these wrappers are required by the SDK; this is fragile and
       // will break if a future version of the SDK updates this generated DOM,
@@ -132,19 +121,14 @@ loop.shared.views = (function(_, OT, l10n) {
 
     // height set to "auto" to fix video layout on Google Chrome
     // @see https://bugzilla.mozilla.org/show_bug.cgi?id=991122
-    publisherConfig: {
+    videoStyles: {
       width: "100%",
       height: "auto",
-      style: {
-        bugDisplayMode: "off",
-        buttonDisplayMode: "off"
-      }
+      style: { "bugDisplayMode": "off" }
     },
 
     events: {
-      'click .btn-hangup': 'hangup',
-      'click .btn-mute-audio': 'toggleMuteAudio',
-      'click .btn-mute-video': 'toggleMuteVideo'
+      'click .btn.stop': 'hangup'
     },
 
     /**
@@ -180,9 +164,9 @@ loop.shared.views = (function(_, OT, l10n) {
       event.streams.forEach(function(stream) {
         if (stream.connection.connectionId !==
             this.model.session.connection.connectionId) {
-          this.model.session.subscribe(stream, incoming, this.publisherConfig);
+          this.model.session.subscribe(stream, incoming, this.videoStyles);
         }
-      }, this);
+      }.bind(this));
     },
 
     /**
@@ -197,54 +181,6 @@ loop.shared.views = (function(_, OT, l10n) {
     },
 
     /**
-     * Toggles audio mute state.
-     *
-     * @param  {MouseEvent} event
-     */
-    toggleMuteAudio: function(event) {
-      event.preventDefault();
-      if (!this.localStream) {
-        return;
-      }
-      var msgId;
-      var $button = this.$(".btn-mute-audio");
-      var enabled = !this.localStream.hasAudio;
-      this.publisher.publishAudio(enabled);
-      if (enabled) {
-        msgId = "mute_local_audio_button.title";
-        $button.removeClass("muted");
-      } else {
-        msgId = "unmute_local_audio_button.title";
-        $button.addClass("muted");
-      }
-      $button.attr("title", l10n.get(msgId));
-    },
-
-    /**
-     * Toggles video mute state.
-     *
-     * @param  {MouseEvent} event
-     */
-    toggleMuteVideo: function(event) {
-      event.preventDefault();
-      if (!this.localStream) {
-        return;
-      }
-      var msgId;
-      var $button = this.$(".btn-mute-video");
-      var enabled = !this.localStream.hasVideo;
-      this.publisher.publishVideo(enabled);
-      if (enabled) {
-        $button.removeClass("muted");
-        msgId = "mute_local_video_button.title";
-      } else {
-        $button.addClass("muted");
-        msgId = "unmute_local_video_button.title";
-      }
-      $button.attr("title", l10n.get(msgId));
-    },
-
-    /**
      * Publishes remote streams available once a session is connected.
      *
      * http://tokbox.com/opentok/libraries/client/js/reference/SessionConnectEvent.html
@@ -254,7 +190,7 @@ loop.shared.views = (function(_, OT, l10n) {
     publish: function(event) {
       var outgoing = this.$(".outgoing").get(0);
 
-      this.publisher = this.sdk.initPublisher(outgoing, this.publisherConfig);
+      this.publisher = this.sdk.initPublisher(outgoing, this.videoStyles);
 
       // Suppress OT GuM custom dialog, see bug 1018875
       function preventOpeningAccessDialog(event) {
@@ -262,20 +198,6 @@ loop.shared.views = (function(_, OT, l10n) {
       }
       this.publisher.on("accessDialogOpened", preventOpeningAccessDialog);
       this.publisher.on("accessDenied", preventOpeningAccessDialog);
-      this.publisher.on("streamCreated", function(event) {
-        this.localStream = event.stream;
-        if (this.localStream.hasAudio) {
-          this.$(".btn-mute-audio").addClass("streaming");
-        }
-        if (this.localStream.hasVideo) {
-          this.$(".btn-mute-video").addClass("streaming");
-        }
-      }.bind(this));
-      this.publisher.on("streamDestroyed", function() {
-        this.localStream = null;
-        this.$(".btn-mute-audio").removeClass("streaming muted");
-        this.$(".btn-mute-video").removeClass("streaming muted");
-      }.bind(this));
 
       this.model.session.publish(this.publisher);
     },

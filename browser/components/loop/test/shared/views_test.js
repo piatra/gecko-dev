@@ -2,10 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-/* global loop, sinon */
+/*global loop, sinon, React */
+/* jshint newcap:false */
 
 var expect = chai.expect;
 var l10n = document.webL10n || document.mozL10n;
+var TestUtils = React.addons.TestUtils;
 
 describe("loop.shared.views", function() {
   "use strict";
@@ -62,6 +64,168 @@ describe("loop.shared.views", function() {
         off: sandbox.spy(),
         publishAudio: sandbox.spy(),
         publishVideo: sandbox.spy()
+      };
+      fakeSDK = {
+        initPublisher: sandbox.stub().returns(fakePublisher),
+        initSession: sandbox.stub().returns(fakeSession)
+      };
+      model = new sharedModels.ConversationModel(fakeSessionData, {
+        sdk: fakeSDK
+      });
+    });
+
+    describe("#componentDidMount", function() {
+
+      it("should start a session", function() {
+
+        sandbox.stub(model, "startSession");
+
+        TestUtils.renderIntoDocument(
+          sharedViews.ConversationView({sdk: fakeSDK, model: model}));
+
+        sinon.assert.calledOnce(model.startSession);
+      });
+    });
+
+    describe.skip("constructed", function() {
+      describe("#hangup", function() {
+        it("should disconnect the session", function() {
+          var view = new sharedViews.ConversationView({
+            sdk: fakeSDK,
+            model: model
+          });
+          sandbox.stub(model, "endSession");
+          view.publish();
+
+          view.hangup({preventDefault: function() {}});
+
+          sinon.assert.calledOnce(model.endSession);
+        });
+      });
+
+      describe.skip("#publish", function() {
+        var view;
+
+        beforeEach(function() {
+          view = new sharedViews.ConversationView({
+            sdk: fakeSDK,
+            model: model
+          });
+        });
+
+        it("should publish local stream", function() {
+          view.publish();
+
+          sinon.assert.calledOnce(fakeSDK.initPublisher);
+          sinon.assert.calledOnce(fakeSession.publish);
+        });
+
+        it("should start listening to OT publisher accessDialogOpened and " +
+          " accessDenied events",
+          function() {
+            view.publish();
+
+            sinon.assert.calledTwice(fakePublisher.on);
+            sinon.assert.calledWith(fakePublisher.on, "accessDialogOpened");
+            sinon.assert.calledWith(fakePublisher.on, "accessDenied");
+          });
+      });
+
+      describe.skip("#unpublish", function() {
+        var view;
+
+        beforeEach(function() {
+          view = new sharedViews.ConversationView({
+            sdk: fakeSDK,
+            model: model
+          });
+          view.publish();
+        });
+
+        it("should unpublish local stream", function() {
+          view.unpublish();
+
+          sinon.assert.calledOnce(fakeSession.unpublish);
+        });
+
+        it("should unsubscribe from accessDialogOpened and accessDenied events",
+          function() {
+            view.unpublish();
+
+            sinon.assert.calledTwice(fakePublisher.off);
+            sinon.assert.calledWith(fakePublisher.off, "accessDialogOpened");
+            sinon.assert.calledWith(fakePublisher.off, "accessDenied");
+          });
+      });
+
+      describe.skip("Model events", function() {
+        var view;
+
+        beforeEach(function() {
+          sandbox.stub(sharedViews.ConversationView.prototype, "publish");
+          sandbox.stub(sharedViews.ConversationView.prototype, "unpublish");
+          view = new sharedViews.ConversationView({sdk: fakeSDK, model: model});
+        });
+
+        it("should publish local stream on session:connected", function() {
+          model.trigger("session:connected");
+
+          sinon.assert.calledOnce(view.publish);
+        });
+
+        it("should publish remote streams on session:stream-created",
+          function() {
+            var s1 = {connection: {connectionId: 42}};
+            var s2 = {connection: {connectionId: 43}};
+
+            model.trigger("session:stream-created", {streams: [s1, s2]});
+
+            sinon.assert.calledOnce(fakeSession.subscribe);
+            sinon.assert.calledWith(fakeSession.subscribe, s2);
+          });
+
+        it("should unpublish local stream on session:ended", function() {
+          model.trigger("session:ended");
+
+          sinon.assert.calledOnce(view.unpublish);
+        });
+
+        it("should unpublish local stream on session:peer-hungup", function() {
+          model.trigger("session:peer-hungup");
+
+          sinon.assert.calledOnce(view.unpublish);
+        });
+
+        it("should unpublish local stream on session:network-disconnected",
+          function() {
+            model.trigger("session:network-disconnected");
+
+            sinon.assert.calledOnce(view.unpublish);
+          });
+      });
+    });
+  });
+
+  describe.skip("OldConversationView", function() {
+    var fakeSDK, fakeSessionData, fakeSession, fakePublisher, model;
+
+    beforeEach(function() {
+      fakeSessionData = {
+        sessionId:    "sessionId",
+        sessionToken: "sessionToken",
+        apiKey:       "apiKey"
+      };
+      fakeSession = _.extend({
+        connection: {connectionId: 42},
+        connect: sandbox.spy(),
+        disconnect: sandbox.spy(),
+        publish: sandbox.spy(),
+        unpublish: sandbox.spy(),
+        subscribe: sandbox.spy()
+      }, Backbone.Events);
+      fakePublisher = {
+        on: sandbox.spy(),
+        off: sandbox.spy()
       };
       fakeSDK = {
         initPublisher: sandbox.stub().returns(fakePublisher),
