@@ -12,6 +12,7 @@ loop.shared.views = (function(_, OT, l10n) {
   "use strict";
 
   var sharedModels = loop.shared.models;
+  var __ = l10n.get;
 
   /**
    * L10n view. Translates resulting view DOM fragment once rendered.
@@ -88,6 +89,29 @@ loop.shared.views = (function(_, OT, l10n) {
       }
       return this;
     }
+  });
+
+  /**
+   * Conversation controls.
+   */
+  var ConversationToolbar = React.createClass({displayName: 'ConversationToolbar',
+
+    propTypes: {
+      hangup: React.PropTypes.func.isRequired,
+    },
+
+    handleClickHangup: function() {
+      this.props.hangup();
+    },
+
+    render: function() {
+      return (
+        React.DOM.nav( {className:"controls"}, 
+          React.DOM.button( {className:"btn stop",
+                  onClick:this.handleClickHangup}, "__(\"stop\")")
+        )
+        );
+      }
   });
 
   var ConversationView = React.createClass({displayName: 'ConversationView',
@@ -511,6 +535,7 @@ loop.shared.views = (function(_, OT, l10n) {
     L10nView: L10nView,
     BaseView: BaseView,
     ConversationView: ConversationView,
+    ConversationToolbar: ConversationToolbar,
     OldConversationView: OldConversationView,
     NotificationListView: NotificationListView,
     NotificationView: NotificationView,

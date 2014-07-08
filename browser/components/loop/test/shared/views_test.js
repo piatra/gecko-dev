@@ -42,6 +42,26 @@ describe("loop.shared.views", function() {
     });
   });
 
+  describe("ConversationToolbar", function() {
+    var hangup;
+
+    beforeEach(function() {
+      hangup = sandbox.stub();
+    });
+
+    it("should call the hangup callback when the hangup button is clicked",
+        function() {
+          var ConversationToolbar = sharedViews.ConversationToolbar({hangup: hangup});
+          var conversationToolbar = TestUtils.renderIntoDocument(ConversationToolbar);
+          var button = TestUtils.findRenderedDOMComponentWithTag(conversationToolbar, "button");
+
+          TestUtils.Simulate.click(button);
+
+          sinon.assert.calledOnce(hangup);
+          sinon.assert.calledWithExactly(hangup);
+        });
+  });
+
   describe("ConversationView", function() {
     var fakeSDK, fakeSessionData, fakeSession, fakePublisher, model;
 
