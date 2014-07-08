@@ -97,6 +97,48 @@ loop.shared.views = (function(_, OT, l10n) {
       this.props.model.startSession();
     },
 
+    hangup: function(event) {
+      this.props.model.endSession();
+    },
+
+    /**
+     * Publishes remote streams available once a session is connected.
+     *
+     * http://tokbox.com/opentok/libraries/client/js/reference/SessionConnectEvent.html
+     *
+     * @param  {SessionConnectEvent} event
+     */
+    publish: function(event) {
+      var outgoing = this.getDOMNode().querySelector(".outgoing");
+
+      this.publisher = this.props.sdk.initPublisher(outgoing, this
+      .publisherConfig);
+
+      // Suppress OT GuM custom dialog, see bug 1018875
+      function preventOpeningAccessDialog(event) {
+        event.preventDefault();
+      }
+      this.publisher.on("accessDialogOpened", preventOpeningAccessDialog);
+      this.publisher.on("accessDenied", preventOpeningAccessDialog);
+/*
+      this.publisher.on("streamCreated", function(event) {
+        this.localStream = event.stream;
+        if (this.localStream.hasAudio) {
+          this.$(".btn-mute-audio").addClass("streaming");
+        }
+        if (this.localStream.hasVideo) {
+          this.$(".btn-mute-video").addClass("streaming");
+        }
+      }.bind(this));
+      this.publisher.on("streamDestroyed", function() {
+        this.localStream = null;
+        this.$(".btn-mute-audio").removeClass("streaming muted");
+        this.$(".btn-mute-video").removeClass("streaming muted");
+      }.bind(this));
+*/
+      this.props.model.session.publish(this.publisher);
+    },
+
     render: function () {
       return (
         <div />

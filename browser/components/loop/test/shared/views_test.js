@@ -87,13 +87,18 @@ describe("loop.shared.views", function() {
       });
     });
 
-    describe.skip("constructed", function() {
+    describe("constructed", function() {
+      var view;
+
+      beforeEach(function() {
+        view = TestUtils.renderIntoDocument(sharedViews.ConversationView({
+          sdk: fakeSDK,
+          model: model
+        }));
+      });
+
       describe("#hangup", function() {
         it("should disconnect the session", function() {
-          var view = new sharedViews.ConversationView({
-            sdk: fakeSDK,
-            model: model
-          });
           sandbox.stub(model, "endSession");
           view.publish();
 
@@ -101,17 +106,11 @@ describe("loop.shared.views", function() {
 
           sinon.assert.calledOnce(model.endSession);
         });
+
+        it("should call this.unpublish");
       });
 
-      describe.skip("#publish", function() {
-        var view;
-
-        beforeEach(function() {
-          view = new sharedViews.ConversationView({
-            sdk: fakeSDK,
-            model: model
-          });
-        });
+      describe("#publish", function() {
 
         it("should publish local stream", function() {
           view.publish();
@@ -125,20 +124,15 @@ describe("loop.shared.views", function() {
           function() {
             view.publish();
 
-            sinon.assert.calledTwice(fakePublisher.on);
+            sinon.assert.called(fakePublisher.on);
             sinon.assert.calledWith(fakePublisher.on, "accessDialogOpened");
             sinon.assert.calledWith(fakePublisher.on, "accessDenied");
           });
       });
 
-      describe.skip("#unpublish", function() {
-        var view;
+      describe("#unpublish", function() {
 
         beforeEach(function() {
-          view = new sharedViews.ConversationView({
-            sdk: fakeSDK,
-            model: model
-          });
           view.publish();
         });
 
@@ -158,7 +152,67 @@ describe("loop.shared.views", function() {
           });
       });
 
-      describe.skip("Model events", function() {
+      describe("#toggleMuteAudio", function() {
+        var view;
+
+        beforeEach(function() {
+          view = new sharedViews.ConversationView({
+            sdk: fakeSDK,
+            model: model
+          });
+          view.publish();
+        });
+
+        it("should unpublish local audio when enabled", function() {
+          view.localStream = {hasAudio: true};
+
+          view.toggleMuteAudio({preventDefault: sandbox.spy()});
+
+          sinon.assert.calledOnce(fakePublisher.publishAudio);
+          sinon.assert.calledWithExactly(fakePublisher.publishAudio, false);
+        });
+
+        it("should publish local audio when disabled", function() {
+          view.localStream = {hasAudio: false};
+
+          view.toggleMuteAudio({preventDefault: sandbox.spy()});
+
+          sinon.assert.calledOnce(fakePublisher.publishAudio);
+          sinon.assert.calledWithExactly(fakePublisher.publishAudio, true);
+        });
+      });
+
+      describe("#toggleMuteVideo", function() {
+        var view;
+
+        beforeEach(function() {
+          view = new sharedViews.ConversationView({
+            sdk: fakeSDK,
+            model: model
+          });
+          view.publish();
+        });
+
+        it("should unpublish local video when enabled", function() {
+          view.localStream = {hasVideo: true};
+
+          view.toggleMuteVideo({preventDefault: sandbox.spy()});
+
+          sinon.assert.calledOnce(fakePublisher.publishVideo);
+          sinon.assert.calledWithExactly(fakePublisher.publishVideo, false);
+        });
+
+        it("should publish local video when disabled", function() {
+          view.localStream = {hasVideo: false};
+
+          view.toggleMuteVideo({preventDefault: sandbox.spy()});
+
+          sinon.assert.calledOnce(fakePublisher.publishVideo);
+          sinon.assert.calledWithExactly(fakePublisher.publishVideo, true);
+        });
+      });
+
+      describe("Model events", function() {
         var view;
 
         beforeEach(function() {
@@ -205,6 +259,7 @@ describe("loop.shared.views", function() {
       });
     });
   });
+
 
   describe.skip("OldConversationView", function() {
     var fakeSDK, fakeSessionData, fakeSession, fakePublisher, model;
