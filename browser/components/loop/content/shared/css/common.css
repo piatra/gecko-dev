@@ -17,7 +17,7 @@ body {
   padding: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans;
   font-size: 14px;
-  background: #f2f2f2;
+  background: #fbfbfb;
 }
 
 button {
@@ -70,7 +70,7 @@ img {
 }
 
 .btn-info {
-  background: #428BCA;
+  background: #0095dd;
 }
 
 .btn-success {
