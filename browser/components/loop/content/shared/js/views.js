@@ -91,15 +91,17 @@ loop.shared.views = (function(_, OT, l10n) {
   });
 
   var ConversationView = React.createClass({displayName: 'ConversationView',
-      mixins: [Backbone.Events],
+    mixins: [Backbone.Events],
 
-      componentDidMount: function() {
-        this.props.model.startSession();
-      },
+    componentDidMount: function() {
+      this.props.model.startSession();
+    },
 
-      render: function () {
-        return React.DOM.div(null );
-      }
+    render: function () {
+      return (
+        React.DOM.div(null )
+      );
+    }
   });
 
   var OldConversationView = BaseView.extend({
