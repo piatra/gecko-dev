@@ -101,22 +101,57 @@ loop.shared.views = (function(_, OT, l10n) {
       publisher: React.PropTypes.object.isRequired
     },
 
+    getInitialState: function() {
+      return {
+        videoMuted: false,
+        audioMuted: false
+      };
+    },
+
     handleClickHangup: function() {
       this.props.hangup();
     },
 
+    handlerClickMuteAudio: function() {
+      var publishAudio = !this.props.localStream.hasAudio;
+      this.props.publisher.publishAudio(publishAudio);
+
+      this.setState({audioMuted: publishAudio});
+    },
+
+    handlerClickMuteVideo: function() {
+      var publishVideo = !this.props.localStream.hasVideo;
+      this.props.publisher.publishVideo(publishVideo);
+
+      this.setState({videoMuted: publishVideo});
+    },
+
     render: function() {
+      var cx = React.addons.classSet;
+      var audioButtonClass = cx({
+        "btn": true,
+        "media-control": true,
+        "btn-mute-audio": true,
+        "muted": this.state.audioMuted
+      });
+      var videoButtonClass = cx({
+        "btn": true,
+        "media-control": true,
+        "btn-mute-video": true,
+        "muted": this.state.videoMuted
+      });
+
       return (
         <ul className="controls cf">
           <li><button className="btn btn-hangup"
                       onClick={this.handleClickHangup}>
                 __("hangup_button")
               </button></li>
-          <li><button className="btn media-control btn-mute-video"
+          <li><button className={videoButtonClass}
                       onClick={this.handlerClickMuteVideo}>
                 __("mute_local_video_button")
               </button></li>
-          <li><button className="btn media-control btn-mute-audio"
+          <li><button className={audioButtonClass}
                       onClick={this.handlerClickMuteAudio}>
                 __("mute_local_audio_button")
               </button></li>

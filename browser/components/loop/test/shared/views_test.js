@@ -44,14 +44,21 @@ describe("loop.shared.views", function() {
   });
 
   describe("ConversationToolbar", function() {
-    var hangup, publisher, ConversationToolbar, conversationToolbar;
+    var hangup, publisher, localStream, ConversationToolbar, conversationToolbar;
 
     beforeEach(function() {
       hangup = sandbox.stub();
-      publisher = {};
+      publisher = {
+        publishAudio: sandbox.spy(),
+        publishVideo: sandbox.spy()
+      };
+      localStream = {
+        hasAudio: true,
+        hasVideo: true
+      };
 
       ConversationToolbar = sharedViews.ConversationToolbar(
-        {hangup: hangup, publisher: publisher});
+        {hangup: hangup, publisher: publisher, localStream: localStream});
       conversationToolbar =
         TestUtils.renderIntoDocument(ConversationToolbar);
     });
@@ -75,8 +82,43 @@ describe("loop.shared.views", function() {
 
         TestUtils.Simulate.click(button);
 
-        // XXX verify here
+        sinon.assert.calledOnce(publisher.publishAudio);
+        sinon.assert.calledWithExactly(publisher.publishAudio, false);
       });
+
+    it("should stop publishing video when the mute video button is pressed " +
+       " and video is being published",
+      function() {
+        var button = getReactElementByClass(conversationToolbar,
+          "btn-mute-video");
+
+        TestUtils.Simulate.click(button);
+
+        sinon.assert.calledOnce(publisher.publishVideo);
+        sinon.assert.calledWithExactly(publisher.publishVideo, false);
+      });
+
+      it("should add the muted state to the audio button when audio is muted",
+          function () {
+            var button = getReactElementByClass(conversationToolbar,
+              "btn-mute-audio");
+
+            TestUtils.Simulate.click(button);
+
+            var DOMelem = button.getDOMNode();
+            expect(DOMelem.classList.contains('muted'));
+        });
+
+      it("should add the muted state to the video button when video is muted",
+          function () {
+            var button = getReactElementByClass(conversationToolbar,
+              "btn-mute-video");
+
+            TestUtils.Simulate.click(button);
+
+            var DOMelem = button.getDOMNode();
+            expect(DOMelem.classList.contains('muted'));
+        });
   });
 
   describe("ConversationView", function() {
