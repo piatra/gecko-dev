@@ -108,6 +108,27 @@ loop.shared.views = (function(_, OT, l10n) {
       };
     },
 
+    componentWillMount: function() {
+      this.props.publisher.on("streamCreated", function(event) {
+        var localStream = event.stream;
+        if (localStream.hasAudio) {
+          this.setState({audioStreaming: true});
+        }
+        if (this.localStream.hasVideo) {
+          this.setState({videoStreaming: true});
+        }
+      }.bind(this));
+      this.publisher.on("streamDestroyed", function() {
+        var localStream = null;
+        this.setState({
+          videoStreaming: false,
+          videoMuted: false,
+          audioStreaming: false,
+          audioMuted: false
+        });
+      }.bind(this));
+    },
+
     handleClickHangup: function() {
       this.props.hangup();
     },
@@ -182,7 +203,7 @@ loop.shared.views = (function(_, OT, l10n) {
       var outgoing = this.getDOMNode().querySelector(".outgoing");
 
       this.publisher = this.props.sdk.initPublisher(outgoing, this
-      .publisherConfig);
+                       .publisherConfig);
 
       // Suppress OT GuM custom dialog, see bug 1018875
       function preventOpeningAccessDialog(event) {
@@ -190,22 +211,7 @@ loop.shared.views = (function(_, OT, l10n) {
       }
       this.publisher.on("accessDialogOpened", preventOpeningAccessDialog);
       this.publisher.on("accessDenied", preventOpeningAccessDialog);
-/*
-      this.publisher.on("streamCreated", function(event) {
-        this.localStream = event.stream;
-        if (this.localStream.hasAudio) {
-          this.$(".btn-mute-audio").addClass("streaming");
-        }
-        if (this.localStream.hasVideo) {
-          this.$(".btn-mute-video").addClass("streaming");
-        }
-      }.bind(this));
-      this.publisher.on("streamDestroyed", function() {
-        this.localStream = null;
-        this.$(".btn-mute-audio").removeClass("streaming muted");
-        this.$(".btn-mute-video").removeClass("streaming muted");
-      }.bind(this));
-*/
+
       this.props.model.session.publish(this.publisher);
     },
 
