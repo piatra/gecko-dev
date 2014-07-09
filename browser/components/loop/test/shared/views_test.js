@@ -50,7 +50,9 @@ describe("loop.shared.views", function() {
       hangup = sandbox.stub();
       publisher = {
         publishAudio: sandbox.spy(),
-        publishVideo: sandbox.spy()
+        publishVideo: sandbox.spy(),
+        on: sandbox.stub(),
+        off: sandbox.stub()
       };
       localStream = {
         hasAudio: true,

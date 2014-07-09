@@ -118,7 +118,7 @@ loop.shared.views = (function(_, OT, l10n) {
           this.setState({videoStreaming: true});
         }
       }.bind(this));
-      this.publisher.on("streamDestroyed", function() {
+      this.props.publisher.on("streamDestroyed", function() {
         var localStream = null;
         this.setState({
           videoStreaming: false,
