@@ -39,7 +39,7 @@
 
 .description-content {
   margin: .5em 0;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   font-family: Open Sans,sans-serif;
   color: #666;
@@ -54,7 +54,7 @@
   border: 1px solid #ccc; /* Overriding background style for a text input (see
                              below) resets its borders to a weird beveled style;
                              defining a default 1px border solves the issue. */
-  font-size: 11px;
+  font-size: 12px;
   width: 100%;
   padding: 0 10px;
   margin: 5px 0;
