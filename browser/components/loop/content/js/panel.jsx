@@ -40,19 +40,24 @@ loop.panel = (function(_, mozL10n) {
       this.setState({showMenu: false});
     },
 
-    changeAvailability: function(event) {
-      var status = event.target.getAttribute('data-status');
-      switch(status) {
-        case 'available':
-          this.setState({doNotDisturb: false});
-          navigator.mozLoop.doNotDisturb = false;
-          break;
-        case 'donotdisturb':
-          this.setState({doNotDisturb: true});
-          navigator.mozLoop.doNotDisturb = true;
-          break;
-      }
-      this.hideDropdownMenu();
+    // XXX target event can either be the li, the span or the i tag
+    // this makes it easier to figure out the target by making a
+    // closure with the desired status already passed in.
+    changeAvailability: function(newAvailabilty) {
+      return function(event) {
+        // Note: side effect!
+        switch (newAvailabilty) {
+          case 'available':
+            this.setState({doNotDisturb: false});
+            navigator.mozLoop.doNotDisturb = false;
+            break;
+          case 'do-not-disturb':
+            this.setState({doNotDisturb: true});
+            navigator.mozLoop.doNotDisturb = true;
+            break;
+        }
+        this.hideDropdownMenu();
+      }.bind(this);
     },
 
     render: function() {
@@ -60,39 +65,35 @@ loop.panel = (function(_, mozL10n) {
       var cx = React.addons.classSet;
       var availabilityStatus = cx({
         'status': true,
-        'status-dnd': navigator.mozLoop.doNotDisturb,
-        'status-available': !navigator.mozLoop.doNotDisturb
+        'status-dnd': this.state.doNotDisturb,
+        'status-available': !this.state.doNotDisturb
       });
       var availabilityDropdown = cx({
         'dnd-menu': true,
         'hide': !this.state.showMenu
       });
-      var availabilityText = navigator.mozLoop.doNotDisturb ?
+      var availabilityText = this.state.doNotDisturb ?
                               __("display_name_dnd_status") :
                               __("display_name_available_status");
 
       return (
         <div className="footer component-spacer">
           <div className="do-not-disturb">
-            <p className="dnd-status">
-              <span onClick={this.showDropdownMenu}>{availabilityText}</span>
+            <p className="dnd-status" onClick={this.showDropdownMenu}>
+              <span>{availabilityText}</span>
               <i className={availabilityStatus}></i>
             </p>
             <ul className={availabilityDropdown}
                 onMouseLeave={this.hideDropdownMenu}>
-              <li className="dnd-menu-item dnd-make-available">
+              <li onClick={this.changeAvailability("available")}
+                  className="dnd-menu-item dnd-make-available">
                 <i className="status status-available"></i>
-                <span onClick={this.changeAvailability}
-                      data-status="available">
-                  {__("display_name_available_status")}
-                </span>
+                <span>{__("display_name_available_status")}</span>
               </li>
-              <li className="dnd-menu-item dnd-make-unavailable">
+              <li onClick={this.changeAvailability("do-not-disturb")}
+                  className="dnd-menu-item dnd-make-unavailable">
                 <i className="status status-dnd"></i>
-                <span onClick={this.changeAvailability}
-                      data-status="donotdisturb">
-                        {__("display_name_dnd_status")}
-                </span>
+                <span>{__("display_name_dnd_status")}</span>
               </li>
             </ul>
           </div>
@@ -150,7 +151,11 @@ loop.panel = (function(_, mozL10n) {
       };
     },
 
-    // XXX this will go away once the backend changes
+    /**
+    * Returns a random 5 character string used to identify
+    * the conversation.
+    * XXX this will go away once the backend changes
+    */
     conversationIdentifier: function() {
       return Math.random().toString(36).substring(5);
     },
@@ -184,8 +189,7 @@ loop.panel = (function(_, mozL10n) {
       return (
         <PanelLayout summary={__("get_link_to_share")}>
           <div className="invite">
-            <input type="url" value={this.state.callUrl}
-                   ref="caller" readOnly="true"
+            <input type="url" value={this.state.callUrl} readOnly="true"
                    className={cx({'pending': this.state.pending})} />
           </div>
         </PanelLayout>
@@ -271,6 +275,7 @@ loop.panel = (function(_, mozL10n) {
      * Resets this router to its initial state.
      */
     reset: function() {
+      this._notifier.clear();
       var client = new loop.Client({
         baseServerUrl: navigator.mozLoop.serverUrl
       });
@@ -302,9 +307,9 @@ loop.panel = (function(_, mozL10n) {
   return {
     init: init,
     AvailabilityDropdown: AvailabilityDropdown,
+    CallUrlResult: CallUrlResult,
     PanelView: PanelView,
     PanelRouter: PanelRouter,
-    ToSView: ToSView,
-    CallUrlResult: CallUrlResult
+    ToSView: ToSView
   };
 })(_, document.mozL10n);

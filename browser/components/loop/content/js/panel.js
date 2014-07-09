@@ -40,19 +40,24 @@ loop.panel = (function(_, mozL10n) {
       this.setState({showMenu: false});
     },
 
-    changeAvailability: function(event) {
-      var status = event.target.getAttribute('data-status');
-      switch(status) {
-        case 'available':
-          this.setState({doNotDisturb: false});
-          navigator.mozLoop.doNotDisturb = false;
-          break;
-        case 'donotdisturb':
-          this.setState({doNotDisturb: true});
-          navigator.mozLoop.doNotDisturb = true;
-          break;
-      }
-      this.hideDropdownMenu();
+    // XXX target event can either be the li, the span or the i tag
+    // this makes it easier to figure out the target by making a
+    // closure with the desired status already passed in.
+    changeAvailability: function(newAvailabilty) {
+      return function(event) {
+        // Note: side effect!
+        switch (newAvailabilty) {
+          case 'available':
+            this.setState({doNotDisturb: false});
+            navigator.mozLoop.doNotDisturb = false;
+            break;
+          case 'do-not-disturb':
+            this.setState({doNotDisturb: true});
+            navigator.mozLoop.doNotDisturb = true;
+            break;
+        }
+        this.hideDropdownMenu();
+      }.bind(this);
     },
 
     render: function() {
@@ -60,39 +65,35 @@ loop.panel = (function(_, mozL10n) {
       var cx = React.addons.classSet;
       var availabilityStatus = cx({
         'status': true,
-        'status-dnd': navigator.mozLoop.doNotDisturb,
-        'status-available': !navigator.mozLoop.doNotDisturb
+        'status-dnd': this.state.doNotDisturb,
+        'status-available': !this.state.doNotDisturb
       });
       var availabilityDropdown = cx({
         'dnd-menu': true,
         'hide': !this.state.showMenu
       });
-      var availabilityText = navigator.mozLoop.doNotDisturb ?
+      var availabilityText = this.state.doNotDisturb ?
                               __("display_name_dnd_status") :
                               __("display_name_available_status");
 
       return (
         React.DOM.div( {className:"footer component-spacer"}, 
           React.DOM.div( {className:"do-not-disturb"}, 
-            React.DOM.p( {className:"dnd-status"}, 
-              React.DOM.span( {onClick:this.showDropdownMenu}, availabilityText),
+            React.DOM.p( {className:"dnd-status", onClick:this.showDropdownMenu}, 
+              React.DOM.span(null, availabilityText),
               React.DOM.i( {className:availabilityStatus})
             ),
             React.DOM.ul( {className:availabilityDropdown,
                 onMouseLeave:this.hideDropdownMenu}, 
-              React.DOM.li( {className:"dnd-menu-item dnd-make-available"}, 
+              React.DOM.li( {onClick:this.changeAvailability("available"),
+                  className:"dnd-menu-item dnd-make-available"}, 
                 React.DOM.i( {className:"status status-available"}),
-                React.DOM.span( {onClick:this.changeAvailability,
-                      'data-status':"available"}, 
-                  __("display_name_available_status")
-                )
+                React.DOM.span(null, __("display_name_available_status"))
               ),
-              React.DOM.li( {className:"dnd-menu-item dnd-make-unavailable"}, 
+              React.DOM.li( {onClick:this.changeAvailability("do-not-disturb"),
+                  className:"dnd-menu-item dnd-make-unavailable"}, 
                 React.DOM.i( {className:"status status-dnd"}),
-                React.DOM.span( {onClick:this.changeAvailability,
-                      'data-status':"donotdisturb"}, 
-                        __("display_name_dnd_status")
-                )
+                React.DOM.span(null, __("display_name_dnd_status"))
               )
             )
           )
@@ -150,7 +151,11 @@ loop.panel = (function(_, mozL10n) {
       };
     },
 
-    // XXX this will go away once the backend changes
+    /**
+    * Returns a random 5 character string used to identify
+    * the conversation.
+    * XXX this will go away once the backend changes
+    */
     conversationIdentifier: function() {
       return Math.random().toString(36).substring(5);
     },
@@ -184,8 +189,7 @@ loop.panel = (function(_, mozL10n) {
       return (
         PanelLayout( {summary:__("get_link_to_share")}, 
           React.DOM.div( {className:"invite"}, 
-            React.DOM.input( {type:"url", value:this.state.callUrl,
-                   ref:"caller", readOnly:"true",
+            React.DOM.input( {type:"url", value:this.state.callUrl, readOnly:"true",
                    className:cx({'pending': this.state.pending})} )
           )
         )
@@ -271,6 +275,7 @@ loop.panel = (function(_, mozL10n) {
      * Resets this router to its initial state.
      */
     reset: function() {
+      this._notifier.clear();
       var client = new loop.Client({
         baseServerUrl: navigator.mozLoop.serverUrl
       });
@@ -302,9 +307,9 @@ loop.panel = (function(_, mozL10n) {
   return {
     init: init,
     AvailabilityDropdown: AvailabilityDropdown,
+    CallUrlResult: CallUrlResult,
     PanelView: PanelView,
     PanelRouter: PanelRouter,
-    ToSView: ToSView,
-    CallUrlResult: CallUrlResult
+    ToSView: ToSView
   };
 })(_, document.mozL10n);

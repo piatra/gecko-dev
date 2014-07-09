@@ -165,9 +165,6 @@ describe("loop.panel", function() {
 
   describe("loop.panel.AvailabilityDropdown", function() {
     var view;
-    // XXX convenience methods
-    var getElementByClass = TestUtils.findRenderedDOMComponentWithClass;
-    var getElementByTag = TestUtils.findRenderedDOMComponentWithTag;
 
     beforeEach(function() {
       view = TestUtils.renderIntoDocument(loop.panel.AvailabilityDropdown());
@@ -179,9 +176,8 @@ describe("loop.panel", function() {
       });
 
       it("should toggle the value of mozLoop.doNotDisturb", function() {
-        var dropdownMenu = getElementByTag(view, "ul");
-        var menuItem = getElementByClass(view, "dnd-make-available");
-        var availableMenuOption = getElementByTag(menuItem, "span");
+        var availableMenuOption = view.getDOMNode()
+                                    .querySelector(".dnd-make-available");
 
         TestUtils.Simulate.click(availableMenuOption);
 
@@ -189,15 +185,12 @@ describe("loop.panel", function() {
       });
 
       it("should toggle the dropdown menu", function() {
-        var dropdownMenu = getElementByTag(view, "ul");
-        var menuItem = getElementByClass(view, "dnd-status");
-        var availableMenuOption = getElementByTag(menuItem, "span");
+        var availableMenuOption = view.getDOMNode()
+                                    .querySelector(".dnd-status span");
 
         TestUtils.Simulate.click(availableMenuOption);
 
         expect(view.state.showMenu).eql(true);
-
-
       });
     });
   });
@@ -232,7 +225,7 @@ describe("loop.panel", function() {
   });
 
   describe("loop.panel.CallUrlResult", function() {
-    var fakeClient, callUrlData;
+    var fakeClient, callUrlData, view;
 
     beforeEach(function() {
       callUrlData = {
@@ -245,6 +238,11 @@ describe("loop.panel", function() {
           cb(null, callUrlData);
         }
       };
+
+      view = TestUtils.renderIntoDocument(loop.panel.CallUrlResult({
+        notifier: notifier,
+        client: fakeClient
+      }));
     });
 
     describe("Rendering the component should generate a call URL", function() {
@@ -273,42 +271,22 @@ describe("loop.panel", function() {
       });
 
       it("should update state with the call url received", function() {
-        var view = TestUtils.renderIntoDocument(loop.panel.CallUrlResult({
-          notifier: notifier,
-          client: fakeClient
-        }));
-
         expect(view.state.pending).eql(false);
         expect(view.state.callUrl).eql(callUrlData.call_url);
       });
 
       it("should clear the pending state when a response is received",
         function() {
-          var view = TestUtils.renderIntoDocument(loop.panel.CallUrlResult({
-            notifier: notifier,
-            client: fakeClient
-          }));
-
           expect(view.state.pending).eql(false);
         });
 
       it("should update CallUrlResult with the call url", function() {
-        var view = TestUtils.renderIntoDocument(loop.panel.CallUrlResult({
-          notifier: notifier,
-          client: fakeClient
-        }));
-
         var urlField = view.getDOMNode().querySelector("input[type='url']");
 
         expect(urlField.value).eql(callUrlData.call_url);
       });
 
       it("should reset all pending notifications", function() {
-        var view = TestUtils.renderIntoDocument(loop.panel.CallUrlResult({
-          notifier: notifier,
-          client: fakeClient
-        }));
-
         sinon.assert.calledOnce(view.props.notifier.clear);
       });
 

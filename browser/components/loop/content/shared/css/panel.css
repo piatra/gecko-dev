@@ -82,26 +82,19 @@
   margin-bottom: 0;
 }
 
-/* Call URL input */
-
-.input-controls {
-  display: flex;
-  align-items: center;
-}
-
 /* DnD menu */
 
 .dnd-status {
   border: 1px solid transparent;
   padding: 2px 4px;
   font-size: 10px;
+  cursor: pointer;
+  border-radius: 3px;
 }
 
 .dnd-status:hover {
   border: 1px solid #DDD;
   background: #F1F1F1;
-  border-radius: 3px;
-  cursor: pointer;
 }
 
 .do-not-disturb {
@@ -138,11 +131,11 @@
 /* Status badges -- Available/Unavailable */
 
 .status {
+  display: inline-block;
   width: 8px;
   height: 8px;
-  border-radius: 50%;
-  display: inline-block;
   margin: 0 5px;
+  border-radius: 50%;
 }
 
 .status-available {
