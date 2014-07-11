@@ -170,7 +170,7 @@ loop.shared.router = (function(l10n) {
     },
 
     /**
-     * Peer hung up. Notifies the user and ends the call.
+     * Peer hung up; ends the call.
      *
      * Event properties:
      * - {String} connectionId: OT session id
@@ -178,7 +178,6 @@ loop.shared.router = (function(l10n) {
      * @param {Object} event
      */
     _onPeerHungup: function() {
-      this._notifier.warnL10n("peer_ended_conversation");
       this.endCall();
     },
 

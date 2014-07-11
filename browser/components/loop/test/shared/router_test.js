@@ -159,15 +159,6 @@ describe("loop.shared.router", function() {
         sinon.assert.calledOnce(router.endCall);
       });
 
-      it("should warn the user when peer hangs up", function() {
-        conversation.trigger("session:peer-hungup");
-
-        sinon.assert.calledOnce(notifier.warnL10n);
-        sinon.assert.calledWithExactly(notifier.warnL10n,
-                                       "peer_ended_conversation");
-
-      });
-
       it("should call endCall() when peer hangs up", function() {
         conversation.trigger("session:peer-hungup");
 
