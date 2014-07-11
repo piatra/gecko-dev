@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-/* global loop:true */
+/* global loop:true, React */
 
 var loop = loop || {};
 loop.shared = loop.shared || {};
@@ -166,7 +166,6 @@ loop.shared.router = (function(l10n) {
      * Session has ended. Notifies the user and ends the call.
      */
     _onSessionEnded: function() {
-      this._notifier.warnL10n("call_has_ended");
       this.endCall();
     },
 
