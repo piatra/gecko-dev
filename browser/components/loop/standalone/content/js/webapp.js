@@ -139,6 +139,9 @@ loop.webapp = (function($, _, OT) {
      * @override {loop.shared.router.BaseConversationRouter.endCall}
      */
     endCall: function() {
+
+      this._notifier.warnL10n("call_has_ended");
+
       var route = "home";
       if (this._conversation.get("loopToken")) {
         route = "call/" + this._conversation.get("loopToken");

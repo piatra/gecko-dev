@@ -2,8 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-/* global loop, sinon */
-
+/* global loop, sinon, React */
 var expect = chai.expect;
 
 describe("loop.webapp", function() {
@@ -21,7 +20,7 @@ describe("loop.webapp", function() {
       warn: sandbox.spy(),
       warnL10n: sandbox.spy(),
       error: sandbox.spy(),
-      errorL10n: sandbox.spy(),
+      errorL10n: sandbox.spy()
     };
   });
 
@@ -107,20 +106,27 @@ describe("loop.webapp", function() {
     });
 
     describe("#endCall", function() {
-      it("should navigate to home if session token is unset", function() {
+      it("should navigate to home if session token is unset", function () {
         router.endCall();
 
         sinon.assert.calledOnce(router.navigate);
         sinon.assert.calledWithMatch(router.navigate, "home");
       });
 
-      it("should navigate to call/:token if session token is set", function() {
+      it("should navigate to call/:token if session token is set", function () {
         conversation.set("loopToken", "fake");
 
         router.endCall();
 
         sinon.assert.calledOnce(router.navigate);
         sinon.assert.calledWithMatch(router.navigate, "call/fake");
+      });
+
+      it("should warn the user that the call has ended", function () {
+        router.endCall();
+
+        sinon.assert.calledOnce(notifier.warnL10n);
+        sinon.assert.calledWithExactly(notifier.warnL10n, "call_has_ended");
       });
     });
 
@@ -314,7 +320,7 @@ describe("loop.webapp", function() {
         });
       });
 
-      it("should trigger a notication when a session:error model event is " +
+      it("should trigger a notification when a session:error model event is " +
          " received", function() {
         conversation.trigger("session:error", "tech error");
 
