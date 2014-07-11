@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-/* global loop, sinon */
+/* global loop, sinon, React */
 
 var expect = chai.expect;
 
@@ -42,7 +42,7 @@ describe("loop.conversation", function() {
   });
 
   describe("#init", function() {
-    var conversation, oldTitle;
+    var oldTitle;
 
     beforeEach(function() {
       oldTitle = document.title;

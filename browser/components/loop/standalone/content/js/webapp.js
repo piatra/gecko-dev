@@ -87,13 +87,13 @@ loop.webapp = (function($, _, OT) {
     /**
      * Initiates the call.
      *
-     * @param {SubmitEvent} event
+     * @param {Event} submit event
      */
     initiate: function(event) {
       event.preventDefault();
       this.model.initiate({
         client: new loop.StandaloneClient({
-          baseServerUrl: baseServerUrl,
+          baseServerUrl: baseServerUrl
         }),
         outgoing: true,
         // For now, we assume both audio and video as there is no

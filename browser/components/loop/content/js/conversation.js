@@ -41,7 +41,7 @@ loop.conversation = (function(OT, mozL10n) {
 
     /**
      * User clicked on the "accept" button.
-     * @param  {MouseEvent} event
+     * @param  {Event} mouse event
      */
     handleAccept: function(event) {
       event.preventDefault();
@@ -50,7 +50,7 @@ loop.conversation = (function(OT, mozL10n) {
 
     /**
      * User clicked on the "decline" button.
-     * @param  {MouseEvent} event
+     * @param  {Event} mouse event
      */
     handleDecline: function(event) {
       event.preventDefault();
