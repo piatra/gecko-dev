@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-/* global loop, sinon, React */
+/* global loop, sinon, React, TestUtils */
 
 var expect = chai.expect;
 
@@ -269,12 +269,25 @@ describe("loop.conversation", function() {
   });
 
   describe("EndedCallView", function() {
+    var comp;
+
+    function mountTestComponent(props) {
+      return TestUtils.renderIntoDocument(
+        loop.conversation.EndedCallView(props));
+    }
+
+    afterEach( function () {
+      React.unmountComponentAtNode(comp.getDOMNode());
+      comp = undefined;
+    });
+
     describe("#closeWindow", function() {
       it("should close the conversation window", function() {
         sandbox.stub(window, "close");
-        var view = new loop.conversation.EndedCallView();
+        comp = mountTestComponent({});
 
-        view.closeWindow({preventDefault: sandbox.spy()});
+        TestUtils.Simulate.click(
+          comp.getDOMNode().querySelector(".close-button"));
 
         sinon.assert.calledOnce(window.close);
       });

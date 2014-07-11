@@ -61,7 +61,7 @@ loop.conversation = (function(OT, mozL10n) {
     }
   });
 
-  var EndedCallView = React.createClass({displayName: 'EndedCallView',
+  var EndedCallView = React.createClass({
     closeWindow: function(event) {
       event.preventDefault();
       // XXX For now, we just close the window.
@@ -71,13 +71,13 @@ loop.conversation = (function(OT, mozL10n) {
     render: function () {
       /* jshint ignore:start */
       return (
-        React.DOM.div( {className:"foo"}, 
-          React.DOM.h2(null, "Call Ended"),
-          React.DOM.button( {className:"btn btn-success btn-accept close-button",
-                  onClick:this.closeWindow}, 
-            "Close Window"
-          )
-        )
+        <div className="foo">
+          <h2>Call Ended</h2>
+          <button className="btn btn-success btn-accept close-button"
+                  onClick={this.closeWindow}>
+            Close Window
+          </button>
+        </div>
       );
       /* jshint ignore:end */
     }
