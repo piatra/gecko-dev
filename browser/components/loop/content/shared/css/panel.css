@@ -117,13 +117,20 @@ body {
 
 .dnd-menu-item {
   text-align: left;
-  margin: .3em 0;
   padding: .2em .5em;
   cursor: pointer;
   border: 1px solid transparent;
   border-radius: 2px;
   font-size: 1em;
   white-space: nowrap;
+}
+
+/*
+ * Menu item is also menu trigger
+ * but style should be different
+ */
+.dnd-menu .dnd-menu-item {
+  margin: .4em .5em;
 }
 
 .dnd-menu-item:hover {
@@ -133,19 +140,36 @@ body {
 
 /* Status badges -- Available/Unavailable */
 
-.status {
+.dnd-menu-item:after,
+.dnd-menu-item:before {
+  content: "";
   display: inline-block;
   width: 8px;
   height: 8px;
-  margin: 0 5px;
   border-radius: 50%;
+  margin: 0 0 0 5px;
 }
 
-.status-available {
+.dnd-menu-item:before {
+  display: none;
+  margin: 0 .9em 0 0;
+}
+
+.dnd-menu .dnd-menu-item:before {
+  display: inline-block;
+}
+
+.dnd-menu .dnd-menu-item:after {
+  display: none;
+}
+
+.status-make-available:after,
+.status-make-available:before {
   background: #6cb23e;
 }
 
-.status-dnd {
+.status-make-dnd:after,
+.status-make-dnd:before {
   border: 1px solid #888;
 }
 
@@ -169,6 +193,7 @@ body {
 
 .footer {
   font-size: 1em;
+  min-height: 55px;
   border-top: 1px solid #D1D1D1;
   background: #EAEAEA;
   color: #7F7F7F;

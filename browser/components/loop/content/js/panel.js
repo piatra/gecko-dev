@@ -22,78 +22,110 @@ loop.panel = (function(_, mozL10n) {
   var router;
 
   /**
-   * Availability drop down menu subview.
+   *  Reusable dropdown component
+   *  Usage:
+   *  @type {function} callback The function to be called when the menu item
+   *                            is clicked on
+   *  @type {string} className Menu component CSS class selector
+   *  @type {number} selected Index of the selected component
+   *
+   *  <Menu select={callback} [selected] [className]>
+   *    <YourMenuItemComponent />
+   *    <YourMenuItemComponent />
+   *  </Menu>
    */
-  var AvailabilityDropdown = React.createClass({displayName: 'AvailabilityDropdown',
-    getInitialState: function() {
-      return {
-        doNotDisturb: navigator.mozLoop.doNotDisturb,
-        showMenu: false
-      };
-    },
-
-    showDropdownMenu: function() {
-      this.setState({showMenu: true});
-    },
-
-    hideDropdownMenu: function() {
-      this.setState({showMenu: false});
-    },
-
-    // XXX target event can either be the li, the span or the i tag
-    // this makes it easier to figure out the target by making a
-    // closure with the desired status already passed in.
-    changeAvailability: function(newAvailabilty) {
-      return function(event) {
-        // Note: side effect!
-        switch (newAvailabilty) {
-          case 'available':
-            this.setState({doNotDisturb: false});
-            navigator.mozLoop.doNotDisturb = false;
-            break;
-          case 'do-not-disturb':
-            this.setState({doNotDisturb: true});
-            navigator.mozLoop.doNotDisturb = true;
-            break;
-        }
-        this.hideDropdownMenu();
-      }.bind(this);
+  var MenuItem = React.createClass({displayName: 'MenuItem',
+    handleClick: function(event) {
+      this.props.toggleMenu(this.props.key);
     },
 
     render: function() {
-      // XXX https://github.com/facebook/react/issues/310 for === htmlFor
-      var cx = React.addons.classSet;
-      var availabilityStatus = cx({
-        'status': true,
-        'status-dnd': this.state.doNotDisturb,
-        'status-available': !this.state.doNotDisturb
-      });
-      var availabilityDropdown = cx({
-        'dnd-menu': true,
-        'hide': !this.state.showMenu
-      });
-      var availabilityText = this.state.doNotDisturb ?
-                              __("display_name_dnd_status") :
-                              __("display_name_available_status");
+      var liStyle = {
+        listStyle: "none"
+      };
+      return (
+        React.DOM.li( {style:liStyle, onClick:this.handleClick}, 
+          this.props.children
+        )
+      );
+    }
+  });
 
+  var Menu = React.createClass({displayName: 'Menu',
+    getInitialState: function() {
+      return {
+        opened: false,
+        selected: this.props.selected || 0
+      };
+    },
+
+    open: function(event) {
+      this.setState({open: true});
+    },
+
+    select: function(option) {
+      this.setState({open: false, selected: option});
+      this.props.select(this.props.children[option].getDOMNode());
+    },
+
+    render: function() {
+      if (!this.state.open) {
+        var selectedMenuItem = this.props.children[this.state.selected];
+        return (
+          MenuItem( {toggleMenu:this.open}, selectedMenuItem)
+        );
+      }
+
+      var children = React.Children.map(this.props.children,
+                                        function(child, index) {
+        return MenuItem( {key:index, toggleMenu:this.select}, child);
+      }, this);
+
+      // The component that generates the menu should have
+      // sane default CSS, therefor I am reseting them
+      var ulStyle = {
+        padding: 0,
+        margin: 0
+      };
+
+      return (
+        React.DOM.ul( {style:ulStyle, className:this.props.menuCSSClass}, 
+          children
+        )
+      );
+    }
+  });
+
+  /**
+   * Availability drop down menu subview.
+   */
+  var AvailabilityDropdown = React.createClass({displayName: 'AvailabilityDropdown',
+    changeAvailability: function(DOMElement) {
+      // Note: side effect!
+      if (DOMElement.classList.contains("status-make-available")) {
+        this.setState({doNotDisturb: false});
+        navigator.mozLoop.doNotDisturb = false;
+      }
+      if (DOMElement.classList.contains("status-make-dnd")) {
+        this.setState({doNotDisturb: true});
+        navigator.mozLoop.doNotDisturb = true;
+      }
+    },
+
+    render: function() {
+      // XXX choose which menu item is selected by default
+      // there is room for improvement especially when > 2 items
+      var defaultItem = navigator.mozLoop.doNotDisturb ? 0 : 1;
       return (
         React.DOM.div( {className:"footer component-spacer"}, 
           React.DOM.div( {className:"do-not-disturb"}, 
-            React.DOM.p( {className:"dnd-status", onClick:this.showDropdownMenu}, 
-              React.DOM.span(null, availabilityText),
-              React.DOM.i( {className:availabilityStatus})
-            ),
-            React.DOM.ul( {className:availabilityDropdown,
-                onMouseLeave:this.hideDropdownMenu}, 
-              React.DOM.li( {onClick:this.changeAvailability("available"),
-                  className:"dnd-menu-item dnd-make-available"}, 
-                React.DOM.i( {className:"status status-available"}),
-                React.DOM.span(null, __("display_name_available_status"))
-              ),
-              React.DOM.li( {onClick:this.changeAvailability("do-not-disturb"),
-                  className:"dnd-menu-item dnd-make-unavailable"}, 
-                React.DOM.i( {className:"status status-dnd"}),
+            Menu( {selected:defaultItem, select:this.changeAvailability,
+                  menuCSSClass:"dnd-menu"}, 
+              React.DOM.div( {className:"dnd-menu-item status-make-dnd"}, 
                 React.DOM.span(null, __("display_name_dnd_status"))
+              ),
+              React.DOM.div( {className:"dnd-menu-item status-make-available"}, 
+                React.DOM.span(null, __("display_name_available_status"))
               )
             )
           )

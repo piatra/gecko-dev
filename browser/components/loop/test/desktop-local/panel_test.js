@@ -176,21 +176,25 @@ describe("loop.panel", function() {
       });
 
       it("should toggle the value of mozLoop.doNotDisturb", function() {
-        var availableMenuOption = view.getDOMNode()
-                                    .querySelector(".dnd-make-available");
+        var menuTriggerButton = view.getDOMNode()
+                                    .querySelector(".status-make-dnd");
+        TestUtils.Simulate.click(menuTriggerButton); // open the menu
+        var availableTriggerButton = view.getDOMNode()
+                                    .querySelector(".status-make-available");
 
-        TestUtils.Simulate.click(availableMenuOption);
+        TestUtils.Simulate.click(availableTriggerButton); // change state
 
         expect(navigator.mozLoop.doNotDisturb).eql(false);
       });
 
       it("should toggle the dropdown menu", function() {
-        var availableMenuOption = view.getDOMNode()
-                                    .querySelector(".dnd-status span");
+        var menuTriggerButton = view.getDOMNode()
+                                    .querySelector(".status-make-dnd");
+        TestUtils.Simulate.click(menuTriggerButton);
 
-        TestUtils.Simulate.click(availableMenuOption);
-
-        expect(view.state.showMenu).eql(true);
+        var menuDOMElem = view.getDOMNode()
+                                    .querySelector("ul");
+        TestUtils.Simulate.click(menuDOMElem);
       });
     });
   });
