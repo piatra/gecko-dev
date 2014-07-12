@@ -175,6 +175,18 @@ describe("loop.panel", function() {
         navigator.mozLoop.doNotDisturb = true;
       });
 
+      it("should toggle the dropdown menu", function() {
+        var menuTriggerButton = view.getDOMNode()
+                                    .querySelector(".status-make-dnd");
+        TestUtils.Simulate.click(menuTriggerButton);
+
+        var menuDOMElem = view.getDOMNode()
+                                    .querySelector("ul");
+
+        // will fail the test if the element does not exist
+        TestUtils.Simulate.click(menuDOMElem);
+      });
+
       it("should toggle the value of mozLoop.doNotDisturb", function() {
         var menuTriggerButton = view.getDOMNode()
                                     .querySelector(".status-make-dnd");
@@ -185,16 +197,6 @@ describe("loop.panel", function() {
         TestUtils.Simulate.click(availableTriggerButton); // change state
 
         expect(navigator.mozLoop.doNotDisturb).eql(false);
-      });
-
-      it("should toggle the dropdown menu", function() {
-        var menuTriggerButton = view.getDOMNode()
-                                    .querySelector(".status-make-dnd");
-        TestUtils.Simulate.click(menuTriggerButton);
-
-        var menuDOMElem = view.getDOMNode()
-                                    .querySelector("ul");
-        TestUtils.Simulate.click(menuDOMElem);
       });
     });
   });
