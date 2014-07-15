@@ -62,9 +62,12 @@ class BaseMachFormatter(base.BaseFormatter):
         self.status_buffer[test] = {"count": 0, "unexpected": 0, "pass": 0}
         self.has_unexpected[test] = bool(unexpected)
 
-        return "Harness status %s%s. Subtests passed %i/%i. Unexpected %i" % (
+        if "message" not in data:
+            data["message"] = "No message"
+
+        return "Harness status %s%s. Subtests passed %i/%i. Unexpected %i. %s" % (
             data["status"], expected_str, subtests["pass"],
-            subtests["count"], unexpected)
+            subtests["count"], unexpected, data["message"])
 
     def test_status(self, data):
         test = self._get_test_id(data)
