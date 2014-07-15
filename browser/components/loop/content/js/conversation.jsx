@@ -71,12 +71,12 @@ loop.conversation = (function(OT, mozL10n) {
     render: function () {
       /* jshint ignore:start */
       return (
-        <div className="foo">
-          <h2>Call Ended</h2>
-          <button className="btn btn-success btn-accept close-button"
-                  onClick={this.closeWindow}>
-            Close Window
-          </button>
+        <div className="call-ended">
+            <h2>Call Ended</h2>
+            <button className="btn btn-success btn-accept close-button"
+                    onClick={this.closeWindow}>
+              Close Window
+            </button>
         </div>
       );
       /* jshint ignore:end */
