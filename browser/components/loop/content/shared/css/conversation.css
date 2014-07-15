@@ -148,13 +148,17 @@
   position: inherit;
 }
 
+/* XXX move these into their own CSS, since they're desktop only, with a comment
+ * to make it clear that we have different constraints on using newer stuff
+ */
+
 /* Call ended view */
 .call-ended {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  min-height: 200px;
+  min-height: 264px;  /* full height of chat box; XXX what about detached */
 }
 
 /* XXX move to common.css? */
