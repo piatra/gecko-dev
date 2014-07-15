@@ -4,6 +4,7 @@
 
 import ConfigParser
 import datetime
+import json
 import os
 import socket
 import StringIO
@@ -704,6 +705,59 @@ class Marionette(object):
             print ('PROCESS-CRASH | %s | abnormal termination with exit code %d' %
                 (name, returncode))
         return crashed
+
+    # so tests can enforce a clean profile
+    def enforce_gecko_prefs(self, prefs):
+        """
+        Checks if the running instance has the given prefs. If not, it will kill the
+        currently running instance, and spawn a new instance with the requested preferences
+
+        : param prefs: A dictionary whose keys are preference names.
+        """
+        pref_exists = True
+        self.set_context(self.CONTEXT_CHROME)
+        for pref, value in prefs.iteritems():
+            if type(value) is not str:
+                value = json.dumps(value)
+            pref_exists = self.execute_script("""
+            let prefInterface = Components.classes["@mozilla.org/preferences-service;1"]
+                                          .getService(Components.interfaces.nsIPrefBranch);
+            let pref = '%s';
+            let value = '%s';
+            let type = prefInterface.getPrefType(pref);
+            switch(type) {
+                case prefInterface.PREF_STRING:
+                    return value == prefInterface.getCharPref(pref).toString();
+                case prefInterface.PREF_BOOL:
+                    return value == prefInterface.getBoolPref(pref).toString();
+                case prefInterface.PREF_INT:
+                    return value == prefInterface.getIntPref(pref).toString();
+                case prefInterface.PREF_INVALID:
+                    return false;
+            }
+            """ % (pref, value))
+            if not pref_exists:
+                break
+        self.set_context(self.CONTEXT_CONTENT)
+        if not pref_exists:
+            instance = type(self.instance)(host=self.instance.marionette_host, port=self.instance.marionette_port,
+                    bin=self.instance.bin, profile=self.instance.profile_path,
+                    app_args=self.instance.app_args, symbols_path=self.instance.symbols_path,
+                    gecko_log=self.instance.gecko_log, prefs=prefs)
+            self.delete_session()
+            self.instance.close()
+            self.instance = instance
+            self.instance.start()
+            assert(self.wait_for_port()), "Timed out waiting for port!"
+            self.start_session()
+            if self.timeout is not None:
+                self.timeouts(self.TIMEOUT_SEARCH, self.timeout)
+                self.timeouts(self.TIMEOUT_SCRIPT, self.timeout)
+                self.timeouts(self.TIMEOUT_PAGE, self.timeout)
+            else:
+                self.timeouts(self.TIMEOUT_PAGE, 30000)
+
+
 
     def absolute_url(self, relative_url):
         '''

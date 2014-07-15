@@ -21,18 +21,21 @@ class GeckoInstance(object):
                       "browser.warnOnQuit": False}
 
     def __init__(self, host, port, bin, profile, app_args=None, symbols_path=None,
-                  gecko_log=None):
+                  gecko_log=None, prefs=None):
         self.marionette_host = host
         self.marionette_port = port
         self.bin = bin
         self.profile_path = profile
         self.app_args = app_args or []
+        self.prefs = prefs
         self.runner = None
         self.symbols_path = symbols_path
         self.gecko_log = gecko_log
 
     def start(self):
         profile_args = {"preferences": self.required_prefs}
+        if self.prefs:
+            profile_args["preferences"].update(self.prefs)
         if not self.profile_path:
             profile_args["restore"] = False
             profile = Profile(**profile_args)
