@@ -62,6 +62,25 @@ loop.conversation = (function(OT, mozL10n) {
   });
 
   var EndedCallView = React.createClass({displayName: 'EndedCallView',
+
+    getUserPlatform: function() {
+      // Target user platform for OS specific styles
+      var platform = "unknown";
+      if (navigator.platform.indexOf("Win") != -1) platform = "windows";
+      if (navigator.platform.indexOf("Mac") != -1) platform ="mac";
+      if (navigator.platform.indexOf("Linux") != -1) platform="linux";
+      return platform;
+    },
+
+    getInitialState: function() {
+      return {platform: this.getUserPlatform()};
+    },
+
+    componentDidMount: function() {
+      // Removes the title from the conversation window
+      document.title = "";
+    },
+
     closeWindow: function(event) {
       event.preventDefault();
       // XXX For now, we just close the window.
@@ -69,13 +88,14 @@ loop.conversation = (function(OT, mozL10n) {
     },
 
     render: function () {
+      var compClassName = "btn btn-error full-width " + this.state.platform;
       /* jshint ignore:start */
       return (
         React.DOM.div( {className:"call-ended"}, 
             React.DOM.h2(null, "Call Ended"),
-            React.DOM.button( {className:"btn btn-success btn-accept close-button",
+            React.DOM.button( {className:compClassName,
                     onClick:this.closeWindow}, 
-              "Close Window"
+              "Close"
             )
         )
       );

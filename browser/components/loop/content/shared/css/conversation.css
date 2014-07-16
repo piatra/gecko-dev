@@ -159,20 +159,15 @@
   align-items: center;
   justify-content: space-between;
   min-height: 264px;  /* full height of chat box; XXX what about detached */
+  padding: 1em;
+  color: #666;
 }
 
 /* XXX move to common.css? */
 .call-ended h2 {
   font-family: "lucida grande";
-  font-size: 14px;
+  font-size: .8rem;
   font-weight: 700;
-}
-
-.call-ended button {
-  background-color: #D74345;
-  border: #D74345;
-  max-height: 26px;
-  margin-bottom: 11px;
 }
 
 /* Incoming call */
