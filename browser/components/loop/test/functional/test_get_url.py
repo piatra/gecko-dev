@@ -95,9 +95,8 @@ class TestGetUrl(MarionetteTestCase):
         # look for a conversation window popup
         self.marionette.set_context("chrome")
         self.marionette.switch_to_frame()
-        frame = self.marionette.find_element("tag name", "chatbox")
+        frame = self.marionette.find_element("id", "chatbox")
         print frame
-        #frame = self.wait_for_element_displayed("tag name", "chatbox")
         self.marionette.switch_to_frame(frame)
 
     def tearDown(self):
