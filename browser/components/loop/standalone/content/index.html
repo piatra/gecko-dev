@@ -13,13 +13,20 @@
   </head>
   <body onload="loop.webapp.init();">
 
-    <header>
-      <h1>Loop</h1>
-    </header>
+  <header>
+    <h1 class="header-text"><strong>Firefox</strong> Hello!</h1>
+      <img class="loop-logo" alt="Loop logo" src="https://people.mozilla.org/~dhenein/labs/loop-link-spec/images/avatar-logo.png">
+      <h3 id="call-url">http://localhost:3000/content/#call/esb9wZbZh</h3>
+      <h4 class="lighter">(From May 26, 2014)</h4>
+  </header>
+
+    <p class="large-font">Click Call to start a video call</p>
 
     <div id="messages"></div>
 
     <div id="main"></div>
+
+    <p>Terms of service</p>
 
     <!-- libs -->
     <script src="https://static.opentok.com/webrtc/v2.2/js/opentok.min.js"></script>

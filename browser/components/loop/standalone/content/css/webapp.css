@@ -6,6 +6,57 @@ body {
   width: 100%;
   /* prevent the video convsersation elements to occupy the whole available
      width hence the height while keeping aspect ratio */
-  max-width: 730px;
+  max-width: 530px;
   margin: 0 auto;
+  padding: 2em;
+  background: #fbfbfb;
+  color: #666;
+  text-align: center;
+}
+
+header {
+  max-height: 300px;
+  border-radius: 4px;
+  background: none repeat scroll 0% 0% #FFF;
+  padding: 20px;
+  border: 1px solid #E7E7E7;
+  box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.03);
+  margin-bottom: 25px;
+}
+
+.loop-logo {
+  width: 100px;
+  margin-top: 1em;
+}
+
+.header-text {
+  margin: 0;
+  font-weight: normal;
+}
+
+.large-font {
+  font-size: 1.8em;
+}
+
+.btn-large {
+  padding: 10px 20px;
+  font-size: 18px;
+  max-width: 200px;
+}
+
+.button-group {
+  width: 100%;
+  display: flex;
+  align-content: space-between;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.button-group .btn {
+  flex: 1;
+}
+
+.lighter {
+  opacity: .4;
+  font-weight: normal;
 }

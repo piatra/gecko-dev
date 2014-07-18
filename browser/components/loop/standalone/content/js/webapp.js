@@ -36,7 +36,10 @@ loop.webapp = (function($, _, OT) {
     template: _.template([
       '<form>',
       '  <p>',
-      '    <button class="btn btn-success" data-l10n-id="start_call"></button>',
+      '    <div class="button-group">',
+      '      <button class="btn btn-success btn-large"',
+      '              data-l10n-id="start_call"></button>',
+      '    </div>',
       '  </p>',
       '</form>'
     ].join("")),
