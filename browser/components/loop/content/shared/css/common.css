@@ -82,7 +82,7 @@ img {
 }
 
 .btn-success {
-  background: #5cb85c;
+  background: #74bf43;
 }
 
 .btn-warning {
@@ -91,6 +91,36 @@ img {
 
 .btn-error {
   background: #d9534f;
+}
+
+.btn-large {
+  padding: 10px 20px;
+  font-size: 18px;
+  max-width: 200px;
+}
+
+.button-group {
+  width: 100%;
+  display: flex;
+  align-content: space-between;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.button-group .btn {
+  flex: 1;
+}
+
+.btn-icon--video {
+  background-image: url("../img/video-inverse-14x14@2x.png");
+  background-repeat: no-repeat;
+  background-position: 62% 40%;
+  background-size: 20px;
+}
+
+.btn-large.btn-icon {
+  padding-left: 0;
+  padding-right: 20px;
 }
 
 .disabled, button[disabled] {

@@ -37,7 +37,7 @@ loop.webapp = (function($, _, OT) {
       '<form>',
       '  <p>',
       '    <div class="button-group">',
-      '      <button class="btn btn-success btn-large"',
+      '      <button class="btn btn-success btn-large btn-icon btn-icon--video"',
       '              data-l10n-id="start_call"></button>',
       '    </div>',
       '  </p>',

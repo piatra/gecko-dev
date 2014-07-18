@@ -39,23 +39,6 @@ header {
   font-size: 1.8em;
 }
 
-.btn-large {
-  padding: 10px 20px;
-  font-size: 18px;
-  max-width: 200px;
-}
-
-.button-group {
-  width: 100%;
-  display: flex;
-  align-content: space-between;
-  justify-content: center;
-  flex-direction: row;
-}
-
-.button-group .btn {
-  flex: 1;
-}
 
 .lighter {
   opacity: .4;
