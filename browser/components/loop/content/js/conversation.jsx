@@ -27,6 +27,10 @@ loop.conversation = (function(OT, mozL10n) {
       model: React.PropTypes.func.isRequired
     },
 
+    getInitialState: function() {
+      return {showDeclineMenu: false};
+    },
+
     /**
      * Used for adding different styles to the panel
      * @returns {String} Corresponds to the client platform
@@ -55,19 +59,49 @@ loop.conversation = (function(OT, mozL10n) {
       this.props.model.trigger("decline");
     },
 
+    _handleIgnoreBlock: function(e) {
+      this.props.model.trigger("block");
+      /* Prevent event propagation
+       * stop the click from reaching parent element */
+      return false;
+    },
+
+    _toggleDeclineMenu: function() {
+      var currentState = this.state.showDeclineMenu;
+      this.setState({showDeclineMenu: !currentState});
+    },
+
     render: function() {
       /* jshint ignore:start */
-      var btnClassAccept = "btn btn-error btn-decline";
-      var btnClassDecline = "btn btn-success btn-accept";
+      var btnClassAccept = "btn btn-success btn-accept";
+      var btnClassBlock = "btn btn-error btn-block";
+      var btnClassDecline = "btn btn-error btn-decline";
       var conversationPanelClass = "incoming-call " + this._getTargetPlatform();
+      var cx = React.addons.classSet;
+      var dropdownMenu = cx({
+        "native-dropdown-menu": true,
+        "decline-block-menu": true,
+        "hide": !this.state.showDeclineMenu
+      });
       return (
         <div className={conversationPanelClass}>
           <h2>{__("incoming_call")}</h2>
           <div className="button-group">
-            <button className={btnClassAccept} onClick={this._handleDecline}>
-              {__("incoming_call_decline_button")}
-            </button>
-            <button className={btnClassDecline} onClick={this._handleAccept}>
+            <div className={btnClassDecline} onClick={this._handleDecline}>
+              <span className="btn__chevron-text">
+                {__("incoming_call_decline_button")}
+              </span>
+              <span className="btn__chevron"
+                onMouseEnter={this._toggleDeclineMenu}
+                onMouseLeave={this._toggleDeclineMenu}>
+                <ul className={dropdownMenu}>
+                  <li className="btn-block" onClick={this._handleIgnoreBlock}>
+                    Decline and Block
+                  </li>
+                </ul>
+              </span>
+            </div>
+            <button className={btnClassAccept} onClick={this._handleAccept}>
               {__("incoming_call_answer_button")}
             </button>
           </div>
@@ -116,7 +150,8 @@ loop.conversation = (function(OT, mozL10n) {
       "call/accept": "accept",
       "call/decline": "decline",
       "call/ongoing": "conversation",
-      "call/ended": "ended"
+      "call/ended": "ended",
+      "call/block": "ignoreAndBlock"
     },
 
     /**
@@ -148,6 +183,9 @@ loop.conversation = (function(OT, mozL10n) {
       this._conversation.once("decline", function() {
         this.navigate("call/decline", {trigger: true});
       }.bind(this));
+      this._conversation.once("block", function() {
+        this.navigate("call/block", {trigger: true});
+      }.bind(this));
       this.loadReactComponent(loop.conversation.IncomingCallView({
         model: this._conversation
       }));
@@ -170,6 +208,21 @@ loop.conversation = (function(OT, mozL10n) {
     decline: function() {
       window.navigator.mozLoop.stopAlerting();
       // XXX For now, we just close the window
+      window.close();
+    },
+
+    /**
+     * Decline & block an incoming call
+     */
+    ignoreAndBlock: function() {
+      window.navigator.mozLoop.stopAlerting();
+      var token = navigator.mozLoop.getLoopCharPref('loopToken');
+      var client = new loop.Client();
+      client.deleteCallUrl(token, function(error) {
+        // XXX The conversation window will be closed when this cb is triggered
+        // figure out if there is a better way to report the error to the user
+        console.log(error);
+      });
       window.close();
     },
 

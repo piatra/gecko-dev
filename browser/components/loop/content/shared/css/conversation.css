@@ -166,6 +166,7 @@
   align-items: center;
   justify-content: space-between;
   min-height: 264px;
+  position: relative;
 }
 
 .incoming-call h2 {
@@ -173,3 +174,28 @@
   font-weight: normal;
 }
 
+/* Block incoming call */
+
+.native-dropdown-menu {
+  /* Should match a native select menu */
+  position: absolute;
+  background: #fff;
+  padding: 0;
+  box-shadow: 0 4px 5px rgba(30, 30, 30, .3);
+  border-style: solid;
+  border-width: 1px 1px 1px 2px;
+  border-color: #aaa #111 #111 #aaa;
+}
+
+.decline-block-menu {
+  /* Align the menu with the chevron */
+  bottom: -34px;
+  left: -81px;
+  width: 130px;
+}
+
+.decline-block-menu li {
+  list-style: none;
+  font-size: 1em;
+  color: #000;
+}

@@ -167,22 +167,20 @@ loop.panel = (function(_, mozL10n) {
     },
 
     _onCallUrlReceived: function(err, callUrlData) {
-      // XXX this initializer is a bug, as it will cause
-      // setState to set the callUrl to false if one is not returned.
-      // Should decide on an implement correct behavior and state
-      // (eg set widget as disabled, state.callUrl == '')
-      //
-      var callUrl = false;
-
       this.props.notifier.clear();
 
       if (err) {
         this.props.notifier.errorL10n("unable_retrieve_url");
+        this.setState({pending: false});
       } else {
-        callUrl = callUrlData.callUrl || callUrlData.call_url;
-      }
+        var callUrl = callUrlData.callUrl || callUrlData.call_url;
+        // XXX the current server vers does not implement the callToken field
+        // but it exists in the API. This workaround should be removed in the future
+        var token = callUrlData.callToken || callUrl.split('/').pop();
 
-      this.setState({pending: false, callUrl: callUrl});
+        navigator.mozLoop.setLoopCharPref('loopToken', token);
+        this.setState({pending: false, callUrl: callUrl});
+      }
     },
 
     render: function() {
