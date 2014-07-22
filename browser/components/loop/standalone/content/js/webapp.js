@@ -28,6 +28,35 @@ loop.webapp = (function($, _, OT) {
     template: _.template('<p data-l10n-id="welcome"></p>')
   });
 
+
+  var NewConversationFormView = React.createClass({
+    render: function() {
+      return (
+        <div class="container__box">
+          <header class="container__box">
+            <h1 class="header-text"><strong>Firefox</strong> Hello!</h1>
+            <img class="loop-logo" alt="Loop logo"
+              src="http://imgur.com/jqYnLl0.png" />
+            <h3 class="call-url">
+              http://localhost:3000/#call/aSD32GH54DaEt
+            </h3>
+            <h4 class="lighter">(From May 26, 2014)</h4>
+          </header>
+
+          <p class="large-font light-font">Click Call to start a video chat</p>
+          <div id="messages"></div>
+          <div id="main"></div>
+
+          <p class="tos">By using Firefox Hello!, you agree to the
+            <a href="#">Terms of Use</a>
+            and
+            <a href="#">Privacy Notice</a>
+          </p>
+        </div>
+      );
+    }
+  });
+
   /**
    * Conversation launcher view. A ConversationModel is associated and attached
    * as a `model` property.
