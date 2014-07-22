@@ -15,30 +15,93 @@ body {
   font-family: Open Sans,sans-serif;
 }
 
+html, body {
+  height: 100%;
+}
+
 header {
-  max-height: 300px;
   border-radius: 4px;
   background: none repeat scroll 0% 0% #FFF;
-  padding: 20px;
+  padding: 2rem 5rem;
   border: 1px solid #E7E7E7;
   box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.03);
   margin-bottom: 25px;
 }
 
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.container__box {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+.footer,
+.footer a,
+.tos,
+.tos a {
+  font-size: .6rem;
+  font-size: 400;
+  color: #adadad;
+}
+
+  .tos a {
+    text-decoration: none;
+  }
+
+  .tos a:hover {
+    text-decoration: underline;
+  }
+
+  .tos a {
+    color: #777;
+  }
+
+  .footer__external-links a {
+    padding: .2rem .7rem;
+    margin: 0 .5rem;
+    text-decoration: none;
+  }
+
+  .footer__external-links a:hover {
+    color: #111;
+  }
+
+  .footer__logo {
+    width: 150px;
+    margin: 0 auto;
+  }
+
+.call-url {
+  text-overflow: ellipsis;
+  width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .loop-logo {
   width: 100px;
-  margin-top: 1em;
+  margin: 1em auto;
 }
 
 .header-text {
   margin: 0;
-  font-weight: normal;
+  font-weight: lighter;
 }
 
 .large-font {
   font-size: 1.8em;
 }
 
+.light-font {
+  font-weight: lighter;
+}
 
 .lighter {
   opacity: .4;

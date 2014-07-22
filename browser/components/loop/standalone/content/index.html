@@ -13,25 +13,39 @@
   </head>
   <body onload="loop.webapp.init();">
 
-  <header>
-    <h1 class="header-text"><strong>Firefox</strong> Hello!</h1>
-    <img class="loop-logo" alt="Loop logo" src="http://imgur.com/jqYnLl0.png">
-      <!--<h3 id="call-url">http://localhost:3000/content/#call/esb9wZbZh</h3>-->
-      <h4 class="lighter">(From May 26, 2014)</h4>
-  </header>
+  <div class="container">
 
-    <p class="large-font">Click Call to start a video call</p>
+    <div class="container__box">
+      <header class="container__box">
+        <h1 class="header-text"><strong>Firefox</strong> Hello!</h1>
+        <img class="loop-logo" alt="Loop logo" src="http://imgur.com/jqYnLl0.png">
+        <h3 class="call-url">http://localhost:3000/#call/aSD32GH54DaEt</h3>
+        <h4 class="lighter">(From May 26, 2014)</h4>
+      </header>
 
-    <div id="messages"></div>
+      <p class="large-font light-font">Click Call to start a video chat</p>
 
-    <div id="main"></div>
+      <div id="messages"></div>
 
-    <h6>By using Firefox Hello!, you agree to the
+      <div id="main"></div>
+
+      <p class="tos">By using Firefox Hello!, you agree to the
       <a href="#">Terms of Use</a>
       and
       <a href="#">Privacy Notice</a>
-    </h6>
+      </p>
+    </div>
 
+    <div class="footer container__box">
+      <img alt="Mozilla Logo" src="../../content/shared/img/mozilla-logo.png"
+           class="footer__logo">
+      <p class="footer__external-links">
+      <a href="#">Mozilla 2014</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Get Help</a>
+      </p>
+    </div>
+  </div>
     <!-- libs -->
     <script src="https://static.opentok.com/webrtc/v2.2/js/opentok.min.js"></script>
     <script type="text/javascript" src="libs/webl10n-20130617.js"></script>
