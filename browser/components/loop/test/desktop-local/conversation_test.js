@@ -255,7 +255,7 @@ describe("loop.conversation", function() {
       });
 
       describe("#blocked", function() {
-        it("should call alert stop", function() {
+        it("should call mozLoop.stopAlerting", function() {
           sandbox.stub(window.navigator.mozLoop, "stopAlerting");
           router.ignoreAndBlock();
 
@@ -284,7 +284,7 @@ describe("loop.conversation", function() {
           sinon.assert.calledWithExactly(log, fakeError);
         });
 
-        it("close the window", function() {
+        it("should close the window", function() {
           sandbox.stub(window, "close");
           router.ignoreAndBlock();
 

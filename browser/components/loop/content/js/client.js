@@ -127,7 +127,7 @@ loop.Client = (function($) {
 
           this.mozLoop.noteCallUrlExpiry(urlData.expiresAt);
         } catch (err) {
-          console.log("Error requesting call info", err);
+          console.log("Error deleting call info", err);
           cb(err);
         }
       });

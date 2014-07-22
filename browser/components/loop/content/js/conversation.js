@@ -92,8 +92,8 @@ loop.conversation = (function(OT, mozL10n) {
                 __("incoming_call_decline_button")
               ),
               React.DOM.span( {className:"btn__chevron",
-                onMouseEnter:this._toggleDeclineMenu,
-                onMouseLeave:this._toggleDeclineMenu}, 
+                onMouseLeave:this._toggleDeclineMenu,
+                onClick:this._toggleDeclineMenu}, 
                 React.DOM.ul( {className:dropdownMenu}, 
                   React.DOM.li( {className:"btn-block", onClick:this._handleIgnoreBlock}, 
                     "Decline and Block"
@@ -151,7 +151,7 @@ loop.conversation = (function(OT, mozL10n) {
       "call/decline": "decline",
       "call/ongoing": "conversation",
       "call/ended": "ended",
-      "call/block": "ignoreAndBlock"
+      "call/ignoreAndBlock": "ignoreAndBlock"
     },
 
     /**
@@ -212,7 +212,10 @@ loop.conversation = (function(OT, mozL10n) {
     },
 
     /**
-     * Decline & block an incoming call
+     * Ignore and block an incoming call
+     * @note:
+     * - loopToken is the callUrl identifier. It gets set in the panel
+     *   after a callUrl is received
      */
     ignoreAndBlock: function() {
       window.navigator.mozLoop.stopAlerting();

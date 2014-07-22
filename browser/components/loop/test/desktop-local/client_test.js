@@ -72,31 +72,34 @@ describe("loop.Client", function() {
                                 "/call-url/" + fakeToken, "DELETE");
       });
 
-      it("should call the callback when the request succeeds", function() {
-        var callUrlData = {
-          "callUrl": "fakeCallUrl",
-          "expiresAt": 60
-        };
+      it("should call the callback when the request succeeds with null",
+         function() {
+           var callUrlData = {
+             "callUrl": "fakeCallUrl",
+             "expiresAt": 60
+           };
 
-        // Sets up the hawkRequest stub to trigger the callback with no error
-        // and the url.
-        hawkRequestStub.callsArgWith(3, null);
+           // Sets up the hawkRequest stub to trigger the callback with no error
+           // and the url.
+           hawkRequestStub.callsArgWith(3, null);
 
-        client.deleteCallUrl(fakeToken, callback);
+           client.deleteCallUrl(fakeToken, callback);
 
-        sinon.assert.calledWithExactly(callback, null);
-      });
+           sinon.assert.calledWithExactly(callback, null);
+         });
 
       it("should reset all url expiry when the request succeeds", function() {
         // Sets up the hawkRequest stub to trigger the callback with no error
         // and the url.
+        var dateInMilliseconds = new Date(2014,7,20).getTime();
         hawkRequestStub.callsArgWith(3, null);
-        sandbox.useFakeTimers(new Date(2014,7,20).getTime());
+        sandbox.useFakeTimers(dateInMiliseconds);
 
         client.deleteCallUrl(fakeToken, callback);
 
         sinon.assert.calledOnce(mozLoop.noteCallUrlExpiry);
-        sinon.assert.calledWithExactly(mozLoop.noteCallUrlExpiry, 1408518000);
+        sinon.assert.calledWithExactly(mozLoop.noteCallUrlExpiry,
+                                       dateInMilliseconds / 1000);
       });
 
       it("should send an error when the request fails", function() {
