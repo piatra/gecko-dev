@@ -31,6 +31,21 @@ loop.conversation = (function(OT, mozL10n) {
       return {showDeclineMenu: false};
     },
 
+    componentDidMount: function() {
+      window.addEventListener('click', this.clickHandler);
+    },
+
+    componentWillUnmount: function() {
+      window.removeEventListener('click', this.clickHandler);
+    },
+
+    clickHandler: function(e) {
+      var target = e.target;
+      if (!target.classList.contains('btn-chevron')) {
+        this._hideDeclineMenu();
+      }
+    },
+
     /**
      * Used for adding different styles to the panel
      * @returns {String} Corresponds to the client platform
@@ -60,7 +75,7 @@ loop.conversation = (function(OT, mozL10n) {
     },
 
     _handleIgnoreBlock: function(e) {
-      this.props.model.trigger("block");
+      this.props.model.trigger("ignoreAndBlock");
       /* Prevent event propagation
        * stop the click from reaching parent element */
       return false;
@@ -71,6 +86,10 @@ loop.conversation = (function(OT, mozL10n) {
       this.setState({showDeclineMenu: !currentState});
     },
 
+    _hideDeclineMenu: function() {
+      this.setState({showDeclineMenu: false});
+    },
+
     render: function() {
       /* jshint ignore:start */
       var btnClassAccept = "btn btn-success btn-accept";
@@ -78,25 +97,28 @@ loop.conversation = (function(OT, mozL10n) {
       var btnClassDecline = "btn btn-error btn-decline";
       var conversationPanelClass = "incoming-call " + this._getTargetPlatform();
       var cx = React.addons.classSet;
-      var dropdownMenu = cx({
+      var ignoreDropdownMenuClasses = cx({
         "native-dropdown-menu": true,
         "decline-block-menu": true,
-        "hide": !this.state.showDeclineMenu
+        "visually-hidden": !this.state.showDeclineMenu
       });
       return (
         React.DOM.div( {className:conversationPanelClass}, 
           React.DOM.h2(null, __("incoming_call")),
-          React.DOM.div( {className:"button-group"}, 
-            React.DOM.div( {className:btnClassDecline, onClick:this._handleDecline}, 
-              React.DOM.span( {className:"btn__chevron-text"}, 
-                __("incoming_call_decline_button")
-              ),
-              React.DOM.span( {className:"btn__chevron",
-                onMouseLeave:this._toggleDeclineMenu,
-                onClick:this._toggleDeclineMenu}, 
-                React.DOM.ul( {className:dropdownMenu}, 
+          React.DOM.div( {className:"button-group incoming-call-action-group"}, 
+            React.DOM.div( {className:"button-chevron-menu-group"}, 
+              React.DOM.div( {className:"button-group-chevron"}, 
+                React.DOM.div( {className:"button-group"}, 
+                  React.DOM.button( {className:btnClassDecline, onClick:this._handleDecline}, 
+                    __("incoming_call_decline_button")
+                  ),
+                  React.DOM.div( {className:"btn-chevron",
+                    onClick:this._toggleDeclineMenu}
+                  )
+                ),
+                React.DOM.ul( {className:ignoreDropdownMenuClasses}, 
                   React.DOM.li( {className:"btn-block", onClick:this._handleIgnoreBlock}, 
-                    "Decline and Block"
+                    __("incoming_call_decline_and_block_button")
                   )
                 )
               )
@@ -183,8 +205,8 @@ loop.conversation = (function(OT, mozL10n) {
       this._conversation.once("decline", function() {
         this.navigate("call/decline", {trigger: true});
       }.bind(this));
-      this._conversation.once("block", function() {
-        this.navigate("call/block", {trigger: true});
+      this._conversation.once("ignoreAndBlock", function() {
+        this.navigate("call/ignoreAndBlock", {trigger: true});
       }.bind(this));
       this.loadReactComponent(loop.conversation.IncomingCallView({
         model: this._conversation

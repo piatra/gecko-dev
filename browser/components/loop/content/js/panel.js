@@ -155,6 +155,10 @@ loop.panel = (function(_, mozL10n) {
     * Returns a random 5 character string used to identify
     * the conversation.
     * XXX this will go away once the backend changes
+    * @note:
+    * - When we get back a callUrl we use setLoopCharPref to store the token
+    *   (the last fragment of the URL) so that it can be used to ignore&block
+    *   the call. The preference is used by the conversation router.
     */
     conversationIdentifier: function() {
       return Math.random().toString(36).substring(5);
@@ -173,13 +177,21 @@ loop.panel = (function(_, mozL10n) {
         this.props.notifier.errorL10n("unable_retrieve_url");
         this.setState({pending: false});
       } else {
-        var callUrl = callUrlData.callUrl || callUrlData.call_url;
-        // XXX the current server vers does not implement the callToken field
-        // but it exists in the API. This workaround should be removed in the future
-        var token = callUrlData.callToken || callUrl.split('/').pop();
+        try {
+          var callUrl = new window.URL(callUrlData.callUrl ||
+                                       callUrlData.call_url);
+          // XXX the current server vers does not implement the callToken field
+          // but it exists in the API. This workaround should be removed in the future
+          var token = callUrlData.callToken ||
+                      callUrl.pathname.split('/').pop();
 
-        navigator.mozLoop.setLoopCharPref('loopToken', token);
-        this.setState({pending: false, callUrl: callUrl});
+          navigator.mozLoop.setLoopCharPref('loopToken', token);
+          this.setState({pending: false, callUrl: callUrl});
+        } catch(e) {
+          console.log(e);
+          this.props.notifier.errorL10n("unable_retrieve_url");
+          this.setState({pending: false});
+        }
       }
     },
 

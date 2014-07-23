@@ -169,6 +169,18 @@
   position: relative;
 }
 
+.incoming-call-action-group {
+  padding: 1em;
+}
+
+.incoming-call-action-group .button-chevron-menu-group {
+  margin-right: .5em;
+}
+
+.incoming-call-action-group > .btn {
+  margin-left: .5em;
+}
+
 .incoming-call h2 {
   font-size: 1.5em;
   font-weight: normal;
@@ -178,9 +190,9 @@
 
 .native-dropdown-menu {
   /* Should match a native select menu */
-  position: absolute;
   background: #fff;
   padding: 0;
+  margin: 0;
   box-shadow: 0 4px 5px rgba(30, 30, 30, .3);
   border-style: solid;
   border-width: 1px 1px 1px 2px;
@@ -189,13 +201,11 @@
 
 .decline-block-menu {
   /* Align the menu with the chevron */
-  bottom: -34px;
-  left: -81px;
   width: 130px;
 }
 
 .decline-block-menu li {
   list-style: none;
-  font-size: 1em;
+  font-size: .9em;
   color: #000;
 }
