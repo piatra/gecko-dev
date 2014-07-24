@@ -59,6 +59,66 @@ describe("loop.shared.models", function() {
       });
     });
 
+    describe("#requestCallUrlInfo", function() {
+      var conversation, server;
+
+      beforeEach(function() {
+        conversation = new sharedModels.ConversationModel({}, {
+          sdk: fakeSDK,
+          pendingCallTimeout: 1000
+        });
+
+        sandbox.spy($, "get");
+
+        conversation.requestCallUrlInfo({
+          location: {href: "http://localhost:3000/#call/fakeToken"},
+          serverUrl: "http://localhost:5000"
+        });
+
+      });
+
+      afterEach(function() {
+        sandbox.restore();
+      });
+
+      describe("should make the requests to the server", function() {
+
+        it("should throw if serverUrl or location is missing", function() {
+          expect(conversation.requestCallUrlInfo.bind(conversation))
+                                              .to.throw(/Server URL required/);
+        });
+
+        it("should make a $.get for the call url creation date", function() {
+          sinon.assert.calledOnce($.get);
+          sinon.assert.calledWithExactly($.get, "http://localhost:5000/calls/fakeToken");
+        });
+
+        it("should set urlCreationDate on success", function() {
+          sandbox.stub(conversation, "set");
+          var serverResponse = {
+            calleeFriendlyName: "Andrei",
+            urlCreationDate: 0
+          };
+
+          requests[0].respond(200, {"Content-Type": "application/json"},
+                              JSON.stringify(serverResponse));
+          sinon.assert.calledWithExactly(conversation.set,
+                                          "urlCreationDate",
+                                          serverResponse.urlCreationDate);
+        });
+
+        it("should log the error if the requests fails", function() {
+          sinon.stub(console, "log");
+          var serverResponse = {responseText: "error"};
+          requests[0].respond(404, {"Content-Type": "application/json"},
+                              "error");
+
+           sinon.assert.calledWithExactly(console.log, "error");
+        });
+      })
+    });
+
+
     describe("constructed", function() {
       var conversation, fakeClient, fakeBaseServerUrl,
           requestCallInfoStub, requestCallsInfoStub;

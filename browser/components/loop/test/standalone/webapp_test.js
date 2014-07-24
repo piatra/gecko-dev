@@ -76,13 +76,13 @@ describe("loop.webapp", function() {
         sdk: {},
         pendingCallTimeout: 1000
       });
+      sandbox.stub(loop.webapp.WebappRouter.prototype, "loadReactComponent");
       router = new loop.webapp.WebappRouter({
         helper: {},
         conversation: conversation,
         notifier: notifier
       });
       sandbox.stub(router, "loadView");
-      sandbox.stub(router, "loadReactComponent");
       sandbox.stub(router, "navigate");
     });
 
@@ -165,9 +165,12 @@ describe("loop.webapp", function() {
         it("should load the ConversationFormView", function() {
           router.initiate("fakeToken");
 
-          sinon.assert.calledOnce(router.loadView);
-          sinon.assert.calledWith(router.loadView,
-            sinon.match.instanceOf(loop.webapp.ConversationFormView));
+          sinon.assert.calledOnce(router.loadReactComponent);
+          sinon.assert.calledWithExactly(router.loadReactComponent,
+            sinon.match(function(value) {
+              return React.addons.TestUtils.isComponentOfType(
+                value, loop.webapp.ConversationFormView);
+            }));
         });
 
         // https://bugzilla.mozilla.org/show_bug.cgi?id=991118
@@ -302,20 +305,24 @@ describe("loop.webapp", function() {
           sdk: {},
           pendingCallTimeout: 1000
         });
-        view = new loop.webapp.ConversationFormView({
-          model: conversation,
-          notifier: notifier
-        });
+
         fakeSubmitEvent = {preventDefault: sinon.spy()};
         initiate = sinon.stub(conversation, "initiate");
+
+        view = React.addons.TestUtils.renderIntoDocument(
+            loop.webapp.ConversationFormView({
+              model: conversation,
+              notifier: notifier
+          })
+        );
       });
 
       it("should start the conversation establishment process", function() {
         conversation.set("loopToken", "fake");
 
-        view.initiate(fakeSubmitEvent);
+        var button = view.getDOMNode().querySelector("button");
+        React.addons.TestUtils.Simulate.click(button);
 
-        sinon.assert.calledOnce(fakeSubmitEvent.preventDefault);
         sinon.assert.calledOnce(initiate);
         sinon.assert.calledWith(initiate, sinon.match(function (value) {
           return !!value.outgoing &&
@@ -325,13 +332,27 @@ describe("loop.webapp", function() {
       });
 
       it("should disable current form once session is initiated", function() {
-        sandbox.stub(view, "disableForm");
         conversation.set("loopToken", "fake");
 
-        view.initiate(fakeSubmitEvent);
+        var button = view.getDOMNode().querySelector("button");
+        React.addons.TestUtils.Simulate.click(button);
 
-        sinon.assert.calledOnce(view.disableForm);
+        expect(button.disabled).to.eql(true);
       });
+
+      it("should set the url creation date", function() {
+        conversation.set("urlCreationDate", 0);
+
+        // wrap in a jquery object because text is broken up
+        // into several span elements
+        var $timestamp = $(view.getDOMNode().querySelector(".call-url-date"));
+        var date = (new Date(0));
+        var options = {year: "numeric", month: "long", day: "numeric"};
+        var timestamp = date.toLocaleDateString(navigator.language, options);
+
+        expect($timestamp.text()).to.eql("(From " + timestamp + ")");
+      });
+
     });
 
     describe("Events", function() {
@@ -344,10 +365,25 @@ describe("loop.webapp", function() {
           sdk: {},
           pendingCallTimeout: 1000
         });
-        view = new loop.webapp.ConversationFormView({
-          model: conversation,
-          notifier: notifier
-        });
+
+        sandbox.spy(conversation, "listenTo");
+
+        view = React.addons.TestUtils.renderIntoDocument(
+            loop.webapp.ConversationFormView({
+              model: conversation,
+              notifier: notifier
+            })
+          );
+      });
+
+      it("should listen for urlCreationDate events", function() {
+        sinon.assert.calledWithExactly(conversation.listenTo, conversation,
+                                    "change:urlCreationDate", sinon.match.func);
+      });
+
+      it("should listen for session:error events", function() {
+        sinon.assert.calledWithExactly(conversation.listenTo, conversation,
+                                       "session:error", sinon.match.func);
       });
 
       it("should trigger a notication when a session:error model event is " +

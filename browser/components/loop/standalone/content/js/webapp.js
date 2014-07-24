@@ -82,23 +82,49 @@ loop.webapp = (function($, _, OT, webL10n) {
     }
   });
 
+  var ConversationHeader = React.createClass({displayName: 'ConversationHeader',
+    render: function() {
+      var conversationUrl = location.href;
+      return (
+        /* jshint ignore:start */
+        React.DOM.header({className: "container-box"}, 
+          React.DOM.h1({className: "light-weight-font"}, 
+            React.DOM.strong(null, __("brandShortname")), " ", __("clientShortname")
+          ), 
+          React.DOM.div({className: "loop-logo", title: "Loop logo", 
+            src: ""}), 
+          React.DOM.h3({className: "call-url"}, 
+            conversationUrl
+          ), 
+          React.DOM.h4({className: "light-color-font call-url-date"}, 
+            "(From ", this.props.urlCreationDate, ")"
+          )
+        )
+        /* jshint ignore:end */
+      );
+    }
+  });
+
+  var ConversationFooter = React.createClass({displayName: 'ConversationFooter',
+    render: function() {
+      return (
+        React.DOM.div(null, 
+          React.DOM.div({title: "Mozilla Logo", className: "footer-logo"}), 
+          React.DOM.p({className: "footer-external-links"}, 
+            React.DOM.a({href: "#"}, "Mozilla 2014"), 
+            React.DOM.a({href: "#"}, "Privacy Policy"), 
+            React.DOM.a({href: "#"}, "Get Help")
+          )
+        )
+      );
+    }
+  });
+
   /**
    * Conversation launcher view. A ConversationModel is associated and attached
    * as a `model` property.
    */
-  var ConversationFormView = sharedViews.BaseView.extend({
-    template: _.template([
-      '<form>',
-      '  <p>',
-      '    <button class="btn btn-success" data-l10n-id="start_call"></button>',
-      '  </p>',
-      '</form>'
-    ].join("")),
-
-    events: {
-      "submit": "initiate"
-    },
-
+  var ConversationFormView = React.createClass({displayName: 'ConversationFormView',
     /**
      * Constructor.
      *
@@ -106,55 +132,103 @@ loop.webapp = (function($, _, OT, webL10n) {
      * - {loop.shared.model.ConversationModel}    model    Conversation model.
      * - {loop.shared.views.NotificationListView} notifier Notifier component.
      *
-     * @param  {Object} options Options object.
      */
-    initialize: function(options) {
-      options = options || {};
 
-      if (!options.model) {
-        throw new Error("missing required model");
-      }
-      this.model = options.model;
+    getInitialState: function() {
+      return {
+        urlCreationDate: "unknown",
+        disableCallButton: false
+      };
+    },
 
-      if (!options.notifier) {
-        throw new Error("missing required notifier");
-      }
-      this.notifier = options.notifier;
+    propTypes: {
+      model: React.PropTypes.instanceOf(sharedModels.ConversationModel)
+                                       .isRequired,
+      notifier: React.PropTypes.object.isRequired
+    },
 
-      this.listenTo(this.model, "session:error", this._onSessionError);
+    componentDidMount: function() {
+      this.props.model.listenTo(this.props.model, "change:urlCreationDate",
+                                this._setConversationTimestamp);
+      this.props.model.listenTo(this.props.model, "session:error",
+                                this._onSessionError);
+      this.props.model.requestCallUrlInfo({
+        location: window.location,
+        serverUrl: loop.config.serverUrl
+      });
     },
 
     _onSessionError: function(error) {
       console.error(error);
-      this.notifier.errorL10n("unable_retrieve_call_info");
-    },
-
-    /**
-     * Disables this form to prevent multiple submissions.
-     *
-     * @see  https://bugzilla.mozilla.org/show_bug.cgi?id=991126
-     */
-    disableForm: function() {
-      this.$("button").attr("disabled", "disabled");
+      this.props.notifier.errorL10n("unable_retrieve_call_info");
     },
 
     /**
      * Initiates the call.
-     *
-     * @param {SubmitEvent} event
      */
-    initiate: function(event) {
-      event.preventDefault();
-      this.model.initiate({
+    _initiate: function() {
+      this.props.model.initiate({
         client: new loop.StandaloneClient({
           baseServerUrl: baseServerUrl
         }),
         outgoing: true,
         // For now, we assume both audio and video as there is no
         // other option to select.
-        callType: "audio-video"
+        callType: "audio-video",
+        loopServer: loop.config.serverUrl
       });
-      this.disableForm();
+      // Disables this form to prevent multiple submissions.
+      // @see  https://bugzilla.mozilla.org/show_bug.cgi?id=991126
+      this.setState({disableCallButton: true});
+    },
+
+    _setConversationTimestamp: function() {
+      var date = (new Date(this.props.model.get("urlCreationDate") * 1000));
+      var options = {year: "numeric", month: "long", day: "numeric"};
+      var timestamp = date.toLocaleDateString(navigator.language, options);
+
+      this.setState({urlCreationDate: timestamp});
+    },
+
+    render: function() {
+      var tos_link_name = __("terms_of_use_link_text");
+      var privacy_notice_name = __("privacy_notice_link_text");
+      var tosHTML = __("legal_text_and_links", {
+        "terms_of_use_url": "<a target=_blank href='" +
+          "https://accounts.firefox.com/legal/terms'>" + tos_link_name + "</a>",
+        "privacy_notice_url": "<a target=_blank href='" +
+          "https://www.mozilla.org/privacy/'>" + privacy_notice_name + "</a>"
+      });
+      var callButtonClasses = "btn btn-success btn-large " +
+                              loop.shared.utils.getTargetPlatform();
+      return (
+        /* jshint ignore:start */
+        React.DOM.div({className: "container"}, 
+          React.DOM.div({className: "container-box"}, 
+            ConversationHeader({urlCreationDate: this.state.urlCreationDate}), 
+            React.DOM.p({className: "large-font light-weight-font"}, 
+              __("initiate_call_button_label")
+            ), 
+            React.DOM.div({id: "messages"}), 
+            React.DOM.div({className: "button-group"}, 
+              React.DOM.div({className: "flex-padding-1"}), 
+              React.DOM.button({ref: "submitButton", onClick: this._initiate, 
+                className: callButtonClasses, 
+                disabled: this.state.disableCallButton}, 
+                __("initiate_call_button"), 
+                React.DOM.i({className: "icon icon-video"})
+              ), 
+              React.DOM.div({className: "flex-padding-1"})
+            ), 
+            React.DOM.p({className: "terms-service", 
+              dangerouslySetInnerHTML: {__html: tosHTML}})
+          ), 
+          React.DOM.div({className: "footer container-box"}, 
+            ConversationFooter(null)
+          )
+        )
+        /* jshint ignore:end */
+      );
     }
   });
 
@@ -250,7 +324,7 @@ loop.webapp = (function($, _, OT, webL10n) {
         this._conversation.endSession();
       }
       this._conversation.set("loopToken", loopToken);
-      this.loadView(new ConversationFormView({
+      this.loadReactComponent(ConversationFormView({
         model: this._conversation,
         notifier: this._notifier
       }));
@@ -308,6 +382,9 @@ loop.webapp = (function($, _, OT, webL10n) {
     } else if (!OT.checkSystemRequirements()) {
       router.navigate("unsupportedBrowser", {trigger: true});
     }
+    // Set the 'lang' and 'dir' attributes to <html> when the page is translated
+    document.documentElement.lang = document.webL10n.getLanguage();
+    document.documentElement.dir = document.webL10n.getDirection();
   }
 
   return {
