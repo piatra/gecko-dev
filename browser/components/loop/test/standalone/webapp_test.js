@@ -298,7 +298,7 @@ describe("loop.webapp", function() {
     });
 
     describe("#initiate", function() {
-      var conversation, initiate, view, fakeSubmitEvent;
+      var conversation, initiate, view, fakeSubmitEvent, requestCallUrlInfo;
 
       beforeEach(function() {
         conversation = new sharedModels.ConversationModel({}, {
@@ -309,10 +309,19 @@ describe("loop.webapp", function() {
         fakeSubmitEvent = {preventDefault: sinon.spy()};
         initiate = sinon.stub(conversation, "initiate");
 
+        sandbox.stub(loop, "StandaloneClient").returns({
+          requestCallUrlInfo: function(token, cb) {
+            cb(null, {urlCreationDate: 0});
+          }
+        });
+
         view = React.addons.TestUtils.renderIntoDocument(
             loop.webapp.ConversationFormView({
               model: conversation,
-              notifier: notifier
+              notifier: notifier,
+              client: loop.StandaloneClient({
+                baseServerUrl: loop.webapp.baseServerUrl
+              })
           })
         );
       });
@@ -324,11 +333,10 @@ describe("loop.webapp", function() {
         React.addons.TestUtils.Simulate.click(button);
 
         sinon.assert.calledOnce(initiate);
-        sinon.assert.calledWith(initiate, sinon.match(function (value) {
-          return !!value.outgoing &&
-            (value.client instanceof loop.StandaloneClient) &&
-            value.client.settings.baseServerUrl === loop.webapp.baseServerUrl;
-        }, "{client: <properly constructed client>, outgoing: true}"));
+        sinon.assert.calledWith(initiate, {
+          loopServer: loop.webapp.baseServerUrl,
+          outgoing: true
+        });
       });
 
       it("should disable current form once session is initiated", function() {
@@ -341,8 +349,6 @@ describe("loop.webapp", function() {
       });
 
       it("should set the url creation date", function() {
-        conversation.set("urlCreationDate", 0);
-
         // wrap in a jquery object because text is broken up
         // into several span elements
         var $timestamp = $(view.getDOMNode().querySelector(".call-url-date"));
@@ -356,7 +362,7 @@ describe("loop.webapp", function() {
     });
 
     describe("Events", function() {
-      var conversation, view;
+      var conversation, view, StandaloneClient, requestCallUrlInfo;
 
       beforeEach(function() {
         conversation = new sharedModels.ConversationModel({
@@ -367,18 +373,29 @@ describe("loop.webapp", function() {
         });
 
         sandbox.spy(conversation, "listenTo");
+        requestCallUrlInfo = sandbox.stub();
+        sandbox.stub(loop, "StandaloneClient").returns({
+          requestCallUrlInfo: requestCallUrlInfo
+        });
+
+        console.log(loop);
 
         view = React.addons.TestUtils.renderIntoDocument(
             loop.webapp.ConversationFormView({
               model: conversation,
-              notifier: notifier
+              notifier: notifier,
+              client: loop.StandaloneClient({
+                baseServerUrl: loop.webapp.baseServerUrl
+              })
             })
           );
       });
 
-      it("should listen for urlCreationDate events", function() {
-        sinon.assert.calledWithExactly(conversation.listenTo, conversation,
-                                    "change:urlCreationDate", sinon.match.func);
+      it("should call requestCallUrlInfo", function() {
+        sinon.assert.calledOnce(requestCallUrlInfo);
+        sinon.assert.calledWithExactly(requestCallUrlInfo,
+                                       sinon.match.string,
+                                       sinon.match.func);
       });
 
       it("should listen for session:error events", function() {

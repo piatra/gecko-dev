@@ -5,6 +5,8 @@
 html,
 body,
 #main {
+  /* Required for `justify-content: space-between` to divide space equally
+   * based on the full height of the page */
   height: 100%;
 }
 

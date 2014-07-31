@@ -84,19 +84,24 @@ loop.webapp = (function($, _, OT, webL10n) {
 
   var ConversationHeader = React.createClass({
     render: function() {
+      var cx = React.addons.classSet;
       var conversationUrl = location.href;
+      var urlCreationDateClasses = cx({
+        "light-color-font": true,
+        "call-url-date": true,
+        "hide": !this.props.urlCreationDate /*hidden until date is available*/
+      });
       return (
         /* jshint ignore:start */
         <header className="container-box">
           <h1 className="light-weight-font">
             <strong>{__("brandShortname")}</strong> {__("clientShortname")}
           </h1>
-          <div className="loop-logo" title="Loop logo"
-            src="" />
+          <div className="loop-logo" title="Loop logo"></div>
           <h3 className="call-url">
             {conversationUrl}
           </h3>
-          <h4 className="light-color-font call-url-date">
+          <h4 className={urlCreationDateClasses}>
             (From {this.props.urlCreationDate})
           </h4>
         </header>
@@ -136,7 +141,7 @@ loop.webapp = (function($, _, OT, webL10n) {
 
     getInitialState: function() {
       return {
-        urlCreationDate: "unknown",
+        urlCreationDate: false,
         disableCallButton: false
       };
     },
@@ -144,7 +149,8 @@ loop.webapp = (function($, _, OT, webL10n) {
     propTypes: {
       model: React.PropTypes.instanceOf(sharedModels.ConversationModel)
                                        .isRequired,
-      notifier: React.PropTypes.object.isRequired
+      notifier: React.PropTypes.instanceOf(sharedViews.NotificationListView)
+                                       .isRequired
     },
 
     componentDidMount: function() {
@@ -152,6 +158,10 @@ loop.webapp = (function($, _, OT, webL10n) {
                                 this._onSessionError);
       this.props.client.requestCallUrlInfo(this.props.model.get("loopToken"),
                                            this._setConversationTimestamp);
+
+      // XXX DOM element does not exist before React view gets instantiated
+      // We should turn the notifier into a react component
+      this.props.notifier.$el = $("#messages");
     },
 
     _onSessionError: function(error) {
