@@ -371,19 +371,12 @@ describe("loop.webapp", function() {
 
         sandbox.spy(conversation, "listenTo");
         requestCallUrlInfo = sandbox.stub();
-        sandbox.stub(loop, "StandaloneClient").returns({
-          requestCallUrlInfo: requestCallUrlInfo
-        });
-
-        console.log(loop);
 
         view = React.addons.TestUtils.renderIntoDocument(
             loop.webapp.ConversationFormView({
               model: conversation,
               notifier: notifier,
-              client: loop.StandaloneClient({
-                baseServerUrl: loop.webapp.baseServerUrl
-              })
+              client: {requestCallUrlInfo: requestCallUrlInfo}
             })
           );
       });
