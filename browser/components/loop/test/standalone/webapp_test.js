@@ -312,31 +312,28 @@ describe("loop.webapp", function() {
         sandbox.stub(loop, "StandaloneClient").returns({
           requestCallUrlInfo: function(token, cb) {
             cb(null, {urlCreationDate: 0});
-          }
+          },
+          settings: {baseServerUrl: loop.webapp.baseServerUrl}
         });
 
         view = React.addons.TestUtils.renderIntoDocument(
             loop.webapp.ConversationFormView({
               model: conversation,
               notifier: notifier,
-              client: loop.StandaloneClient({
-                baseServerUrl: loop.webapp.baseServerUrl
-              })
+              client: loop.StandaloneClient()
           })
         );
       });
 
       it("should start the conversation establishment process", function() {
-        conversation.set("loopToken", "fake");
-
         var button = view.getDOMNode().querySelector("button");
         React.addons.TestUtils.Simulate.click(button);
 
         sinon.assert.calledOnce(initiate);
-        sinon.assert.calledWith(initiate, {
-          loopServer: loop.webapp.baseServerUrl,
-          outgoing: true
-        });
+        sinon.assert.calledWith(initiate, sinon.match(function (value) {
+          return !!value.outgoing &&
+            (value.client.settings.baseServerUrl === loop.webapp.baseServerUrl)
+        }, "outgoing: true && correct baseServerUrl"));
       });
 
       it("should disable current form once session is initiated", function() {
