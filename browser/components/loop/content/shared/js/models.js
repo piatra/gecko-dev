@@ -148,34 +148,6 @@ loop.shared.models = (function() {
     },
 
     /**
-     * Makes a request for url creation date for standalone UI
-     *
-     * @param {string} options.serverUrl Base url where the req is made
-     * @param {string} options.location Window.location object
-     **/
-    requestCallUrlInfo: function(options) {
-      options = options || {};
-
-      if (!options.serverUrl) {
-        throw new Error("Server URL required");
-      }
-      if (!options.location) {
-        throw new Error("Location required");
-      }
-
-      var conversationToken = options.location.href.split("/").pop();
-
-      $.get(options.serverUrl + "/calls/" + conversationToken)
-      .done(function(response) {
-          this.set("urlCreationDate", response.urlCreationDate);
-        }.bind(this)
-      ).fail(function(reqObj, status) {
-        console.error("Request failed: ", status);
-        console.log(reqObj.responseText);
-      });
-    },
-
-    /**
      * Checks that the session is ready.
      *
      * @return {Boolean}

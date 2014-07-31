@@ -75,6 +75,28 @@ loop.StandaloneClient = (function($) {
       cb(err);
     },
 
+   /**
+    * Makes a request for url creation date for standalone UI
+    *
+    * @param {String} loopToken The loopToken representing the call
+    * @param {Function} cb Callback(err, callUrlData)
+    *
+    **/
+    requestCallUrlInfo: function(loopToken, cb) {
+      if (!loopToken) {
+        throw new Error("Missing required parameter loopToken");
+      }
+
+      $.ajax({
+        url:         this.settings.baseServerUrl + "/calls/" + loopToken,
+        method:      "GET",
+        contentType: "application/json",
+        dataType:    "json"
+      }).done(function(callUrlInfo) {
+          cb(null, callUrlInfo);
+        }).fail(this._failureHandler.bind(this, cb));
+    },
+
     /**
      * Posts a call request to the server for a call represented by the
      * loopToken. Will return the session data for the call.

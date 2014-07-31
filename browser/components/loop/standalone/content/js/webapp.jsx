@@ -148,14 +148,10 @@ loop.webapp = (function($, _, OT, webL10n) {
     },
 
     componentDidMount: function() {
-      this.props.model.listenTo(this.props.model, "change:urlCreationDate",
-                                this._setConversationTimestamp);
       this.props.model.listenTo(this.props.model, "session:error",
                                 this._onSessionError);
-      this.props.model.requestCallUrlInfo({
-        location: window.location,
-        serverUrl: loop.config.serverUrl
-      });
+      this.props.client.requestCallUrlInfo(this.props.model.get("loopToken"),
+                                           this._setConversationTimestamp);
     },
 
     _onSessionError: function(error) {
@@ -168,9 +164,7 @@ loop.webapp = (function($, _, OT, webL10n) {
      */
     _initiate: function() {
       this.props.model.initiate({
-        client: new loop.StandaloneClient({
-          baseServerUrl: baseServerUrl
-        }),
+        client: this.props.client,
         outgoing: true,
         // For now, we assume both audio and video as there is no
         // other option to select.
@@ -182,12 +176,22 @@ loop.webapp = (function($, _, OT, webL10n) {
       this.setState({disableCallButton: true});
     },
 
-    _setConversationTimestamp: function() {
-      var date = (new Date(this.props.model.get("urlCreationDate") * 1000));
-      var options = {year: "numeric", month: "long", day: "numeric"};
-      var timestamp = date.toLocaleDateString(navigator.language, options);
+    /**
+     * Set the call url creation date on the standalone UI page
+     * @param {error} err If the request fails
+     * @param {object} callUrlInfo Contains information about the requested call
+     * http://docs.services.mozilla.com/loop/apis.html#post-calls-token
+     */
+    _setConversationTimestamp: function(err, callUrlInfo) {
+      if (err) {
+        this.props.notifier.errorL10n("unable_retrieve_call_info");
+      } else {
+        var date = (new Date(callUrlInfo.urlCreationDate * 1000));
+        var options = {year: "numeric", month: "long", day: "numeric"};
+        var timestamp = date.toLocaleDateString(navigator.language, options);
 
-      this.setState({urlCreationDate: timestamp});
+        this.setState({urlCreationDate: timestamp});
+      }
     },
 
     render: function() {
@@ -326,7 +330,10 @@ loop.webapp = (function($, _, OT, webL10n) {
       this._conversation.set("loopToken", loopToken);
       this.loadReactComponent(ConversationFormView({
         model: this._conversation,
-        notifier: this._notifier
+        notifier: this._notifier,
+        client: new loop.StandaloneClient({
+          baseServerUrl: baseServerUrl
+        })
       }));
     },
 
