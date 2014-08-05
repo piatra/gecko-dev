@@ -209,13 +209,40 @@ describe("loop.shared.views", function() {
     });
 
     describe("#componentDidMount", function() {
-      it("should start a session", function() {
-        sandbox.stub(model, "startSession");
 
+      beforeEach(function() {
+        sandbox.stub(model, "startSession");
+      });
+
+      it("should start a session", function() {
         mountTestComponent({sdk: fakeSDK, model: model});
 
         sinon.assert.calledOnce(model.startSession);
       });
+
+      it("should have video state set to true by default", function() {
+        var el = mountTestComponent({sdk: fakeSDK, model: model});
+
+        expect(el.state.video.enabled).to.eql(true);
+      });
+
+      it("should set video state to false when audio only call", function() {
+        sandbox.stub(model, "get").withArgs("callType").returns("audio");
+
+        var el = mountTestComponent({sdk: fakeSDK, model: model});
+
+        expect(el.state.video.enabled).to.eql(false);
+      });
+
+      it("should add .conversation-audio-only HTML selector when audio call",
+         function() {
+           sandbox.stub(model, "get").withArgs("callType").returns("audio");
+
+           var el = mountTestComponent({sdk: fakeSDK, model: model});
+
+           expect(el.getDOMNode().classList.contains("conversation-audio-only"))
+           .to.eql(true);
+         });
     });
 
     describe("constructed", function() {

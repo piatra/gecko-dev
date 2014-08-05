@@ -175,8 +175,18 @@ loop.webapp = (function($, _, OT, webL10n) {
      * Initiates the call.
      */
     _initiateOutgoingCall: function() {
+      this.props.model.setupOutgoingCall({
+        client: new loop.StandaloneClient({
+          baseServerUrl: baseServerUrl
+        }),
+        outgoing: true,
+        // For now, we assume both audio and video as there is no
+        // other option to select.
+        callType: "audio-video",
+        loopServer: loop.config.serverUrl
+      });
+
       this.setState({disableCallButton: true});
-      this.props.model.setupOutgoingCall();
     },
 
     _setConversationTimestamp: function(err, callUrlInfo) {

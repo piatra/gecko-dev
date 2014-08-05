@@ -156,7 +156,7 @@ loop.conversation = (function(OT, mozL10n) {
      *                             by the router from the URL.
      */
     incoming: function(loopVersion) {
-      navigator.mozLoop.startAlerting();
+      window.navigator.mozLoop.startAlerting();
       this._conversation.set({loopVersion: loopVersion});
       this._conversation.once("accept", () => {
         this.navigate("call/accept", {trigger: true});

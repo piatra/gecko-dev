@@ -8,6 +8,12 @@
   position: relative;
 }
 
+/* Hide the video placeholder if stream not available */
+.conversation-audio-only .media {
+  height: 0;
+  overflow: hidden;
+}
+
 .conversation-toolbar {
   position: absolute;
   z-index: 999; /* required to have it superimposed to the video element */

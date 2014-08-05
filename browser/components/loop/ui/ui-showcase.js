@@ -125,6 +125,9 @@
           Section({name: "ConversationView"}, 
             Example({summary: "Default"}, 
               ConversationView({video: {enabled: true}, audio: {enabled: true}})
+            ), 
+            Example({summary: "Audio only"}, 
+              ConversationView({video: {enabled: false}, audio: {enabled: true}})
             )
           ), 
 

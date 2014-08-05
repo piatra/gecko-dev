@@ -137,8 +137,10 @@ loop.shared.models = (function() {
       this.set({
         sessionId:    sessionData.sessionId,
         sessionToken: sessionData.sessionToken,
-        apiKey:       sessionData.apiKey
-      });
+        apiKey:       sessionData.apiKey,
+        callType:     sessionData.callType || false
+      }).trigger("session:ready", this);
+      return this;
     },
 
     /**

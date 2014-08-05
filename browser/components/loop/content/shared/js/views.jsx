@@ -219,9 +219,16 @@ loop.shared.views = (function(_, OT, l10n) {
 
     getInitialState: function() {
       return {
-        video: {enabled: false},
-        audio: {enabled: false}
+        video: {enabled: true},
+        audio: {enabled: true},
       };
+    },
+
+    componentWillMount: function() {
+      if (this.props.model.get("callType") == "audio") {
+        this.publisherConfig['publishVideo'] = false;
+        this.setState({video: {enabled: false}});
+      }
     },
 
     componentDidMount: function() {
@@ -333,9 +340,15 @@ loop.shared.views = (function(_, OT, l10n) {
     },
 
     render: function() {
+      var cx = React.addons.classSet;
+      var conversationWindowClasses = cx({
+        conversation: true,
+        "conversation-audio-only": !this.state.video.enabled
+      });
+      console.log(this.state.video);
       /* jshint ignore:start */
       return (
-        <div className="conversation">
+        <div className={conversationWindowClasses}>
           <ConversationToolbar video={this.state.video}
                                audio={this.state.audio}
                                publishStream={this.publishStream}

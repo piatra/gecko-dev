@@ -126,6 +126,9 @@
             <Example summary="Default">
               <ConversationView video={{enabled: true}} audio={{enabled: true}} />
             </Example>
+            <Example summary="Audio only">
+              <ConversationView video={{enabled: false}} audio={{enabled: true}} />
+            </Example>
           </Section>
 
           <Section name="FeedbackView">
