@@ -1,0 +1,3 @@
+# Loop server configuration
+CONTENT_SERVER_PORT = 3001
+LOOP_SERVER_PORT = 5001
