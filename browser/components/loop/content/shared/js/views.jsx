@@ -351,20 +351,25 @@ loop.shared.views = (function(_, OT, l10n) {
     },
 
     render: function() {
+      var localStreamClasses = React.addons.classSet({
+        local: true,
+        "local-stream": true,
+        "local-stream-audio": !this.state.video.enabled
+      });
       /* jshint ignore:start */
       return (
         <div className="video-layout-wrapper">
           <div className="conversation">
-            <ConversationToolbar video={this.state.video}
-                                 audio={this.state.audio}
-                                 publishStream={this.publishStream}
-                                 hangup={this.hangup} />
             <div className="media nested">
               <div className="video_wrapper remote_wrapper">
                 <div className="video_inner remote"></div>
               </div>
-              <div className="local"></div>
+              <div className={localStreamClasses}></div>
             </div>
+            <ConversationToolbar video={this.state.video}
+                                 audio={this.state.audio}
+                                 publishStream={this.publishStream}
+                                 hangup={this.hangup} />
           </div>
         </div>
       );

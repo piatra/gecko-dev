@@ -114,26 +114,45 @@
 
           Section({name: "IncomingCallView"}, 
             Example({summary: "Default", dashed: "true", style: {width: "280px"}}, 
-              IncomingCallView(null)
+              React.DOM.div({className: "fx-embedded"}, 
+                IncomingCallView(null)
+              )
+            )
+          ), 
+
+          Section({name: "IncomingCallView-ActiveState"}, 
+            Example({summary: "Default", dashed: "true", style: {width: "280px"}}, 
+              React.DOM.div({className: "fx-embedded", 'data-trigger-click': "btn-chevron"}, 
+                IncomingCallView(null)
+              )
             )
           ), 
 
           Section({name: "ConversationToolbar"}, 
             React.DOM.h3(null, "Desktop Conversation Window"), 
-            React.DOM.div({className: "conversation-window"}, 
+            React.DOM.div({className: "conversation-window fx-embedded override-position"}, 
               Example({summary: "Default (260x265)", dashed: "true"}, 
-                ConversationToolbar({video: {enabled: true}, audio: {enabled: true}})
+                ConversationToolbar({video: {enabled: true}, 
+                                     audio: {enabled: true}, 
+                                     hangup: noop, 
+                                     publishStream: noop})
               ), 
               Example({summary: "Video muted"}, 
-                ConversationToolbar({video: {enabled: false}, audio: {enabled: true}})
+                ConversationToolbar({video: {enabled: false}, 
+                                     audio: {enabled: true}, 
+                                     hangup: noop, 
+                                     publishStream: noop})
               ), 
               Example({summary: "Audio muted"}, 
-                ConversationToolbar({video: {enabled: true}, audio: {enabled: false}})
+                ConversationToolbar({video: {enabled: true}, 
+                                     audio: {enabled: false}, 
+                                     hangup: noop, 
+                                     publishStream: noop})
               )
             ), 
 
             React.DOM.h3(null, "Standalone"), 
-            React.DOM.div({className: "standalone"}, 
+            React.DOM.div({className: "standalone override-position"}, 
               Example({summary: "Default"}, 
                 ConversationToolbar({video: {enabled: true}, audio: {enabled: true}})
               ), 
@@ -161,11 +180,14 @@
 
             Example({summary: "Desktop conversation window", dashed: "true", 
                      style: {width: "260px", height: "265px"}}, 
-              React.DOM.div({className: "conversation-window"}, 
-                ConversationView({video: {enabled: true}, audio: {enabled: true}, 
+              React.DOM.div({className: "conversation-window fx-embedded"}, 
+                ConversationView({sdk: {}, 
+                                  video: {enabled: true}, 
+                                  audio: {enabled: true}, 
                                   model: mockConversationModel})
               )
             ), 
+
             Example({summary: "Standalone version"}, 
               React.DOM.div({className: "standalone"}, 
                 ConversationView({video: {enabled: true}, audio: {enabled: true}, 
@@ -197,15 +219,103 @@
             Example({summary: "Non-Firefox User"}, 
               CallUrlExpiredView({helper: {isFirefox: returnFalse}})
             )
+          ), 
+
+          Section({name: "AlertMessages"}, 
+            Example({summary: "Various alerts"}, 
+              React.DOM.div({className: "alert alert-warning"}, 
+                React.DOM.button({className: "close"}), 
+                React.DOM.p({className: "message"}, 
+                  "The person you were calling has ended the conversation."
+                )
+              ), 
+              React.DOM.br(null), 
+              React.DOM.div({className: "alert alert-error"}, 
+                React.DOM.button({className: "close"}), 
+                React.DOM.p({className: "message"}, 
+                  "The person you were calling has ended the conversation."
+                )
+              )
+            )
           )
+
         )
       );
     }
   });
 
+  /**
+   * Simulate events and enable active state for component showcase
+   * */
+  function _triggerActiveComponents() {
+    var components = document.querySelectorAll('[data-trigger-click]');
+    [].forEach.call(components, function(comp) {
+      var className = comp.dataset.triggerClick;
+      var triggerClick = simulateClick.bind(null, comp);
+      var multipleNodes = className.split(' ');
+      if (multipleNodes.length > 1) { // if multiple nodes
+        multipleNodes.forEach(triggerClick);
+      } else {
+        triggerClick(className);
+      }
+    });
+
+    function simulateClick(parentComponent, sel) {
+      var node = parentComponent.querySelector("." + sel);
+      if (node) {
+        React.addons.TestUtils.Simulate.click(node);
+      }
+    }
+  }
+
+  /**
+   * Render components that have different styles across
+   * CSS media rules in their own iframe to mimic the viewport
+   * */
+  function _renderComponentsInIframes() {
+    var parents = document.querySelectorAll('.breakpoint');
+    [].forEach.call(parents, appendChildInIframe);
+
+    /**
+     * Extracts the component from the DOM and appends in the an iframe
+     *
+     * @type {HTMLElement} parent - Parent DOM node of a component & iframe
+     * */
+    function appendChildInIframe(parent) {
+      var styles     = document.querySelector('head').children;
+      var component  = parent.children[0];
+      var iframe     = parent.children[1];
+      iframe.src    = "about:blank";
+      // Workaround for bug 297685
+      iframe.onload = function () {
+        var iframeHead = iframe.contentDocument.querySelector('head');
+        iframe.contentDocument.documentElement.querySelector('body')
+                                              .appendChild(component);
+
+        [].forEach.call(styles, function(style) {
+          iframeHead.appendChild(style.cloneNode(true));
+        });
+
+      }
+    }
+  }
+
   window.addEventListener("DOMContentLoaded", function() {
     var body = document.body;
     body.className = loop.shared.utils.getTargetPlatform();
-    React.renderComponent(App(null), document.body);
+
+    /* XXX we should properly mock the component dependencies
+     * it would remove the need for a try/catch block and would
+     * reveal meaningful debug messages in the console
+     * */
+    try {
+      React.renderComponent(App(null), body);
+    } catch (e) {
+      console.log(e);
+    }
+
+    _triggerActiveComponents();
+    _renderComponentsInIframes();
   });
+
 })();

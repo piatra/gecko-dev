@@ -351,20 +351,25 @@ loop.shared.views = (function(_, OT, l10n) {
     },
 
     render: function() {
+      var localStreamClasses = React.addons.classSet({
+        local: true,
+        "local-stream": true,
+        "local-stream-audio": !this.state.video.enabled
+      });
       /* jshint ignore:start */
       return (
         React.DOM.div({className: "video-layout-wrapper"}, 
           React.DOM.div({className: "conversation"}, 
-            ConversationToolbar({video: this.state.video, 
-                                 audio: this.state.audio, 
-                                 publishStream: this.publishStream, 
-                                 hangup: this.hangup}), 
             React.DOM.div({className: "media nested"}, 
               React.DOM.div({className: "video_wrapper remote_wrapper"}, 
                 React.DOM.div({className: "video_inner remote"})
               ), 
-              React.DOM.div({className: "local"})
-            )
+              React.DOM.div({className: localStreamClasses})
+            ), 
+            ConversationToolbar({video: this.state.video, 
+                                 audio: this.state.audio, 
+                                 publishStream: this.publishStream, 
+                                 hangup: this.hangup})
           )
         )
       );
