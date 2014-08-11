@@ -77,7 +77,7 @@ loop.panel = (function(_, mozL10n) {
                               __("display_name_available_status");
 
       return (
-        <div className="footer component-spacer">
+        <div className="footer">
           <div className="do-not-disturb">
             <p className="dnd-status" onClick={this.showDropdownMenu}>
               <span>{availabilityText}</span>
@@ -139,10 +139,8 @@ loop.panel = (function(_, mozL10n) {
 
     render: function() {
       return (
-        <div className="component-spacer share generate-url">
-          <div className="description">
-            <p className="description-content">{this.props.summary}</p>
-          </div>
+        <div className="share generate-url">
+          <div className="description">{this.props.summary}</div>
           <div className="action">
             {this.props.children}
           </div>

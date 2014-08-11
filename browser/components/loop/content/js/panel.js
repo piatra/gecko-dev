@@ -77,7 +77,7 @@ loop.panel = (function(_, mozL10n) {
                               __("display_name_available_status");
 
       return (
-        React.DOM.div({className: "footer component-spacer"}, 
+        React.DOM.div({className: "footer"}, 
           React.DOM.div({className: "do-not-disturb"}, 
             React.DOM.p({className: "dnd-status", onClick: this.showDropdownMenu}, 
               React.DOM.span(null, availabilityText), 
@@ -139,10 +139,8 @@ loop.panel = (function(_, mozL10n) {
 
     render: function() {
       return (
-        React.DOM.div({className: "component-spacer share generate-url"}, 
-          React.DOM.div({className: "description"}, 
-            React.DOM.p({className: "description-content"}, this.props.summary)
-          ), 
+        React.DOM.div({className: "share generate-url"}, 
+          React.DOM.div({className: "description"}, this.props.summary), 
           React.DOM.div({className: "action"}, 
             this.props.children
           )
