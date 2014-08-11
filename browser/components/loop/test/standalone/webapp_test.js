@@ -26,6 +26,7 @@ describe("loop.webapp", function() {
       warnL10n: sandbox.spy(),
       error: sandbox.spy(),
       errorL10n: sandbox.spy(),
+      clear: sandbox.stub()
     };
     loop.config.pendingCallTimeout = 1000;
   });
@@ -99,18 +100,12 @@ describe("loop.webapp", function() {
         sandbox.stub(router, "_setupWebSocketAndCallView");
       });
 
-      it("should navigate back home if session token is missing", function() {
+      it("should trigger call:error if session token is missing", function() {
+        sandbox.stub(conversation, "trigger");
         router.startCall();
 
-        sinon.assert.calledOnce(router.navigate);
-        sinon.assert.calledWithMatch(router.navigate, "home");
-      });
-
-      it("should notify the user if session token is missing", function() {
-        router.startCall();
-
-        sinon.assert.calledOnce(notifier.errorL10n);
-        sinon.assert.calledWithExactly(notifier.errorL10n,
+        sinon.assert.calledOnce(conversation.trigger);
+        sinon.assert.calledWithExactly(conversation.trigger, "call:error",
                                        "missing_conversation_info");
       });
 
@@ -122,6 +117,53 @@ describe("loop.webapp", function() {
         sinon.assert.calledOnce(router._setupWebSocketAndCallView);
         sinon.assert.calledWithExactly(router._setupWebSocketAndCallView, "fake");
       });
+    });
+
+    describe("#callFailed", function() {
+      var view;
+      beforeEach(function(){
+        conversation.set("loopToken", "fake_token");
+        view = React.addons.TestUtils.renderIntoDocument(
+            loop.webapp.StartConversationView({
+              model: conversation,
+              notifier: notifier,
+              client: client
+            })
+        );
+        conversation.trigger("call:error", "fake_string");
+      });
+      it("should set callFailed state to true", function() {
+        expect(view.state.callFailed).to.eql(true);
+      });
+      it("should render the retry button", function() {
+        var btn = view.getDOMNode().querySelector('.standalone-btn-retry-call');
+
+        expect(btn).to.not.eql(null);
+      });
+      it("should disable retry button when you click it", function() {
+        var btn = view.getDOMNode().querySelector('.standalone-btn-retry-call');
+
+        React.addons.TestUtils.Simulate.click(btn);
+
+        expect(view.state.disableCallRetryButton).to.eql(true);
+      });
+      it("should remove error message when you click the retry button",
+         function() {
+           var btn = view.getDOMNode().querySelector('.standalone-btn-retry-call');
+
+           React.addons.TestUtils.Simulate.click(btn);
+
+           expect(view.state.callFailed).to.eql(false);
+         });
+      it("should setup outgoing call when you click the retry button",
+         function() {
+           var btn = view.getDOMNode().querySelector('.standalone-btn-retry-call');
+           sandbox.spy(conversation, "setupOutgoingCall");
+
+           React.addons.TestUtils.Simulate.click(btn);
+
+           sinon.assert.calledOnce(conversation.setupOutgoingCall);
+         });
     });
 
     describe("#_setupWebSocketAndCallView", function() {
@@ -222,6 +264,7 @@ describe("loop.webapp", function() {
                        "promiseConnect").returns({
             then: sandbox.spy()
           });
+          sandbox.stub(conversation, "trigger");
 
           router._setupWebSocketAndCallView();
         });
@@ -241,14 +284,14 @@ describe("loop.webapp", function() {
               sinon.assert.calledOnce(router.endCall);
             });
 
-            it("should display an error message", function() {
+            it("should trigger call:error with apropriate l10n error", function() {
               router._websocket.trigger("progress", {
                 state: "terminated",
                 reason: "reject"
               });
 
-              sinon.assert.calledOnce(router._notifier.errorL10n);
-              sinon.assert.calledWithExactly(router._notifier.errorL10n,
+              sinon.assert.calledOnce(conversation.trigger);
+              sinon.assert.calledWithExactly(conversation.trigger, "call:error",
                 "call_timeout_notification_text");
             });
           });
@@ -261,7 +304,7 @@ describe("loop.webapp", function() {
         router.endCall();
 
         sinon.assert.calledOnce(router.navigate);
-        sinon.assert.calledWithMatch(router.navigate, "home");
+        sinon.assert.calledWithMatch(router.navigate, "default");
       });
 
       it("should navigate to call/:token if session token is set", function() {
@@ -277,11 +320,11 @@ describe("loop.webapp", function() {
     describe("Routes", function() {
       describe("#home", function() {
         it("should load the HomeView", function() {
-          router.home();
+          router.defaultView();
 
           sinon.assert.calledOnce(router.loadView);
           sinon.assert.calledWith(router.loadView,
-            sinon.match.instanceOf(loop.webapp.HomeView));
+            sinon.match.instanceOf(loop.webapp.DefaultView));
         });
       });
 
@@ -464,17 +507,12 @@ describe("loop.webapp", function() {
         });
 
         describe("No loop token", function() {
-          it("should navigate to home", function() {
+          it("should trigger call:error with appropriate error", function() {
+            sandbox.spy(conversation, "trigger");
             conversation.setupOutgoingCall();
 
-            sinon.assert.calledOnce(router.navigate);
-            sinon.assert.calledWithMatch(router.navigate, "home");
-          });
-
-          it("should display an error", function() {
-            conversation.setupOutgoingCall();
-
-            sinon.assert.calledOnce(notifier.errorL10n);
+            sinon.assert.calledWith(conversation.trigger, "call:error",
+                                    "missing_conversation_info");
           });
         });
 
@@ -504,19 +542,13 @@ describe("loop.webapp", function() {
                 sinon.assert.calledWith(router.navigate, "/call/expired");
               });
 
-            it("should navigate to home on any other error", function() {
+            it("should trigger call:error on any other error", function() {
               client.requestCallInfo.callsArgWith(2, {errno: 104});
+              sandbox.spy(conversation, "trigger");
               conversation.setupOutgoingCall();
 
-              sinon.assert.calledOnce(router.navigate);
-              sinon.assert.calledWith(router.navigate, "home");
-              });
-
-            it("should notify the user on any other error", function() {
-              client.requestCallInfo.callsArgWith(2, {errno: 104});
-              conversation.setupOutgoingCall();
-
-              sinon.assert.calledOnce(notifier.errorL10n);
+              sinon.assert.calledWith(conversation.trigger, "call:error",
+                                      "missing_conversation_info");
             });
 
             it("should call outgoing on the conversation model when details " +
@@ -670,10 +702,19 @@ describe("loop.webapp", function() {
                                        sinon.match.func);
       });
 
-      it("should listen for session:error events", function() {
-        sinon.assert.calledOnce(conversation.listenTo);
+      it("should listen for session:error and call:error events", function() {
+        sinon.assert.calledTwice(conversation.listenTo);
+        sinon.assert.calledWithExactly(conversation.listenTo, conversation,
+                                       "call:error", sinon.match.func);
         sinon.assert.calledWithExactly(conversation.listenTo, conversation,
                                        "session:error", sinon.match.func);
+      });
+
+      it("should call onCallError when call:error is triggered", function() {
+        conversation.trigger("call:error", "fake_string");
+
+        sinon.assert.calledOnce(notifier.errorL10n);
+        sinon.assert.calledWithExactly(notifier.errorL10n, "fake_string");
       });
 
       it("should trigger a notication when a session:error model event is " +

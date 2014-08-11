@@ -79,7 +79,8 @@ p {
  * together with .btn-*
  */
 
-.btn {
+.btn,
+.standalone-btn-retry-call {
   display: inline-block;
   overflow: hidden;
   margin: 0;

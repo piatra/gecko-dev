@@ -12,6 +12,7 @@ loop.panel = (function(_, mozL10n) {
   "use strict";
 
   var sharedViews = loop.shared.views,
+      DropdownMenuMixin = loop.shared.views.DropdownMenuMixin,
       // aliasing translation function as __ for concision
       __ = mozL10n.get;
 
@@ -20,36 +21,6 @@ loop.panel = (function(_, mozL10n) {
    * @type {loop.desktopRouter.DesktopRouter}
    */
   var router;
-
-  /**
-   * Dropdown menu mixin.
-   * @type {Object}
-   */
-  var DropdownMenuMixin = {
-    getInitialState: function() {
-      return {showMenu: false};
-    },
-
-    _onBodyClick: function() {
-      this.setState({showMenu: false});
-    },
-
-    componentDidMount: function() {
-      document.body.addEventListener("click", this._onBodyClick);
-    },
-
-    componentWillUnmount: function() {
-      document.body.removeEventListener("click", this._onBodyClick);
-    },
-
-    showDropdownMenu: function() {
-      this.setState({showMenu: true});
-    },
-
-    hideDropdownMenu: function() {
-      this.setState({showMenu: false});
-    }
-  };
 
   /**
    * Availability drop down menu subview.

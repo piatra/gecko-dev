@@ -16,7 +16,8 @@ loop.webapp = (function($, _, OT, mozL10n) {
 
   var sharedModels = loop.shared.models,
       sharedViews = loop.shared.views,
-      baseServerUrl = loop.config.serverUrl;
+      baseServerUrl = loop.config.serverUrl,
+      DropdownMenuMixin = loop.shared.views.DropdownMenuMixin;
 
   /**
    * App router.
@@ -25,9 +26,9 @@ loop.webapp = (function($, _, OT, mozL10n) {
   var router;
 
   /**
-   * Homepage view.
+   * Default page view.
    */
-  var HomeView = sharedViews.BaseView.extend({
+  var DefaultView = sharedViews.BaseView.extend({
     template: _.template('<p data-l10n-id="welcome"></p>')
   });
 
@@ -139,16 +140,23 @@ loop.webapp = (function($, _, OT, mozL10n) {
      * - {loop.shared.views.NotificationListView} notifier Notifier component.
      *
      */
+    mixins: [DropdownMenuMixin],
 
     getInitialProps: function() {
-      return {showCallOptionsMenu: false};
+      return {
+        showMenu: false,
+        callFailed: false
+      };
     },
 
     getInitialState: function() {
       return {
         urlCreationDateString: '',
         disableCallButton: false,
-        showCallOptionsMenu: this.props.showCallOptionsMenu
+        callFailed: this.props.callFailed,
+        errorSoundNotification: false,
+        disableCallRetryButton: false,
+        seenToS: localStorage.getItem("has-seen-tos")
       };
     },
 
@@ -162,19 +170,44 @@ loop.webapp = (function($, _, OT, mozL10n) {
 
     componentDidMount: function() {
       // Listen for events & hide dropdown menu if user clicks away
-      window.addEventListener("click", this.clickHandler);
+      this.props.model.listenTo(this.props.model, "call:error", this._onCallError);
       this.props.model.listenTo(this.props.model, "session:error",
                                 this._onSessionError);
       this.props.client.requestCallUrlInfo(this.props.model.get("loopToken"),
                                            this._setConversationTimestamp);
+
+      this._loadCallErrorSound();
       // XXX DOM element does not exist before React view gets instantiated
       // We should turn the notifier into a react component
       this.props.notifier.$el = $("#messages");
     },
 
+    /**
+     * Callback function for "call:error" event triggered on the
+     * conversation model. Shows error message, plays error sound
+     * and enables the call retry button
+     *
+     * @param {string} l10nErrorID - l10n id of error
+     */
+    _onCallError: function(l10nErrorId) {
+      this.props.notifier.errorL10n(l10nErrorId);
+      this.setState({
+        // Display call failed error message
+        callFailed: true,
+        // Enable the retry button
+        disableCallRetryButton: false
+      });
+      this.state.errorSoundNotification.play();
+    },
+
     _onSessionError: function(error) {
       console.error(error);
       this.props.notifier.errorL10n("unable_retrieve_call_info");
+    },
+
+    _loadCallErrorSound: function() {
+      var assetURL = location.origin + "/content/shared/sounds/call-failed.mp3";
+      this.state.errorSoundNotification = new Audio(assetURL);
     },
 
     /**
@@ -185,12 +218,26 @@ loop.webapp = (function($, _, OT, mozL10n) {
      *
      * @param {string} User call type choice "audio" or "audio-video"
      */
-    _initiateOutgoingCall: function(callType) {
+    initiateOutgoingCall: function(callType) {
       return function() {
         this.props.model.set("selectedCallType", callType);
         this.setState({disableCallButton: true});
         this.props.model.setupOutgoingCall();
       }.bind(this);
+    },
+
+    /**
+     * Attempt to make another call using the previously selected call type
+     * */
+    retryCall: function() {
+      this.props.notifier.clear();
+      this.setState({
+        // Disable the retry button
+        disableCallRetryButton: true,
+        // Remove the call failed message
+        callFailed: false
+      });
+      this.props.model.setupOutgoingCall();
     },
 
     _setConversationTimestamp: function(err, callUrlInfo) {
@@ -205,20 +252,7 @@ loop.webapp = (function($, _, OT, mozL10n) {
     },
 
     componentWillUnmount: function() {
-      window.removeEventListener("click", this.clickHandler);
       localStorage.setItem("has-seen-tos", "true");
-    },
-
-    clickHandler: function(e) {
-      if (!e.target.classList.contains('btn-chevron') &&
-          this.state.showCallOptionsMenu) {
-            this._toggleCallOptionsMenu();
-      }
-    },
-
-    _toggleCallOptionsMenu: function() {
-      var state = this.state.showCallOptionsMenu;
-      this.setState({showCallOptionsMenu: !state});
     },
 
     render: function() {
@@ -231,15 +265,18 @@ loop.webapp = (function($, _, OT, mozL10n) {
         "privacy_notice_url": "<a target=_blank href='" +
           "https://www.mozilla.org/privacy/'>" + privacy_notice_name + "</a>"
       });
+      var cx = React.addons.classSet;
 
-      var dropdownMenuClasses = React.addons.classSet({
-        "native-dropdown-large-parent": true,
-        "standalone-dropdown-menu": true,
-        "visually-hidden": !this.state.showCallOptionsMenu
-      });
-      var tosClasses = React.addons.classSet({
+      var tosClasses = cx({
         "terms-service": true,
-        hide: (localStorage.getItem("has-seen-tos") === "true")
+        hide: (this.state.seenToS === "true")
+      });
+      var displayCallFailedMsgClasses = cx({
+        "hide": !this.state.callFailed
+      });
+      var displayInitiateCallMsg = cx({
+        "hide": this.state.callFailed,
+        "standalone-call-btn-label": true
       });
 
       return (
@@ -250,57 +287,127 @@ loop.webapp = (function($, _, OT, mozL10n) {
             <ConversationHeader
               urlCreationDateString={this.state.urlCreationDateString} />
 
-            <p className="standalone-call-btn-label">
+            <p className={displayInitiateCallMsg}>
               {mozL10n.get("initiate_call_button_label2")}
             </p>
 
-            <div id="messages"></div>
-
-            <div className="btn-group">
-              <div className="flex-padding-1"></div>
-              <div className="standalone-btn-chevron-menu-group">
-                <div className="btn-group-chevron">
-                  <div className="btn-group">
-
-                    <button className="btn btn-large btn-accept"
-                            onClick={this._initiateOutgoingCall("audio-video")}
-                            disabled={this.state.disableCallButton}
-                            title={mozL10n.get("initiate_audio_video_call_tooltip2")} >
-                      <span className="standalone-call-btn-text">
-                        {mozL10n.get("initiate_audio_video_call_button2")}
-                      </span>
-                      <span className="standalone-call-btn-video-icon"></span>
-                    </button>
-
-                    <div className="btn-chevron"
-                         onClick={this._toggleCallOptionsMenu}>
-                    </div>
-
-                  </div>
-
-                  <ul className={dropdownMenuClasses}>
-                    <li>
-                      {/*
-                       Button required for disabled state.
-                       */}
-                      <button className="start-audio-only-call"
-                              onClick={this._initiateOutgoingCall("audio")}
-                              disabled={this.state.disableCallButton} >
-                        {mozL10n.get("initiate_audio_call_button2")}
-                      </button>
-                    </li>
-                  </ul>
-
-                </div>
-              </div>
-              <div className="flex-padding-1"></div>
+            <div className={displayCallFailedMsgClasses}>
+              <div className="standalone-call-loading-failed"></div>
+              <p className="standalone-call-btn-label">
+                {mozL10n.get("generic_failure_title")} {mozL10n.get("generic_failure_no_reason2")}
+              </p>
             </div>
 
+            <div id="messages"></div>
+
+            <ConversationViewCallBtn showMenu={this.state.showMenu}
+                          initiateCall={this.initiateOutgoingCall}
+                          disableBtn={this.state.disableCallButton}
+                          showDropdownMenu={this.showDropdownMenu}
+                          callFailed={this.state.callFailed} />
+
+            <ConversationViewRetryBtn retryCall={this.retryCall}
+                          disableRetryBtn={this.state.disableCallRetryBtn}
+                          callFailed={this.state.callFailed} />
+
             <p className={tosClasses}
-               dangerouslySetInnerHTML={{__html: tosHTML}}></p>
+               dangerouslySetInnerHTML={{__html: tosHTML}}>
+            </p>
+
           </div>
 
           <ConversationFooter />
+        </div>
+        /* jshint ignore:end */
+      );
+    }
+  });
+
+  var ConversationViewCallBtn = React.createClass({
+
+    propTypes: {
+      initiateCall: React.PropTypes.func.isRequired,
+      disableBtn: React.PropTypes.bool.isRequired,
+      showDropdownMenu: React.PropTypes.func.isRequired,
+      showMenu: React.PropTypes.bool.isRequired
+    },
+
+    render: function() {
+      var dropdownMenuClasses = React.addons.classSet({
+        "native-dropdown-large-parent": true,
+        "standalone-dropdown-menu": true,
+        "visually-hidden": !this.props.showMenu
+      });
+      var callBtnClasses = React.addons.classSet({
+        "btn-group": true,
+        "hide": this.props.callFailed
+      });
+      return (
+        /* jshint ignore:start */
+        <div className={callBtnClasses}>
+          <div className="flex-padding-1"></div>
+          <div className="standalone-btn-chevron-menu-group">
+            <div className="btn-group-chevron">
+              <div className="btn-group">
+
+                <button className="btn btn-large btn-accept"
+                  onClick={this.props.initiateCall("audio-video")}
+                  disabled={this.props.disableBtn}
+                  title={mozL10n.get("initiate_audio_video_call_tooltip2")} >
+                  <span className="standalone-call-btn-text">
+                    {mozL10n.get("initiate_audio_video_call_button2")}
+                  </span>
+                  <span className="standalone-call-btn-video-icon"></span>
+                </button>
+
+                <div className="btn-chevron"
+                  onClick={this.props.showDropdownMenu}>
+                </div>
+
+              </div>
+
+              <ul className={dropdownMenuClasses}>
+                <li>
+                  {/* Button required for disabled state */}
+                  <button className="start-audio-only-call"
+                    onClick={this.props.initiateCall("audio")}
+                    disabled={this.props.disableBtn} >
+                    {mozL10n.get("initiate_audio_call_button2")}
+                  </button>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+          <div className="flex-padding-1"></div>
+        </div>
+      );
+    }
+  });
+
+  var ConversationViewRetryBtn = React.createClass({
+
+    propTypes: {
+      retryCall: React.PropTypes.func.isRequired,
+      disableRetryBtn: React.PropTypes.bool.isRequired,
+      callFailed: React.PropTypes.bool.isRequired
+    },
+
+    render: function() {
+      var retryBtnClasses = React.addons.classSet({
+        "btn-group": true,
+        "hide": !this.props.callFailed
+      });
+      return (
+        /* jshint ignore:start */
+        <div className={retryBtnClasses}>
+          <div className="flex-padding-1"></div>
+          <button className="standalone-btn-retry-call btn-accept"
+            disabled={this.props.disableRetryBtn}
+            onClick={this.props.retryCall} >
+            {mozL10n.get("retry_call_button")}
+          </button>
+          <div className="flex-padding-1"></div>
         </div>
         /* jshint ignore:end */
       );
@@ -312,7 +419,7 @@ loop.webapp = (function($, _, OT, mozL10n) {
    */
   var WebappRouter = loop.shared.router.BaseConversationRouter.extend({
     routes: {
-      "":                    "home",
+      "":                    "defaultView",
       "unsupportedDevice":   "unsupportedDevice",
       "unsupportedBrowser":  "unsupportedBrowser",
       "call/expired":        "expired",
@@ -327,7 +434,7 @@ loop.webapp = (function($, _, OT, mozL10n) {
       }
 
       // Load default view
-      this.loadView(new HomeView());
+      this.loadView(new DefaultView());
 
       this.listenTo(this._conversation, "timeout", this._onTimeout);
     },
@@ -343,8 +450,7 @@ loop.webapp = (function($, _, OT, mozL10n) {
     setupOutgoingCall: function() {
       var loopToken = this._conversation.get("loopToken");
       if (!loopToken) {
-        this._notifier.errorL10n("missing_conversation_info");
-        this.navigate("home", {trigger: true});
+        this._conversation.trigger("call:error", "missing_conversation_info");
       } else {
         var callType = this._conversation.get("selectedCallType");
 
@@ -361,8 +467,7 @@ loop.webapp = (function($, _, OT, mozL10n) {
                 this._onSessionExpired();
                 break;
               default:
-                this._notifier.errorL10n("missing_conversation_info");
-                this.navigate("home", {trigger: true});
+                this._conversation.trigger("call:error", "missing_conversation_info");
                 break;
             }
             return;
@@ -378,8 +483,7 @@ loop.webapp = (function($, _, OT, mozL10n) {
     startCall: function() {
       var loopToken = this._conversation.get("loopToken");
       if (!loopToken) {
-        this._notifier.errorL10n("missing_conversation_info");
-        this.navigate("home", {trigger: true});
+        this._conversation.trigger("call:error", "missing_conversation_info");
       } else {
         this._setupWebSocketAndCallView(loopToken);
       }
@@ -404,7 +508,7 @@ loop.webapp = (function($, _, OT, mozL10n) {
       }.bind(this), function() {
         // XXX Not the ideal response, but bug 1047410 will be replacing
         // this by better "call failed" UI.
-        this._notifier.errorL10n("cannot_start_call_session_not_ready");
+        this._conversation.trigger("call:error", "missing_converation_info");
         return;
       }.bind(this));
 
@@ -451,14 +555,14 @@ loop.webapp = (function($, _, OT, mozL10n) {
      */
     _handleCallRejected: function() {
       this.endCall();
-      this._notifier.errorL10n("call_timeout_notification_text");
+      this._conversation.trigger("call:error", "call_timeout_notification_text");
     },
 
     /**
      * @override {loop.shared.router.BaseConversationRouter.endCall}
      */
     endCall: function() {
-      var route = "home";
+      var route = "default";
       if (this._conversation.get("loopToken")) {
         route = "call/" + this._conversation.get("loopToken");
       }
@@ -472,8 +576,8 @@ loop.webapp = (function($, _, OT, mozL10n) {
     /**
      * Default entry point.
      */
-    home: function() {
-      this.loadView(new HomeView());
+    defaultView: function() {
+      this.loadView(new DefaultView());
     },
 
     unsupportedDevice: function() {
@@ -507,7 +611,7 @@ loop.webapp = (function($, _, OT, mozL10n) {
         notifier: this._notifier,
         client: this._client
       });
-      this._conversation.once("call:outgoing:setup", this.setupOutgoingCall, this);
+      this._conversation.on("call:outgoing:setup", this.setupOutgoingCall, this);
       this._conversation.once("change:publishedStream", this._checkConnected, this);
       this._conversation.once("change:subscribedStream", this._checkConnected, this);
       this.loadReactComponent(startView);
@@ -581,7 +685,7 @@ loop.webapp = (function($, _, OT, mozL10n) {
     baseServerUrl: baseServerUrl,
     CallUrlExpiredView: CallUrlExpiredView,
     StartConversationView: StartConversationView,
-    HomeView: HomeView,
+    DefaultView: DefaultView,
     init: init,
     PromoteFirefoxView: PromoteFirefoxView,
     WebappHelper: WebappHelper,

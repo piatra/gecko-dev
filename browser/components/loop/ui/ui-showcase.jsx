@@ -198,6 +198,18 @@
             </Example>
           </Section>
 
+          <Section name="StartConversationView--Failed">
+            <Example summary="Start conversation view" dashed="true">
+              <div className="standalone">
+                <StartConversationView model={mockConversationModel}
+                                       client={mockClient}
+                                       notifier={mockNotifier}
+                                       showCallOptionsMenu={true}
+                                       callFailed={true} />
+              </div>
+            </Example>
+          </Section>
+
           <Section name="ConversationView">
             <Example summary="Desktop conversation window" dashed="true"
                      style={{width: "260px", height: "265px"}}>

@@ -809,11 +809,42 @@ loop.shared.views = (function(_, OT, l10n) {
     ].join(""))
   });
 
+  /**
+   * Dropdown menu mixin.
+   * @type {Object}
+   */
+  var DropdownMenuMixin = {
+    getInitialState: function() {
+      return {showMenu: false};
+    },
+
+    _onBodyClick: function() {
+      this.setState({showMenu: false});
+    },
+
+    componentDidMount: function() {
+      document.body.addEventListener("click", this._onBodyClick);
+    },
+
+    componentWillUnmount: function() {
+      document.body.removeEventListener("click", this._onBodyClick);
+    },
+
+    showDropdownMenu: function() {
+      this.setState({showMenu: true});
+    },
+
+    hideDropdownMenu: function() {
+      this.setState({showMenu: false});
+    }
+  };
+
   return {
     L10nView: L10nView,
     BaseView: BaseView,
     ConversationView: ConversationView,
     ConversationToolbar: ConversationToolbar,
+    DropdownMenuMixin: DropdownMenuMixin,
     FeedbackView: FeedbackView,
     MediaControlButton: MediaControlButton,
     NotificationListView: NotificationListView,

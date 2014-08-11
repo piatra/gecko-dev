@@ -198,6 +198,18 @@
             )
           ), 
 
+          Section({name: "StartConversationView--Failed"}, 
+            Example({summary: "Start conversation view", dashed: "true"}, 
+              React.DOM.div({className: "standalone"}, 
+                StartConversationView({model: mockConversationModel, 
+                                       client: mockClient, 
+                                       notifier: mockNotifier, 
+                                       showCallOptionsMenu: true, 
+                                       callFailed: true})
+              )
+            )
+          ), 
+
           Section({name: "ConversationView"}, 
             Example({summary: "Desktop conversation window", dashed: "true", 
                      style: {width: "260px", height: "265px"}}, 

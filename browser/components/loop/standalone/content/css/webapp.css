@@ -179,17 +179,23 @@ body,
   }
 }
 
-.btn-large {
+.btn-large,
+.standalone-btn-retry-call {
   /* Dimensions from spec
    * https://people.mozilla.org/~dhenein/labs/loop-link-spec/#call-start */
   font-size: 1rem;
   padding: .3em .5rem;
+  min-width: 160px;
 }
 
   .btn-large + .btn-chevron {
     padding: 1rem;
     height: 100%; /* match full height of button */
   }
+
+.standalone-btn-retry-call {
+  border-radius: 2px;
+}
 
 /*
  * Left / Right padding elements
@@ -200,3 +206,11 @@ body,
   flex: 1;
 }
 
+.standalone-call-loading-failed {
+  margin: 1rem;
+  height: 24px;
+  background-image: url("../shared/img/call-failed.png");
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
