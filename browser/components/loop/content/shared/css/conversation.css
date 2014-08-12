@@ -194,9 +194,16 @@
   max-width: 120px;
 }
 
+/* XXX Once we get the incoming call avatar, bug YYY, the H2 should disappear from our
+ * markup, and we should remove this rule entirely.
+ */
 .incoming-call h2 {
   font-size: 1.5em;
   font-weight: normal;
+
+  /* compensate for reset.css overriding this; values borrowed from
+     Firefox OS X html.css */
+  margin: 0.83em 0px;
 }
 
 .call-audio-only {
