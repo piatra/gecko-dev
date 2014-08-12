@@ -213,11 +213,21 @@
   }
 
 
-  @media (min-resolution: 2dppx) {
-    .call-audio-only {
-      background-image: url("../img/audio-inverse-14x14@2x.png");
-    }
+.call-audio-video {
+  background-image: url("../img/video-inverse-14x14.png");
+  background-position: 96% center;
+  background-repeat: no-repeat;
+  background-size: 1rem;
+}
+
+@media (min-resolution: 2dppx) {
+  .call-audio-only {
+    background-image: url("../img/audio-inverse-14x14@2x.png");
   }
+  .call-audio-video {
+    background-image: url("../img/video-inverse-14x14@2x.png");
+  }
+}
 
 /* Expired call url page */
 

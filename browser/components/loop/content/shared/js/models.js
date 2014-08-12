@@ -27,7 +27,7 @@ loop.shared.models = (function() {
       apiKey:       undefined,     // OT api key
       callType:     undefined,     // The type of incoming call selected by
                                    // other peer ("audio" or "audio-video")
-      selectedCallType: undefined  // The selected type of the call that was
+      selectedCallType: undefined  // The selected type for the call that was
                                    // initiated ("audio" or "audio-video")
     },
 
@@ -147,8 +147,7 @@ loop.shared.models = (function() {
     },
 
     /**
-     * Sets session information.
-     * Information about the incoming call.
+     * Sets session information about the incoming call.
      *
      * @param {Object} sessionData Conversation session information.
      */
@@ -193,7 +192,8 @@ loop.shared.models = (function() {
     /**
      * Helper function to determine if video stream is available for the
      * incoming or outgoing call
-     * @param {Boolean} callType Incoming or outgoing call
+     *
+     * @param {string} callType Incoming or outgoing call
      */
     hasVideoStream: function(callType) {
       if (callType === "incoming") {

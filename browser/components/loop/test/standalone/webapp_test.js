@@ -401,7 +401,15 @@ describe("loop.webapp", function() {
       });
 
       it("should start the conversation establishment process", function() {
-        var button = view.getDOMNode().querySelector("button");
+        var button = view.getDOMNode().querySelector(".start-audio-video-call");
+        React.addons.TestUtils.Simulate.click(button);
+
+        sinon.assert.calledOnce(setupOutgoingCall);
+        sinon.assert.calledWithExactly(setupOutgoingCall);
+      });
+
+      it("should start the conversation establishment process", function() {
+        var button = view.getDOMNode().querySelector(".start-audio-only-call");
         React.addons.TestUtils.Simulate.click(button);
 
         sinon.assert.calledOnce(setupOutgoingCall);
@@ -444,15 +452,6 @@ describe("loop.webapp", function() {
            React.addons.TestUtils.Simulate.click(button);
 
            expect(conversation.get("selectedCallType")).to.eql("audio-video");
-         });
-
-         it("should set the appropriate selectedCallType", function() {
-           conversation.set("loopToken", "fake");
-
-           var button = view.getDOMNode().querySelector(".start-audio-only-call");
-           React.addons.TestUtils.Simulate.click(button);
-
-           expect(conversation.get("selectedCallType")).to.eql("audio");
          });
 
       it("should set state.urlCreationDateString to a locale date string",

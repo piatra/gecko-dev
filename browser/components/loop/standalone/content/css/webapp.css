@@ -136,6 +136,7 @@ header {
 
   .start-audio-only-call {
     border: none;
+    width: 100%;
   }
 
   .start-audio-only-call:hover {

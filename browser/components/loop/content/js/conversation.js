@@ -88,11 +88,6 @@ loop.conversation = (function(OT, mozL10n) {
         "conversation-window-dropdown": true,
         "visually-hidden": !this.state.showDeclineMenu
       });
-      var dropdownMenuClassesAccept = cx({
-        "native-dropdown-menu": true,
-        "conversation-window-dropdown": true,
-        "visually-hidden": !this.state.showAcceptMenu
-      });
       return (
         React.DOM.div({className: conversationPanelClass}, 
           React.DOM.h2(null, __("incoming_call")), 
@@ -122,13 +117,12 @@ loop.conversation = (function(OT, mozL10n) {
             React.DOM.div({className: "button-chevron-menu-group"}, 
               React.DOM.div({className: "button-group"}, 
                 React.DOM.button({className: btnClassAccept, 
-                  onClick: this._handleAccept("audio-video")}, 
-                  __("incoming_call_answer_button"), 
-                  React.DOM.i({class: "icon icon-video"})
+                        onClick: this._handleAccept("audio-video")}, 
+                  __("incoming_call_answer_button")
                 ), 
                 React.DOM.div({className: "call-audio-only", 
-                  onClick: this._handleAccept("audio"), 
-                  title: __("incoming_call_answer_audio_only_tooltip")}
+                     onClick: this._handleAccept("audio"), 
+                     title: __("incoming_call_answer_audio_only_tooltip")}
                 )
               )
             )

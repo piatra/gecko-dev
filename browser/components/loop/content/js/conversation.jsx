@@ -88,11 +88,6 @@ loop.conversation = (function(OT, mozL10n) {
         "conversation-window-dropdown": true,
         "visually-hidden": !this.state.showDeclineMenu
       });
-      var dropdownMenuClassesAccept = cx({
-        "native-dropdown-menu": true,
-        "conversation-window-dropdown": true,
-        "visually-hidden": !this.state.showAcceptMenu
-      });
       return (
         <div className={conversationPanelClass}>
           <h2>{__("incoming_call")}</h2>
@@ -122,13 +117,12 @@ loop.conversation = (function(OT, mozL10n) {
             <div className="button-chevron-menu-group">
               <div className="button-group">
                 <button className={btnClassAccept}
-                  onClick={this._handleAccept("audio-video")}>
+                        onClick={this._handleAccept("audio-video")}>
                   {__("incoming_call_answer_button")}
-                  <i class="icon icon-video"></i>
                 </button>
                 <div className="call-audio-only"
-                  onClick={this._handleAccept("audio")}
-                  title={__("incoming_call_answer_audio_only_tooltip")} >
+                     onClick={this._handleAccept("audio")}
+                     title={__("incoming_call_answer_audio_only_tooltip")} >
                 </div>
               </div>
             </div>

@@ -177,6 +177,8 @@ loop.webapp = (function($, _, OT, webL10n) {
     /**
      * Initiates the call.
      * Returns a function that can be used to initiate audio or audio-video calls.
+     *
+     * @param {string} User call type choice "audio" or "audio-video"
      */
     _initiateOutgoingCall: function(callType) {
       return function() {
@@ -235,11 +237,6 @@ loop.webapp = (function($, _, OT, webL10n) {
         "visually-hidden": !this.state.showCallOptionsMenu
       });
 
-      // Use inline styles to expand the button to full width
-      var buttonFullWidth = {
-        "width": "100%"
-      };
-
       return (
         /* jshint ignore:start */
         <div className="container">
@@ -276,13 +273,11 @@ loop.webapp = (function($, _, OT, webL10n) {
                   <ul className={dropdownMenuClasses}>
                     <li>
                       {/*
-                       Button required for disabled state. Use reset styles
-                       to hide the default browser CSS
+                       Button required for disabled state.
                        */}
                       <button className="start-audio-only-call"
-                        style={buttonFullWidth}
-                        onClick={this._initiateOutgoingCall("audio")}
-                        disabled={this.state.disableCallButton} >
+                              onClick={this._initiateOutgoingCall("audio")}
+                              disabled={this.state.disableCallButton} >
                         {__("initiate_audio_call_button")}
                       </button>
                     </li>
