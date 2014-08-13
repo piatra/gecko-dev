@@ -17,21 +17,19 @@
 
   /* YYY from Niko's port; but seems to break standalone ui-showcase: local-video
    * disappears.  However, commenting this out makes local video repeat.
-   * Need to check ui-showcase and actual standalone once CSS port complete
-   * to see what's necessary */
-
+   */
   /*overflow: hidden; */
 }
 
 .conversation-toolbar {
   z-index: 999; /* required to have it superimposed to the video element */
-
 }
 
 .conversation .conversation-toolbar {
   /* YYY From Niko's port.  Seems to only make this absolute when embedded
-   * in the conversation, not when in the UI showcase as a standalone thing.  I still suspect
-   * absolute could be done away with here, perhaps in favor of relative
+   * in the conversation, not when in the UI showcase as a standalone thing.
+   * I still suspect absolute could be done away with entirely for the toolbar,
+   * perhaps in favor of relative
    */
   position: absolute;
   left: 0;
@@ -40,7 +38,7 @@
 
 /* desktop version */
 .conversation-window .conversation-toolbar {
-  height: 32px;    /* YYY verify this looks ok IRL; might want to be 32 */
+  height: 32px;
   background: rgba(0, 0, 0, .70);
   border: 1px solid #5a5a5a;
 }
@@ -67,7 +65,7 @@
 }
 
 .standalone .conversation-toolbar li {
-  /* YYY not sure of the origin of this; verify after CSS port complete */
+  /* YYY not sure of the origin of this; need to figure out what's up */
   margin-right: 16px;
 }
 
@@ -86,7 +84,7 @@
 }
 
 .standalone .conversation-toolbar .btn {
-/* YYY dunno about these metrics; look wrong now; review after port complete */
+/* YYY dunno about these metrics; look wrong now; need to review */
   width: 34px;
   background-position: 9px 7px;
   border-radius: 28px;
