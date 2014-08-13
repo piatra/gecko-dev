@@ -10,12 +10,8 @@ body,
   height: 100%;
 }
 
-body {
+body.standalone {
   width: 100%;
-  /* prevent the video convsersation elements to occupy the whole available
-     width hence the height while keeping aspect ratio */
-  max-width: 730px;
-  margin: 0 auto;
   background: #fbfbfb;
   color: #666;
   text-align: center;
@@ -47,6 +43,11 @@ header {
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+
+  /* prevent the video conversation elements to occupy the whole available
+   width hence the height while keeping aspect ratio */
+  width: 730px;
+  margin: 0 auto;
 }
 
 .container-box {

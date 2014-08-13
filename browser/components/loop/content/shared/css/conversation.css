@@ -2,40 +2,94 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-/* Conversation window styles */
+/* Shared conversation window styles */
+.standalone .video-layout-wrapper {
+  background-color: #444;
+}
 
 .conversation {
   position: relative;
 }
 
+.standalone .conversation {
+  margin: 0px auto;
+  max-height: 100vh;
+
+  /* YYY from Niko's port; but seems to break standalone ui-showcase: local-video
+   * disappears.  However, commenting this out makes local video repeat.
+   * Need to check ui-showcase and actual standalone once CSS port complete
+   * to see what's necessary */
+
+  /*overflow: hidden; */
+}
+
 .conversation-toolbar {
-  position: absolute;
   z-index: 999; /* required to have it superimposed to the video element */
+
+}
+
+.conversation .conversation-toolbar {
+  /* YYY From Niko's port.  Seems to only make this absolute when embedded
+   * in the conversation, not when in the UI showcase as a standalone thing.  I still suspect
+   * absolute could be done away with here, perhaps in favor of relative
+   */
+  position: absolute;
   left: 0;
   right: 0;
+}
+
+/* desktop version */
+.conversation-window .conversation-toolbar {
+  height: 32px;    /* YYY verify this looks ok IRL; might want to be 32 */
   background: rgba(0, 0, 0, .70);
   border: 1px solid #5a5a5a;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+}
+
+/* standalone version */
+.standalone .conversation .conversation-toolbar {
+  bottom: 0;   /* YYY if we get rid of the absolute, maybe this can go too? */
+}
+
+.standalone .conversation-toolbar {
+  background: rgba(0, 0, 0, .50);
+  padding: 2em;
+  height: 79px; /* YYY why isn't this 64 px, a la standalone spec? */
 }
 
 .conversation-toolbar li {
   float: left;
-  font-size: 0px; /* prevents vertical bottom padding added to buttons in google
-                     chrome */
+  font-size: 0; /* prevents vertical bottom padding added to buttons in google
+                   chrome */
+}
+
+.conversation-window .conversation-toolbar li {
+  border-right: 1px solid #5a5a5a;
+}
+
+.standalone .conversation-toolbar li {
+  /* YYY not sure of the origin of this; verify after CSS port complete */
+  margin-right: 16px;
 }
 
 .conversation-toolbar .btn {
-  width: 40px;
   height: 30px;
   background: transparent;
   background-repeat: no-repeat;
-  background-position: 12px 8px;
   background-size: 14px 14px;
-  border-right: 1px solid #5a5a5a;
-  border-radius: 0;
   cursor: pointer;
+}
+
+.conversation-window .conversation-toolbar .btn {
+  width: 40px;
+  background-position: 12px 8px;
+  border-radius: 0;
+}
+
+.standalone .conversation-toolbar .btn {
+/* YYY dunno about these metrics; look wrong now; review after port complete */
+  width: 34px;
+  background-position: 9px 7px;
+  border-radius: 28px;
 }
 
 .conversation-toolbar .btn:hover {
@@ -45,13 +99,27 @@
 /* Hangup button */
 .conversation-toolbar .btn-hangup {
   background-color: #D74345;
-  background-image: url(../img/hangup-inverse-14x14.png);
 }
-.conversation-toolbar .btn-hangup:hover {
+
+/* YYY not sure why 2 selectors make sense here; or if colors should be the same
+   in both places */
+.conversation-window .btn-hangup:hover,
+.standalone .conversation-toolbar .btn-hangup:hover {
   background-color: #C53436;
 }
+
+.standalone .conversation-toolbar .btn-hangup {
+  width: auto;
+  font-size: 12px;
+  border-radius: 2px;
+  padding: 0 20px;
+}
+
+.conversation-window .conversation-toolbar .btn-hangup {
+  background-image: url(../img/hangup-inverse-14x14.png);
+}
 @media (min-resolution: 2dppx) {
-  .conversation-toolbar .btn-hangup {
+  .conversation-window .conversation-toolbar .btn-hangup {
     background-image: url(../img/hangup-inverse-14x14@2x.png);
   }
 }
@@ -119,7 +187,6 @@
 .conversation .media.nested .remote_wrapper {
   display: inline-block;
   position: relative;
-  background: #0f0;
   width: 100%;
   padding-bottom: 75%; /* XXX forced 4:3 ratio, see bug 1020445 */
 }
@@ -144,6 +211,14 @@
   /* next two lines are workaround for lack of object-fit; see bug 1020445 */
   height: 22.5%;
   max-height: 105px;
+}
+
+.standalone .conversation .media.nested .local {
+  /* required to have it superimposed to the control toolbar */
+  z-index: 1001;
+  bottom: 10px;
+  right: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* Side by side video elements */
