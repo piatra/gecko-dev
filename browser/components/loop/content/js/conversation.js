@@ -24,7 +24,12 @@ loop.conversation = (function(OT, mozL10n) {
   var IncomingCallView = React.createClass({displayName: 'IncomingCallView',
 
     propTypes: {
-      model: React.PropTypes.object.isRequired
+      model: React.PropTypes.object.isRequired,
+      video: React.PropTypes.object.isRequired
+    },
+
+    getDefaultProps: function() {
+      return {video: {enabled: true}};
     },
 
     getInitialState: function() {
@@ -48,6 +53,13 @@ loop.conversation = (function(OT, mozL10n) {
       }
     },
 
+    /**
+     * Returns a function that initiates either an audio only or an
+     * audio video call
+     *
+     * @param {string} callType - "audio" or "audio-video"
+     *
+     **/
     _handleAccept: function(callType) {
       return () => {
         this.props.model.set("selectedCallType", callType);
@@ -76,8 +88,6 @@ loop.conversation = (function(OT, mozL10n) {
     },
 
     render: function() {
-      /* jshint ignore:start */
-      var btnClassAccept = "btn btn-success btn-accept call-audio-video";
       var btnClassBlock = "btn btn-error btn-block";
       var btnClassDecline = "btn btn-error btn-decline";
       var conversationPanelClass = "incoming-call " +
@@ -89,6 +99,7 @@ loop.conversation = (function(OT, mozL10n) {
         "visually-hidden": !this.state.showDeclineMenu
       });
       return (
+        /* jshint ignore:start */
         React.DOM.div({className: conversationPanelClass}, 
           React.DOM.h2(null, __("incoming_call")), 
           React.DOM.div({className: "button-group incoming-call-action-group"}, 
@@ -114,22 +125,74 @@ loop.conversation = (function(OT, mozL10n) {
               )
             ), 
 
-            React.DOM.div({className: "button-chevron-menu-group"}, 
-              React.DOM.div({className: "button-group"}, 
-                React.DOM.button({className: btnClassAccept, 
-                        onClick: this._handleAccept("audio-video")}, 
-                  __("incoming_call_answer_button")
-                ), 
-                React.DOM.div({className: "call-audio-only", 
-                     onClick: this._handleAccept("audio"), 
-                     title: __("incoming_call_answer_audio_only_tooltip")}
-                )
+            AcceptCallButton({hasVideoStream: this.props.video.enabled, 
+                        audioCallHandler: this._handleAccept("audio"), 
+                        videoCallHandler: this._handleAccept("audio-video")})
+          )
+        )
+        /* jshint ignore:end */
+      );
+    }
+  });
+
+  /**
+   * Answer button for IncomingCallView
+   *
+   * @param {IncomingCallView~_handleAccept} audioCallHandler - Callback fn to
+   *                                                  initiate audio only call
+   * @param {IncomingCallView~_handleAccept} videoCallHandler - Callback fn to
+   *                                                  initiate audio video call
+   */
+  var AcceptCallButton = React.createClass({displayName: 'AcceptCallButton',
+
+    getDefaultProps: function() {
+      return {hasVideoStream: true};
+    },
+
+    propTypes: {
+      audioCallHandler: React.PropTypes.func.isRequired,
+      videoCallHandler: React.PropTypes.func.isRequired,
+      hasVideoStream:   React.PropTypes.bool.isRequired
+    },
+
+    render: function() {
+      var btnClassAcceptVideo = "btn btn-success btn-accept call-audio-video";
+      var btnClassAcceptAudio = "btn btn-success btn-accept call-audio-only";
+      if (this.props.hasVideoStream) {
+        return (
+          /* jshint ignore:start */
+          /* Answer with video primary + audio secondary */
+          React.DOM.div({className: "button-chevron-menu-group"}, 
+            React.DOM.div({className: "button-group"}, 
+              React.DOM.button({className: btnClassAcceptVideo, 
+                      onClick: this.props.videoCallHandler}, 
+                __("incoming_call_answer_button")
+              ), 
+              React.DOM.div({className: "call-audio-only-small", 
+                   onClick: this.props.audioCallHandler, 
+                   title: __("incoming_call_answer_audio_only_tooltip")}
               )
             )
           )
-        )
-      );
-      /* jshint ignore:end */
+        );
+      } else {
+        return (
+          /* Answer with audio primary + video secondary */
+          React.DOM.div({className: "button-chevron-menu-group"}, 
+            React.DOM.div({className: "button-group"}, 
+              React.DOM.button({className: btnClassAcceptAudio, 
+                      onClick: this.props.audioCallHandler}, 
+                __("incoming_call_answer_button")
+              ), 
+              React.DOM.div({className: "call-audio-video-small", 
+                   onClick: this.props.videoCallHandler, 
+                   title: __("incoming_call_answer_audio_only_tooltip")}
+              )
+            )
+          )
+          /* jshint ignore:end */
+        );
+      }
     }
   });
 

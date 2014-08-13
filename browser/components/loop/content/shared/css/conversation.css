@@ -194,37 +194,56 @@
   font-weight: normal;
 }
 
-.call-audio-only {
+/*
+ * Small chevron-like extensions of the main button
+ * offering secondary answer options
+ **/
+.call-audio-only-small,
+.call-audio-video-small {
   width: 26px;
   height: 26px;
   border-left: 1px solid rgba(255,255,255,.4);
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
   background-color: #74BF43;
-  background-image: url("../img/audio-inverse-14x14.png");
   background-size: 1rem;
   background-position: center;
   background-repeat: no-repeat;
   cursor: pointer;
 }
 
-  .call-audio-only:hover {
+  .call-audio-only-small,
+  .call-audio-only {
+    background-image: url("../img/audio-inverse-14x14.png");
+  }
+
+  .call-audio-video-small,
+  .call-audio-video {
+    background-image: url("../img/video-inverse-14x14.png");
+  }
+
+  .call-audio-video-small:hover,
+  .call-audio-only-small:hover {
     background-color: #6cb23e;
   }
 
-
-.call-audio-video {
-  background-image: url("../img/video-inverse-14x14.png");
+/*
+ * Main accept button icon
+ **/
+.call-audio-video,
+.call-audio-only {
   background-position: 96% center;
   background-repeat: no-repeat;
   background-size: 1rem;
 }
 
 @media (min-resolution: 2dppx) {
-  .call-audio-only {
+  .call-audio-only,
+  .call-audio-only-small {
     background-image: url("../img/audio-inverse-14x14@2x.png");
   }
-  .call-audio-video {
+  .call-audio-video,
+  .call-audio-video-small {
     background-image: url("../img/video-inverse-14x14@2x.png");
   }
 }

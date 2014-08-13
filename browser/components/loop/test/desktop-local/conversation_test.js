@@ -445,11 +445,82 @@ describe("loop.conversation", function() {
       model = new Model();
       sandbox.spy(model, "trigger");
       view = TestUtils.renderIntoDocument(loop.conversation.IncomingCallView({
-        model: model
+        model: model,
+        video: {enabled: true}
       }));
     });
 
-    describe("click event on .btn-accept", function() {
+
+    describe("render video as primary answer mode", function() {
+      it("should show video button as primary answer", function() {
+        var button = view.getDOMNode().querySelector(".call-audio-video");
+
+        expect(button).to.not.eql(null);
+      });
+
+      it("should show audio answer as secondary answer", function() {
+        var button = view.getDOMNode().querySelector(".call-audio-only-small");
+
+        expect(button).to.not.eql(null);
+      });
+    });
+
+    describe("render audio as primary answer mode", function() {
+
+      beforeEach(function() {
+        view = TestUtils.renderIntoDocument(loop.conversation.IncomingCallView({
+          model: model,
+          video: {enabled: false}
+        }));
+      });
+
+      it("should show video button as primary answer", function() {
+        var button = view.getDOMNode().querySelector(".call-audio-only");
+
+        expect(button).to.not.eql(null);
+      });
+
+      it("should show audio answer as secondary answer", function() {
+        var button = view.getDOMNode().querySelector(".call-audio-video-small");
+
+        expect(button).to.not.eql(null);
+      });
+    });
+
+    describe("accept call when being called with audio stream", function() {
+
+      beforeEach(function() {
+        view = TestUtils.renderIntoDocument(loop.conversation.IncomingCallView({
+          model: model,
+          video: {enabled: false}
+        }));
+      });
+
+      it("should set selectedCallType to audio-video", function() {
+        var buttonAccept = view.getDOMNode()
+                                    .querySelector(".call-audio-video-small");
+        sandbox.stub(model, "set");
+
+        TestUtils.Simulate.click(buttonAccept);
+
+        sinon.assert.calledOnce(model.set);
+        sinon.assert.calledWithExactly(model.set, "selectedCallType", "audio-video");
+      });
+
+      it("should set selectedCallType to audio", function() {
+        var buttonAccept = view.getDOMNode()
+                                      .querySelector(".call-audio-only");
+        sandbox.stub(model, "set");
+
+        TestUtils.Simulate.click(buttonAccept);
+
+        sinon.assert.calledOnce(model.set);
+        sinon.assert.calledWithExactly(model.set, "selectedCallType", "audio");
+      });
+    });
+
+    describe("accept call when being called with video stream", function() {
+
       it("should trigger an 'accept' conversation model event", function() {
         var buttonAccept = view.getDOMNode().querySelector(".btn-accept");
 
@@ -462,25 +533,26 @@ describe("loop.conversation", function() {
         sinon.assert.calledWith(model.trigger, "change");
       });
 
-        it("should set selectedCallType to audio-video", function() {
-          var buttonAccept = view.getDOMNode().querySelector(".call-audio-video");
-          sandbox.stub(model, "set");
+      it("should set selectedCallType to audio-video", function() {
+        var buttonAccept = view.getDOMNode().querySelector(".call-audio-video");
+        sandbox.stub(model, "set");
 
-          TestUtils.Simulate.click(buttonAccept);
+        TestUtils.Simulate.click(buttonAccept);
 
-          sinon.assert.calledOnce(model.set);
-          sinon.assert.calledWithExactly(model.set, "selectedCallType", "audio-video");
-        });
+        sinon.assert.calledOnce(model.set);
+        sinon.assert.calledWithExactly(model.set, "selectedCallType", "audio-video");
+      });
 
-        it("should set selectedCallType to audio", function() {
-          var buttonAccept = view.getDOMNode().querySelector(".call-audio-only");
-          sandbox.stub(model, "set");
+      it("should set selectedCallType to audio", function() {
+        var buttonAccept = view.getDOMNode()
+        .querySelector(".call-audio-only-small");
+        sandbox.stub(model, "set");
 
-          TestUtils.Simulate.click(buttonAccept);
+        TestUtils.Simulate.click(buttonAccept);
 
-          sinon.assert.calledOnce(model.set);
-          sinon.assert.calledWithExactly(model.set, "selectedCallType", "audio");
-        });
+        sinon.assert.calledOnce(model.set);
+        sinon.assert.calledWithExactly(model.set, "selectedCallType", "audio");
+      });
     });
 
     describe("click event on .btn-decline", function() {
