@@ -13,8 +13,6 @@
 }
 
 body {
-  margin: 0;
-  padding: 0;
   font-family: "Lucida Grande", sans-serif;
   font-size: 12px;
   background: #fbfbfb;
@@ -34,6 +32,11 @@ img {
 h1, h2, h3 {
   font-family: "Open Sans", sans-serif;
   color: #666;
+}
+
+/* choose a sane default for paragraphs, since reset.css' 0px is not what we want */
+p {
+  margin: 1em 0px;
 }
 
 /* Helpers */
