@@ -38,7 +38,14 @@
   var stageFeedbackApiClient = new loop.FeedbackAPIClient(
     "https://input.allizom.org/api/v1/feedback", {
       product: "Loop"
-    });
+    }
+  );
+
+  var mockClient = {
+    requestCallUrl: function() {}
+  };
+
+  var mockConversationModel = new loop.shared.models.ConversationModel({}, {sdk: {}});
 
   var Example = React.createClass({
     render: function() {
@@ -97,10 +104,10 @@
               <strong>Note:</strong> 332px wide.
             </p>
             <Example summary="Pending call url retrieval" dashed="true" style={{width: "332px"}}>
-              <PanelView />
+              <PanelView client={mockClient} />
             </Example>
             <Example summary="Call URL retrieved" dashed="true" style={{width: "332px"}}>
-              <PanelView callUrl="http://invalid.example.url/" />
+              <PanelView callUrl="http://invalid.example.url/" client={mockClient} />
             </Example>
           </Section>
 
@@ -142,12 +149,14 @@
             <Example summary="Desktop conversation window" dashed="true"
                      style={{width: "260px", height: "265px"}}>
               <div className="conversation-window">
-                <ConversationView video={{enabled: true}} audio={{enabled: true}} />
+                <ConversationView video={{enabled: true}} audio={{enabled: true}}
+                                  model={mockConversationModel} />
               </div>
             </Example>
             <Example summary="Standalone version">
               <div className="standalone">
-                <ConversationView video={{enabled: true}} audio={{enabled: true}} />
+                <ConversationView video={{enabled: true}} audio={{enabled: true}}
+                                  model={mockConversationModel} />
               </div>
             </Example>
           </Section>
@@ -182,6 +191,8 @@
   });
 
   window.addEventListener("DOMContentLoaded", function() {
+    var body = document.body;
+    body.className = loop.shared.utils.getTargetPlatform();
     React.renderComponent(<App />, document.body);
   });
 })();
