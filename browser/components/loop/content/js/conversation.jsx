@@ -136,7 +136,8 @@ loop.conversation = (function(OT, mozL10n) {
   });
 
   /**
-   * Answer button for IncomingCallView
+   * Answer button for IncomingCallView, renders based on the incoming call
+   * type that is passed down via hasVideoStream prop
    *
    * @param {IncomingCallView~_handleAccept} audioCallHandler - Callback fn to
    *                                                  initiate audio only call
