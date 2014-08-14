@@ -79,7 +79,7 @@ loop.panel = (function(_, mozL10n) {
       return (
         React.DOM.div({className: "footer"}, 
           React.DOM.div({className: "do-not-disturb"}, 
-            React.DOM.p({className: "dnd-status", onClick: this.showDropdownMenu}, 
+            React.DOM.div({className: "dnd-status", onClick: this.showDropdownMenu}, 
               React.DOM.span(null, availabilityText), 
               React.DOM.i({className: availabilityStatus})
             ), 

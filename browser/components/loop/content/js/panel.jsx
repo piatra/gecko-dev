@@ -79,10 +79,10 @@ loop.panel = (function(_, mozL10n) {
       return (
         <div className="footer">
           <div className="do-not-disturb">
-            <p className="dnd-status" onClick={this.showDropdownMenu}>
+            <div className="dnd-status" onClick={this.showDropdownMenu}>
               <span>{availabilityText}</span>
               <i className={availabilityStatus}></i>
-            </p>
+            </div>
             <ul className={availabilityDropdown}
                 onMouseLeave={this.hideDropdownMenu}>
               <li onClick={this.changeAvailability("available")}
