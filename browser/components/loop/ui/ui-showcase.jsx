@@ -105,8 +105,11 @@
           </Section>
 
           <Section name="IncomingCallView">
-            <Example summary="Default" dashed="true" style={{width: "280px"}}>
+            <Example summary="Default video answer" dashed="true" style={{width: "280px"}}>
               <IncomingCallView />
+            </Example>
+            <Example summary="Default audio answer" dashed="true" style={{width: "280px"}} >
+              <IncomingCallView video={{enabled: false}} />
             </Example>
           </Section>
 

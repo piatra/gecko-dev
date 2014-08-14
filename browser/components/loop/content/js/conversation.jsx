@@ -25,7 +25,8 @@ loop.conversation = (function(OT, mozL10n) {
 
     propTypes: {
       model: React.PropTypes.object.isRequired,
-      video: React.PropTypes.object.isRequired
+      video: React.PropTypes.object.isRequired,
+      hasVideoStream: React.PropTypes.object.isRequired
     },
 
     getDefaultProps: function() {
@@ -98,6 +99,8 @@ loop.conversation = (function(OT, mozL10n) {
         "conversation-window-dropdown": true,
         "visually-hidden": !this.state.showDeclineMenu
       });
+      console.log(this.props.video.enabled);
+      console.log(this.props);
       return (
         /* jshint ignore:start */
         <div className={conversationPanelClass}>
