@@ -39,8 +39,10 @@
 /* desktop version */
 .conversation-window .conversation-toolbar {
   height: 32px;
-  background: rgba(0, 0, 0, .70);
+  background: rgba(0,0,0,.70);
   border: 1px solid #5a5a5a;
+  border-left: 0;
+  border-right: 0;
 }
 
 /* standalone version */
@@ -49,7 +51,7 @@
 }
 
 .standalone .conversation-toolbar {
-  background: rgba(0, 0, 0, .50);
+  background: rgba(0,0,0,.50);
   padding: 2em;
   height: 79px; /* YYY why isn't this 64 px, a la standalone spec? */
 }
@@ -91,7 +93,7 @@
 }
 
 .conversation-toolbar .btn:hover {
-  background-color: rgba(255, 255, 255, .35);
+  background-color: rgba(255,255,255,.35);
 }
 
 /* Hangup button */

@@ -365,6 +365,8 @@ loop.panel = (function(_, mozL10n) {
     });
     Backbone.history.start();
 
+    document.body.classList.add(loop.shared.utils.getTargetPlatform());
+
     // Notify the window that we've finished initalization and initial layout
     var evtObject = document.createEvent('Event');
     evtObject.initEvent('loopPanelInitialized', true, false);
