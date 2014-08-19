@@ -78,11 +78,9 @@ loop.conversation = (function(OT, mozL10n) {
     render: function() {
       /* jshint ignore:start */
       var btnClassAccept = "btn btn-success btn-accept call-audio-video";
-      var btnClassBlock = "btn btn-error btn-block";
       var btnClassDecline = "btn btn-error btn-decline";
       var conversationPanelClass = "incoming-call";
-      var cx = React.addons.classSet;
-      var dropdownMenuClassesDecline = cx({
+      var dropdownMenuClassesDecline = React.addons.classSet({
         "native-dropdown-menu": true,
         "conversation-window-dropdown": true,
         "visually-hidden": !this.state.showDeclineMenu

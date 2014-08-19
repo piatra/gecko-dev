@@ -149,7 +149,7 @@
           <Section name="StartConversationView">
 
             <Example summary="Start conversation view" dashed="true">
-              <div className="standalone-call-view">
+              <div className="standalone">
                 <StartConversationView model={mockConversationModel}
                   client={mockClient} />
               </div>

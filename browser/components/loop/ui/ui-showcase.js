@@ -149,7 +149,7 @@
           Section({name: "StartConversationView"}, 
 
             Example({summary: "Start conversation view", dashed: "true"}, 
-              React.DOM.div({className: "standalone-call-view"}, 
+              React.DOM.div({className: "standalone"}, 
                 StartConversationView({model: mockConversationModel, 
                   client: mockClient})
               )
