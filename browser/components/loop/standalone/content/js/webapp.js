@@ -120,7 +120,7 @@ loop.webapp = (function($, _, OT, webL10n) {
   var ConversationFooter = React.createClass({displayName: 'ConversationFooter',
     render: function() {
       return (
-        React.DOM.div({className: "footer container-box"}, 
+        React.DOM.div({className: "standalone-footer container-box"}, 
           React.DOM.div({title: "Mozilla Logo", className: "footer-logo"})
         )
       );

@@ -10,7 +10,7 @@ body,
   height: 100%;
 }
 
-.standalone-call-view {
+.standalone {
   width: 100%;
   background: #fbfbfb;
   color: #666;
@@ -18,7 +18,7 @@ body,
   font-family: Open Sans,sans-serif;
 }
 
-.standalone-call-view header {
+.standalone header {
   border-radius: 4px;
   background: #fff;
   padding: 1rem 5rem;
@@ -30,7 +30,7 @@ body,
 /*
  * Top/Bottom spacing
  **/
-.footer {
+.standalone-footer {
   margin-bottom: 2rem;
 }
 
