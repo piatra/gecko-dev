@@ -336,7 +336,7 @@ loop.conversation = (function(OT, mozL10n) {
 
     document.title = mozL10n.get("incoming_call_title");
 
-    document.body.className += " " + loop.shared.utils.getTargetPlatform();
+    document.body.classList.add(loop.shared.utils.getTargetPlatform());
 
     var client = new loop.Client();
     router = new ConversationRouter({

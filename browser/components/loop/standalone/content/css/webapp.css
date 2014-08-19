@@ -126,9 +126,12 @@ body,
 .start-audio-video-call {
   background-color: none;
   background-image: url("../shared/img/audio-default-16x16@1.5x.png");
-  background-position: 80% center;
-  background-size: 10px;
   background-repeat: no-repeat;
+  background-size: 10px;
+
+  height: 1.2rem;
+  width: 1.2rem;
+
   cursor: pointer;
 }
 
@@ -142,8 +145,9 @@ body,
 }
 
 .start-audio-video-call {
-  background-size: 20px;
   background-image: url("../shared/img/video-inverse-14x14.png");
+  display: inline-block;
+  background-size: 1.2rem;
 }
 
 @media (min-resolution: 2dppx) {

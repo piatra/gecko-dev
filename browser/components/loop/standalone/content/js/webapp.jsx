@@ -229,7 +229,6 @@ loop.webapp = (function($, _, OT, webL10n) {
       });
 
       var btnClassStartCall = "btn btn-large btn-success " +
-                              "start-audio-video-call " +
                               loop.shared.utils.getTargetPlatform();
       var dropdownMenuClasses = React.addons.classSet({
         "native-dropdown-large-parent": true,
@@ -261,7 +260,8 @@ loop.webapp = (function($, _, OT, webL10n) {
                             onClick={this._initiateOutgoingCall("audio-video")}
                             disabled={this.state.disableCallButton}
                             title={__("initiate_audio_video_call_tooltip")} >
-                      {__("initiate_audio_video_call_button")}
+                      <span>{__("initiate_audio_video_call_button")}</span>
+                      <span className="start-audio-video-call"></span>
                     </button>
 
                     <div className="btn-chevron"
@@ -532,8 +532,8 @@ loop.webapp = (function($, _, OT, webL10n) {
     var helper = new WebappHelper();
     var client = new loop.StandaloneClient({
       baseServerUrl: baseServerUrl
-    }),
-    router = new WebappRouter({
+    });
+    var router = new WebappRouter({
       helper: helper,
       notifier: new sharedViews.NotificationListView({el: "#messages"}),
       client: client,
@@ -542,12 +542,16 @@ loop.webapp = (function($, _, OT, webL10n) {
         pendingCallTimeout: loop.config.pendingCallTimeout
       })
     });
+
     Backbone.history.start();
     if (helper.isIOS(navigator.platform)) {
       router.navigate("unsupportedDevice", {trigger: true});
     } else if (!OT.checkSystemRequirements()) {
       router.navigate("unsupportedBrowser", {trigger: true});
     }
+
+    document.body.classList.add(loop.shared.utils.getTargetPlatform());
+
     // Set the 'lang' and 'dir' attributes to <html> when the page is translated
     document.documentElement.lang = document.webL10n.getLanguage();
     document.documentElement.dir = document.webL10n.getDirection();
