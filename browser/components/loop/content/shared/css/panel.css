@@ -4,8 +4,13 @@
 
 /* Panel styles */
 .panel {
-  /* XXX the Social API panel behaves weirdly on inner element size changes,
-     adding unwanted scrollbars; quickfix is to hide these for now. */
+  /* XXX force proper content positioning by adding extra margin space
+   * taken away by reset.css
+   */
+  margin-top: 7px;
+  margin-bottom: 7px;
+
+  /* hide the extra margin space that the panel resizer now wants to show */
   overflow: hidden;
 }
 
