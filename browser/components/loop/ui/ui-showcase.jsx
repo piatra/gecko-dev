@@ -17,7 +17,8 @@
   var IncomingCallView = loop.conversation.IncomingCallView;
 
   // 2. Standalone webapp
-  var CallUrlExpiredView = loop.webapp.CallUrlExpiredView;
+  var CallUrlExpiredView    = loop.webapp.CallUrlExpiredView;
+  var StartConversationView = loop.webapp.StartConversationView;
 
   // 3. Shared components
   var ConversationToolbar = loop.shared.views.ConversationToolbar;
@@ -145,7 +146,19 @@
             </div>
           </Section>
 
+          <Section name="StartConversationView">
+
+            <Example summary="Start conversation view" dashed="true">
+              <div className="standalone-call-view">
+                <StartConversationView model={mockConversationModel}
+                  client={mockClient} />
+              </div>
+            </Example>
+
+          </Section>
+
           <Section name="ConversationView">
+
             <Example summary="Desktop conversation window" dashed="true"
                      style={{width: "260px", height: "265px"}}>
               <div className="conversation-window">
