@@ -537,7 +537,7 @@ describe("loop.webapp", function() {
       });
 
       it("should start the conversation establishment process", function() {
-        var button = view.getDOMNode().querySelector(".start-audio-video-call");
+        var button = view.getDOMNode().querySelector(".btn-success");
         React.addons.TestUtils.Simulate.click(button);
 
         sinon.assert.calledOnce(setupOutgoingCall);
@@ -556,7 +556,7 @@ describe("loop.webapp", function() {
          function() {
            conversation.set("loopToken", "fake");
 
-           var button = view.getDOMNode().querySelector(".start-audio-video-call");
+           var button = view.getDOMNode().querySelector(".btn-success");
            React.addons.TestUtils.Simulate.click(button);
 
            expect(button.disabled).to.eql(true);
