@@ -177,10 +177,8 @@ p {
  * and the dropdown menu */
 .btn-chevron-menu-group {
   display: flex;
-  flex-direction: row;
-  align-items: center;
   justify-content: space-between;
-  flex: 1;
+  flex: 0 1 auto;
 }
 
 .btn-group-chevron .btn {

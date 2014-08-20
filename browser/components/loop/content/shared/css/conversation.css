@@ -261,11 +261,10 @@
 }
 
 .incoming-call-action-group {
-  padding: 2.5em 1em;
-}
-
-.incoming-call-action-group .btn-chevron-menu-group {
-  margin-right: .5em;
+  display: flex;
+  padding: 2.5em 0;
+  width: 100%;
+  justify-content: space-around;
 }
 
 .incoming-call-action-group > .btn {
