@@ -12,13 +12,8 @@
 }
 
 .standalone .conversation {
-  margin: 0px auto;
+  margin: 0 auto;
   max-height: 100vh;
-
-  /* YYY from Niko's port; but seems to break standalone ui-showcase: local-video
-   * disappears.  However, commenting this out makes local video repeat.
-   */
-  /*overflow: hidden; */
 }
 
 .conversation-toolbar {
@@ -68,7 +63,7 @@
 }
 
 .conversation-toolbar .btn {
-  /* height acording to spec
+  /* height according to spec
    * https://people.mozilla.org/~dhenein/labs/loop-link-spec/#video-call */
   height: 24px;
   background-repeat: no-repeat;
@@ -233,7 +228,7 @@
   z-index: 1001;
   bottom: 10px;
   right: 10px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* Side by side video elements */
@@ -284,16 +279,16 @@
   max-width: 120px;
 }
 
-/* XXX Once we get the incoming call avatar, bug YYY, the H2 should disappear from our
- * markup, and we should remove this rule entirely.
+/* XXX Once we get the incoming call avatar, bug 1047435, the H2 should
+ * disappear from our markup, and we should remove this rule entirely.
  */
 .incoming-call h2 {
   font-size: 1.5em;
   font-weight: normal;
 
   /* compensate for reset.css overriding this; values borrowed from
-     Firefox OS X html.css */
-  margin: 0.83em 0px;
+     Firefox Mac html.css */
+  margin: 0.83em 0;
 }
 
 .call-audio-only {
@@ -442,10 +437,10 @@
 
 .feedback .face {
   border: 1px solid transparent;
-  box-shadow: 0px 1px 2px #CCC;
+  box-shadow: 0 1px 2px #CCC;
   cursor: pointer;
   border-radius: 4px;
-  margin: 0px 10px;
+  margin: 0 10px;
   width: 80px;
   height: 80px;
   background-color: #fbfbfb;
