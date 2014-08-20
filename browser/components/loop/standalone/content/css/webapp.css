@@ -100,7 +100,6 @@ body,
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  white-space: nowrap;
 }
 
 .loop-logo {
