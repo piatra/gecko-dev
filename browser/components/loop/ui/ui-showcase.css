@@ -23,8 +23,9 @@
   margin: .5em 0;
 }
 
-.showcase .menu > a {
+.showcase-menu > a {
   margin-right: .5em;
+  padding: .4rem;
 }
 
 .showcase > section {

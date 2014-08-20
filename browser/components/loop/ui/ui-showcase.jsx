@@ -80,7 +80,7 @@
         <div className="showcase">
           <header>
             <h1>Loop UI Components Showcase</h1>
-            <nav className="menu">{
+            <nav className="showcase-menu">{
               React.Children.map(this.props.children, function(section) {
                 return (
                   <a className="btn btn-info" href={"#" + section.props.name}>

@@ -171,7 +171,7 @@ body,
   /* Dimensions from spec
    * https://people.mozilla.org/~dhenein/labs/loop-link-spec/#call-start */
   font-size: 1rem;
-  height: auto;
+  padding: .5rem;
 }
 
   .btn-large + .btn-chevron {

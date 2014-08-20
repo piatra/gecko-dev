@@ -80,7 +80,7 @@
         React.DOM.div({className: "showcase"}, 
           React.DOM.header(null, 
             React.DOM.h1(null, "Loop UI Components Showcase"), 
-            React.DOM.nav({className: "menu"}, 
+            React.DOM.nav({className: "showcase-menu"}, 
               React.Children.map(this.props.children, function(section) {
                 return (
                   React.DOM.a({className: "btn btn-info", href: "#" + section.props.name}, 

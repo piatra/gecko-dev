@@ -263,7 +263,7 @@ loop.webapp = (function($, _, OT, webL10n) {
                       React.DOM.span({className: "standalone-call-btn-text"}, 
                         __("initiate_audio_video_call_button")
                       ), 
-                      React.DOM.span({className: "standalone-call-btn-video-icon"})
+                      React.DOM.span({className: "start-audio-video-call"})
                     ), 
 
                     React.DOM.div({className: "btn-chevron", 
