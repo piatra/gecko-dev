@@ -125,16 +125,21 @@ body,
 .start-audio-video-call {
   width: 1.2rem;
   height: 1.2rem;
-  background-image: url("../img/video-inverse-14x14.png");
+  background-color: #F0F0F0;
   background-size: 10px;
   background-repeat: no-repeat;
   cursor: pointer;
+}
+
+.start-audio-video-call {
+  background-image: url("../img/video-inverse-14x14.png");
 }
 
 .start-audio-only-call {
   width: 100%;
   border: none;
   background-image: url("../shared/img/audio-default-16x16@1.5x.png");
+  background-position: 90% center;
 }
 
 .start-audio-only-call:hover {
