@@ -17,6 +17,6 @@ document.webL10n = document.mozL10n = {
       return match.toUpperCase();
     }).replace(/_/g, " ");  // and convert _ chars to spaces
 
-    return "" + upcasedStringId + (vars ? ";" + JSON.stringify(vars) : "");
+    return "" + readableStringId + (vars ? ";" + JSON.stringify(vars) : "");
   }
 };
