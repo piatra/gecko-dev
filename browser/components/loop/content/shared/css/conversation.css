@@ -256,7 +256,7 @@
   padding: 2.5em 1em;
 }
 
-.incoming-call-action-group .button-chevron-menu-group {
+.incoming-call-action-group .btn-chevron-menu-group {
   margin-right: .5em;
 }
 
@@ -264,8 +264,8 @@
   margin-left: .5em;
 }
 
-.incoming-call-action-group .button-group-chevron,
-.incoming-call-action-group .btn {
+.incoming-call-action-group .btn-group-chevron,
+.incoming-call-action-group .btn-group {
   max-width: 120px;
 }
 

@@ -88,10 +88,10 @@ loop.conversation = (function(OT, mozL10n) {
       return (
         React.DOM.div({className: conversationPanelClass}, 
           React.DOM.h2(null, __("incoming_call")), 
-          React.DOM.div({className: "button-group incoming-call-action-group"}, 
-            React.DOM.div({className: "button-chevron-menu-group"}, 
-              React.DOM.div({className: "button-group-chevron"}, 
-                React.DOM.div({className: "button-group"}, 
+          React.DOM.div({className: "btn-group incoming-call-action-group"}, 
+            React.DOM.div({className: "btn-chevron-menu-group"}, 
+              React.DOM.div({className: "btn-group-chevron"}, 
+                React.DOM.div({className: "btn-group"}, 
 
                   React.DOM.button({className: btnClassDecline, 
                           onClick: this._handleDecline}, 
@@ -111,8 +111,8 @@ loop.conversation = (function(OT, mozL10n) {
               )
             ), 
 
-            React.DOM.div({className: "button-chevron-menu-group"}, 
-              React.DOM.div({className: "button-group"}, 
+            React.DOM.div({className: "btn-chevron-menu-group"}, 
+              React.DOM.div({className: "btn-group"}, 
                 React.DOM.button({className: btnClassAccept, 
                         onClick: this._handleAccept("audio-video")}, 
                   __("incoming_call_answer_button")

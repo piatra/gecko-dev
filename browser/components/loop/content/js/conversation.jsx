@@ -88,10 +88,10 @@ loop.conversation = (function(OT, mozL10n) {
       return (
         <div className={conversationPanelClass}>
           <h2>{__("incoming_call")}</h2>
-          <div className="button-group incoming-call-action-group">
-            <div className="button-chevron-menu-group">
-              <div className="button-group-chevron">
-                <div className="button-group">
+          <div className="btn-group incoming-call-action-group">
+            <div className="btn-chevron-menu-group">
+              <div className="btn-group-chevron">
+                <div className="btn-group">
 
                   <button className={btnClassDecline}
                           onClick={this._handleDecline}>
@@ -111,8 +111,8 @@ loop.conversation = (function(OT, mozL10n) {
               </div>
             </div>
 
-            <div className="button-chevron-menu-group">
-              <div className="button-group">
+            <div className="btn-chevron-menu-group">
+              <div className="btn-group">
                 <button className={btnClassAccept}
                         onClick={this._handleAccept("audio-video")}>
                   {__("incoming_call_answer_button")}

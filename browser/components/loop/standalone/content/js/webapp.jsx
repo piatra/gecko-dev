@@ -250,11 +250,11 @@ loop.webapp = (function($, _, OT, webL10n) {
 
             <div id="messages"></div>
 
-            <div className="button-group">
+            <div className="btn-group">
               <div className="flex-padding-1"></div>
-              <div className="button-chevron-menu-group">
-                <div className="button-group-chevron">
-                  <div className="button-group">
+              <div className="btn-chevron-menu-group">
+                <div className="btn-group-chevron">
+                  <div className="btn-group">
 
                     <button className={btnClassStartCall}
                             onClick={this._initiateOutgoingCall("audio-video")}

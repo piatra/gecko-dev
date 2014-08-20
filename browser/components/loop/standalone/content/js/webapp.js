@@ -250,11 +250,11 @@ loop.webapp = (function($, _, OT, webL10n) {
 
             React.DOM.div({id: "messages"}), 
 
-            React.DOM.div({className: "button-group"}, 
+            React.DOM.div({className: "btn-group"}, 
               React.DOM.div({className: "flex-padding-1"}), 
-              React.DOM.div({className: "button-chevron-menu-group"}, 
-                React.DOM.div({className: "button-group-chevron"}, 
-                  React.DOM.div({className: "button-group"}, 
+              React.DOM.div({className: "btn-chevron-menu-group"}, 
+                React.DOM.div({className: "btn-group-chevron"}, 
+                  React.DOM.div({className: "btn-group"}, 
 
                     React.DOM.button({className: btnClassStartCall, 
                             onClick: this._initiateOutgoingCall("audio-video"), 
