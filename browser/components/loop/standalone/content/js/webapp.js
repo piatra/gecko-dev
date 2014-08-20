@@ -260,7 +260,9 @@ loop.webapp = (function($, _, OT, webL10n) {
                             onClick: this._initiateOutgoingCall("audio-video"), 
                             disabled: this.state.disableCallButton, 
                             title: __("initiate_audio_video_call_tooltip")}, 
-                      React.DOM.span(null, __("initiate_audio_video_call_button")), 
+                      React.DOM.span({className: "standalone-call-btn-text"}, 
+                        __("initiate_audio_video_call_button")
+                      ), 
                       React.DOM.span({className: "start-audio-video-call"})
                     ), 
 

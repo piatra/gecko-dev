@@ -86,19 +86,20 @@ p {
 
 .btn {
   display: inline-block;
-  background: #a5a;
-  border: none;
-  color: #fff;
-  text-decoration: none;
+  overflow: hidden;
+  margin: 0;
   padding: .3em .6em;
+  border: none;
   border: 1px solid transparent;
   border-radius: 2px;
-  cursor: pointer;
-  font-size: .9em;
+  background: #a5a;
+  color: #fff;
   text-align: center;
+  text-decoration: none;
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden;
+  font-size: .9em;
+  cursor: pointer;
 }
 
   button.btn {
@@ -106,28 +107,6 @@ p {
           regular links */
        padding: .3em .3em .3em .5em;
   }
-
-.btn-large {
-  /* Dimensions from spec
-   * https://people.mozilla.org/~dhenein/labs/loop-link-spec/#call-start */
-  padding: .5em;
-  font-size: 1rem;
-  height: auto;
-}
-
-  .btn-large + .btn-chevron {
-    padding: 1rem;
-    height: 100%; /* match full height of button */
-  }
-
-/*
- * Left / Right padding elements
- * used to center components
- * */
-.flex-padding-1 {
-  display: flex;
-  flex: 1;
-}
 
 .btn-info {
   background-color: #0096dd;
