@@ -263,7 +263,7 @@ loop.webapp = (function($, _, OT, webL10n) {
                       React.DOM.span({className: "standalone-call-btn-text"}, 
                         __("initiate_audio_video_call_button")
                       ), 
-                      React.DOM.span({className: "start-audio-video-call"})
+                      React.DOM.span({className: "standalone-call-btn-video-icon"})
                     ), 
 
                     React.DOM.div({className: "btn-chevron", 
@@ -277,7 +277,7 @@ loop.webapp = (function($, _, OT, webL10n) {
                       /*
                        Button required for disabled state.
                        */
-                      React.DOM.button({className: "start-audio-only-call", 
+                      React.DOM.button({className: "standalone-call-audio-menuitem",
                               onClick: this._initiateOutgoingCall("audio"), 
                               disabled: this.state.disableCallButton}, 
                         __("initiate_audio_call_button")

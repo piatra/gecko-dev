@@ -97,6 +97,7 @@ body,
 .overflow-text-ellipsis,
 .call-url,
 .standalone-call-btn-text {
+  display: inline-block;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -121,32 +122,28 @@ body,
   font-weight: normal;
 }
 
-.start-audio-only-call,
-.start-audio-video-call {
+.standalone-call-audio-menuitem,
+.standalone-call-btn-video-icon {
   width: 1.2rem;
   height: 1.2rem;
-  background-color: #F0F0F0;
-  background-size: 10px;
   background-repeat: no-repeat;
   cursor: pointer;
 }
 
-.start-audio-video-call {
-  background-image: url("../img/video-inverse-14x14.png");
-}
-
-.start-audio-only-call {
+.standalone-call-audio-menuitem {
   width: 100%;
   border: none;
+  background-size: 10px;
+  background-color: #F0F0F0;
   background-image: url("../shared/img/audio-default-16x16@1.5x.png");
   background-position: 90% center;
 }
 
-.start-audio-only-call:hover {
+.standalone-call-audio-menuitem:hover {
   background-image: url("../shared/img/audio-inverse-14x14.png");
 }
 
-.start-audio-video-call {
+.standalone-call-btn-video-icon {
   background-image: url("../shared/img/video-inverse-14x14.png");
   display: inline-block;
   background-size: 1.2rem;
@@ -159,13 +156,13 @@ body,
 }
 
 @media (min-resolution: 2dppx) {
-  .start-audio-only-call {
+  .standalone-call-audio-menuitem {
     background-image: url("../shared/img/audio-default-16x16@2x.png");
   }
-  .start-audio-only-call:hover {
+  .standalone-call-audio-menuitem:hover {
     background-image: url("../shared/img/audio-inverse-14x14@2x.png");
   }
-  .start-audio-video-call {
+  .standalone-call-btn-video-icon {
     background-image: url("../shared/img/video-inverse-14x14@2x.png");
   }
 }
