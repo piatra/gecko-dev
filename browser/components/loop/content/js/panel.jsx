@@ -243,7 +243,7 @@ loop.panel = (function(_, mozL10n) {
           <div className="invite">
             <input type="url" value={this.state.callUrl} readOnly="true"
                    className={inputCSSClass} />
-            <p className="button-group url-actions">
+            <p className="btn-group url-actions">
               <button className="btn btn-email" disabled={!this.state.callUrl}
                 onClick={this.handleEmailButtonClick}
                 data-mailto={this._generateMailTo()}>

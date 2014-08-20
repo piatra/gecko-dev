@@ -243,7 +243,7 @@ loop.panel = (function(_, mozL10n) {
           React.DOM.div({className: "invite"}, 
             React.DOM.input({type: "url", value: this.state.callUrl, readOnly: "true", 
                    className: inputCSSClass}), 
-            React.DOM.p({className: "button-group url-actions"}, 
+            React.DOM.p({className: "btn-group url-actions"}, 
               React.DOM.button({className: "btn btn-email", disabled: !this.state.callUrl, 
                 onClick: this.handleEmailButtonClick, 
                 'data-mailto': this._generateMailTo()}, 
