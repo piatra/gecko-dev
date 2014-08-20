@@ -82,7 +82,10 @@ p {
   width: 100%;
 }
 
-/* Buttons */
+/* A reset for all button-appearing elements, with the lowest-common
+ * denominator of the needed rules.  Intended to be used as a base class
+ * together with .btn-*
+ */
 
 .btn {
   display: inline-block;

@@ -53,10 +53,7 @@
 }
 
 .standalone .conversation-toolbar li {
-  /* XXX used to space out buttons.  The spacing is currently wrong.  When
-   * we get to the point of fixing this (perhaps when we land the SVG icons),
-   * it'd be good to use relative units or, time permitting, switch to
-   * flexboxes.
+  /* XXX Might make sense to use relative units here.
    */
   margin-right: 16px;
 }
