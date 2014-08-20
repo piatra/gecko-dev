@@ -46,3 +46,8 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+:focus {
+  /* from https://people.mozilla.org/~dhenein/labs/loop-link-spec/app.min.css */
+  /* remove blue outline in chrome */
+  outline: 0;
+}
