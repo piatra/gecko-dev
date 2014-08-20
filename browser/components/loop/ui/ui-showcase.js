@@ -104,11 +104,11 @@
             React.DOM.p({className: "note"}, 
               React.DOM.strong(null, "Note:"), " 332px wide."
             ), 
-            Example({summary: "Pending call url retrieval", dashed: "true", style: {width: "332px"}}, 
-              PanelView({client: mockClient})
-            ), 
             Example({summary: "Call URL retrieved", dashed: "true", style: {width: "332px"}}, 
               PanelView({callUrl: "http://invalid.example.url/", client: mockClient})
+            ), 
+            Example({summary: "Pending call url retrieval", dashed: "true", style: {width: "332px"}}, 
+              PanelView({client: mockClient})
             )
           ), 
 

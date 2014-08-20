@@ -178,6 +178,12 @@ loop.panel = (function(_, mozL10n) {
     },
 
     componentDidMount: function() {
+      // If we've already got a callURL, don't bother requesting a new one.
+      // As of this writing, only used for visual testing in the UI showcase.
+      if (this.state.callUrl.length) {
+        return;
+      }
+
       this.setState({pending: true});
       this.props.client.requestCallUrl(this.conversationIdentifier(),
                                        this._onCallUrlReceived);

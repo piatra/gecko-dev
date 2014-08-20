@@ -126,7 +126,6 @@ body,
 .start-audio-video-call {
   width: 1.2rem;
   height: 1.2rem;
-  background-color: none;
   background-image: url("../img/video-inverse-14x14.png");
   background-size: 10px;
   background-repeat: no-repeat;
