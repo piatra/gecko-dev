@@ -24,11 +24,6 @@
 }
 
 .conversation .conversation-toolbar {
-  /* YYY From Niko's port.  Seems to only make this absolute when embedded
-   * in the conversation, not when in the UI showcase as a standalone thing.
-   * I still suspect absolute could be done away with entirely for the toolbar,
-   * perhaps in favor of relative
-   */
   position: absolute;
   left: 0;
   right: 0;
@@ -42,7 +37,7 @@
 
 /* standalone version */
 .standalone .conversation .conversation-toolbar {
-  bottom: 0;   /* YYY if we get rid of the absolute, maybe this can go too? */
+  bottom: 0;
 }
 
 .standalone .conversation-toolbar {
@@ -58,7 +53,10 @@
 }
 
 .standalone .conversation-toolbar li {
-  /* YYY not sure of the origin of this; need to figure out what's up */
+  /* XXX used to space out buttons.  The spacing is currently wrong.  When
+   * we get to the point of fixing this (perhaps when we land the SVG icons),
+   * it'd be good to use relative units or, time permitting, switch to
+   * flexboxes.
   margin-right: 16px;
 }
 
