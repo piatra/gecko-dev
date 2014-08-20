@@ -88,9 +88,8 @@ p {
   display: inline-block;
   overflow: hidden;
   margin: 0;
-  padding: .3em .6em;
+  padding: 0;
   border: none;
-  border: 1px solid transparent;
   border-radius: 2px;
   background: #a5a;
   color: #fff;
@@ -101,12 +100,6 @@ p {
   font-size: .9em;
   cursor: pointer;
 }
-
-  button.btn {
-       /* for some reason, buttons respond differently to setting padding than
-          regular links */
-       padding: .3em .3em .3em .5em;
-  }
 
 .btn-info {
   background-color: #0096dd;

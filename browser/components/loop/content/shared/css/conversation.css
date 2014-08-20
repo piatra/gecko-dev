@@ -98,6 +98,7 @@
 
 .fx-embedded-answer-btn-text {
   display: inline-block;
+  vertical-align: bottom;
 
   /* don't stretch the button of the localized text is too big */
   max-width: 85%;
@@ -110,6 +111,7 @@
 
 .fx-embedded-btn-icon-video {
   display: inline-block;
+  vertical-align: top;
   width: .8rem;
   height: .8rem;
   background-image: url("../img/video-inverse-14x14.png");
@@ -309,7 +311,7 @@
   }
 
 
-.call-audio-video {
+.call-audio-video:after {
   background-image: url("../img/video-inverse-14x14.png");
   background-position: 96% center;
   background-repeat: no-repeat;
