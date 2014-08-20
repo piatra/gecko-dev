@@ -96,6 +96,24 @@
   background-color: rgba(255,255,255,.35);
 }
 
+.fx-embedded-answer-btn-text {
+  display: inline-block;
+  overflow: hidden;
+  max-width: 85%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fx-embedded-btn-icon-video {
+  display: inline-block;
+  width: .9rem;
+  height: .9rem;
+  background-color: none;
+  background-image: url("../img/video-inverse-14x14.png");
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
 /* Hangup button */
 .conversation-toolbar .btn-hangup {
   background-color: #D74345;

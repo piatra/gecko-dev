@@ -77,7 +77,7 @@ loop.conversation = (function(OT, mozL10n) {
 
     render: function() {
       /* jshint ignore:start */
-      var btnClassAccept = "btn btn-success btn-accept call-audio-video";
+      var btnClassAccept = "btn btn-success btn-accept";
       var btnClassDecline = "btn btn-error btn-decline";
       var conversationPanelClass = "incoming-call";
       var dropdownMenuClassesDecline = React.addons.classSet({
@@ -115,7 +115,11 @@ loop.conversation = (function(OT, mozL10n) {
               <div className="btn-group">
                 <button className={btnClassAccept}
                         onClick={this._handleAccept("audio-video")}>
-                  {__("incoming_call_answer_button")}
+                  <span className="fx-embedded-answer-btn-text">
+                    {__("incoming_call_answer_button")}
+                  </span>
+                  <span className="fx-embedded-btn-icon-video">
+                  </span>
                 </button>
                 <div className="call-audio-only"
                      onClick={this._handleAccept("audio")}
