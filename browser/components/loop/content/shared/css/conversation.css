@@ -57,6 +57,7 @@
    * we get to the point of fixing this (perhaps when we land the SVG icons),
    * it'd be good to use relative units or, time permitting, switch to
    * flexboxes.
+   */
   margin-right: 16px;
 }
 
