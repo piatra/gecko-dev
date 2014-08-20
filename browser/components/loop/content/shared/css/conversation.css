@@ -98,8 +98,12 @@
 
 .fx-embedded-answer-btn-text {
   display: inline-block;
-  overflow: hidden;
+
+  /* don't stretch the button of the localized text is too big */
   max-width: 85%;
+
+  /* instead, clip the text and use an ellipsis */
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
