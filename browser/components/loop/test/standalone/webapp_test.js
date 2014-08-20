@@ -584,7 +584,7 @@ describe("loop.webapp", function() {
          it("should set selectedCallType to audio-video", function() {
            conversation.set("loopToken", "fake");
 
-           var button = view.getDOMNode().querySelector(".standalone-call-btn-video-icon");
+           var button = view.getDOMNode().querySelector(".btn-success");
            React.addons.TestUtils.Simulate.click(button);
 
            expect(conversation.get("selectedCallType")).to.eql("audio-video");
