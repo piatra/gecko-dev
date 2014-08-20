@@ -75,6 +75,7 @@
 
 .conversation .media.nested .remote {
   background-image: url("sample-img/video-screen-remote.png");
+  background-repeat: no-repeat;
 }
 
 .conversation .media.nested .local {
