@@ -263,7 +263,7 @@ loop.webapp = (function($, _, OT, webL10n) {
                       <span className="standalone-call-btn-text">
                         {__("initiate_audio_video_call_button")}
                       </span>
-                      <span className="standalone-call-video-icon"></span>
+                      <span className="standalone-call-btn-video-icon"></span>
                     </button>
 
                     <div className="btn-chevron"
