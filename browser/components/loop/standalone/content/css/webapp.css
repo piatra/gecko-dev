@@ -18,7 +18,7 @@ body,
   font-family: Open Sans,sans-serif;
 }
 
-.standalone header {
+.standalone-header {
   border-radius: 4px;
   background: #fff;
   padding: 1rem 5rem;
@@ -112,11 +112,8 @@ body,
   background-repeat: no-repeat;
 }
 
-.large-font {
+.standalone-header-title {
   font-size: 1.8rem;
-}
-
-.light-weight-font {
   font-weight: lighter;
 }
 

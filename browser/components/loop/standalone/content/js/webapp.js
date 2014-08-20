@@ -100,8 +100,8 @@ loop.webapp = (function($, _, OT, webL10n) {
 
       return (
         /* jshint ignore:start */
-        React.DOM.header({className: "container-box"}, 
-          React.DOM.h1({className: "light-weight-font"}, 
+        React.DOM.header({className: "standalone-header container-box"}, 
+          React.DOM.h1({className: "standalone-header-title"}, 
             React.DOM.strong(null, __("brandShortname")), " ", __("clientShortname")
           ), 
           React.DOM.div({className: "loop-logo", title: "Firefox WebRTC! logo"}), 
