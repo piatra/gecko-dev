@@ -123,7 +123,8 @@ loop.shared.views = (function(_, OT, l10n) {
         "btn": true,
         "media-control": true,
         "local-media": this.props.scope === "local",
-        "muted": !this.props.enabled
+        "muted": !this.props.enabled,
+        "standalone-conversation-toolbar-media-btn": true
       };
       classesObj["btn-mute-" + this.props.type] = true;
       return cx(classesObj);
@@ -179,7 +180,7 @@ loop.shared.views = (function(_, OT, l10n) {
 
     render: function() {
       /* jshint ignore:start */
-      var hangupButtonClasses = "btn btn-hangup";
+      var hangupButtonClasses = "btn btn-hangup btn-error";
       return (
         <ul className="conversation-toolbar">
           <li>

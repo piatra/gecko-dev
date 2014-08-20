@@ -23,6 +23,9 @@
 
 .conversation-toolbar {
   z-index: 999; /* required to have it superimposed to the video element */
+  border: 1px solid #5a5a5a;
+  border-left: 0;
+  border-right: 0;
 }
 
 .conversation .conversation-toolbar {
@@ -38,11 +41,8 @@
 
 /* desktop version */
 .conversation-window .conversation-toolbar {
-  height: 32px;
+  height: 26px;
   background: rgba(0,0,0,.70);
-  border: 1px solid #5a5a5a;
-  border-left: 0;
-  border-right: 0;
 }
 
 /* standalone version */
@@ -62,39 +62,45 @@
                    chrome */
 }
 
-.conversation-window .conversation-toolbar li {
-  border-right: 1px solid #5a5a5a;
-}
-
 .standalone .conversation-toolbar li {
   /* YYY not sure of the origin of this; need to figure out what's up */
   margin-right: 16px;
 }
 
 .conversation-toolbar .btn {
-  height: 30px;
-  background: transparent;
+  /* height acording to spec
+   * https://people.mozilla.org/~dhenein/labs/loop-link-spec/#video-call */
+  height: 24px;
   background-repeat: no-repeat;
-  background-size: 14px 14px;
-  cursor: pointer;
+  background-position: center;
+  background-size: 40%;
 }
 
+.conversation-window li {
+  border-right: 1px solid #5a5a5a;
+}
+
+  .conversation-window li:first-child {
+    border-left: 1px solid #5a5a5a;
+  }
+
 .conversation-window .conversation-toolbar .btn {
-  width: 40px;
-  background-position: 12px 8px;
+  width: 32px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 40%;
   border-radius: 0;
 }
 
-.standalone .conversation-toolbar .btn {
-/* YYY dunno about these metrics; look wrong now; need to review */
-  width: 34px;
-  background-position: 9px 7px;
+.standalone-conversation-toolbar-media-btn {
+  width: 36px;
+  background-position: center;
   border-radius: 28px;
 }
 
-.conversation-toolbar .btn:hover {
-  background-color: rgba(255,255,255,.35);
-}
+  .standalone-conversation-toolbar-media-btn:hover {
+    background-color: rgba(255,255,255,.35);
+  }
 
 .fx-embedded-answer-btn-text {
   display: inline-block;
@@ -115,18 +121,6 @@
   background-image: url("../img/video-inverse-14x14.png");
   background-repeat: no-repeat;
   cursor: pointer;
-}
-
-/* Hangup button */
-.conversation-toolbar .btn-hangup {
-  background-color: #D74345;
-}
-
-/* YYY not sure why 2 selectors make sense here; or if colors should be the same
-   in both places */
-.conversation-window .btn-hangup:hover,
-.standalone .conversation-toolbar .btn-hangup:hover {
-  background-color: #C53436;
 }
 
 .standalone .conversation-toolbar .btn-hangup {
