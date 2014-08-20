@@ -94,10 +94,13 @@ body,
   background-repeat: no-repeat;
 }
 
-.call-url {
+.overflow-text-ellipsis,
+.call-url,
+.standalone-call-btn-text {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  white-space: nowrap;
 }
 
 .loop-logo {
@@ -127,6 +130,7 @@ body,
   width: 1.2rem;
   height: 1.2rem;
   background-color: none;
+  background-image: url("../img/video-inverse-14x14.png");
   background-size: 10px;
   background-repeat: no-repeat;
   cursor: pointer;
@@ -150,13 +154,9 @@ body,
 
 /* Ellipsed text content of audio-video call btn */
 .standalone-call-btn-text {
-  display: inline-block;
-  overflow: hidden;
+  /* make some room for the video icon */
   max-width: 90%;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
-
 
 @media (min-resolution: 2dppx) {
   .start-audio-only-call {

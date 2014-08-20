@@ -206,9 +206,6 @@ p {
 @media (min-resolution: 2dppx) {
   .btn-chevron {
     background-image: url(../img/dropdown-inverse@2x.png);
-    background-position: center;
-    background-size: 10px;
-    background-repeat: no-repeat;
   }
 }
 
