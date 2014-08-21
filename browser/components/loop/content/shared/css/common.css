@@ -180,9 +180,7 @@ p {
 .btn-chevron-menu-group {
   display: flex;
   justify-content: space-between;
-  flex: 0 1 auto;
-  min-width: 120px;
-  max-width: 120px;
+  flex: 8;
 }
 
 .btn-group-chevron .btn {
