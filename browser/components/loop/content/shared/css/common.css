@@ -118,18 +118,21 @@ p {
     border: 1px solid #006b9d;
   }
 
+.btn-accept,
 .btn-success,
 .btn-success + .btn-chevron {
   background-color: #74bf43;
   border: 1px solid #74bf43;
 }
 
+  .btn-accept:hover,
   .btn-success:hover,
   .btn-success + .btn-chevron:hover {
     background-color: #6cb23e;
     border: 1px solid #6cb23e;
   }
 
+  .btn-accept:active,
   .btn-success:active,
   .btn-success + .btn-chevron:active {
     background-color: #64a43a;

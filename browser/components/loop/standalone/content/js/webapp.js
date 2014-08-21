@@ -48,7 +48,7 @@ loop.webapp = (function($, _, OT, webL10n) {
         React.DOM.div({className: "promote-firefox"}, 
           React.DOM.h3(null, __("promote_firefox_hello_heading")), 
           React.DOM.p(null, 
-            React.DOM.a({className: "btn btn-large btn-success", 
+            React.DOM.a({className: "btn btn-large btn-accept", 
                href: "https://www.mozilla.org/firefox/"}, 
               __("get_firefox_button")
             )
@@ -228,7 +228,7 @@ loop.webapp = (function($, _, OT, webL10n) {
           "https://www.mozilla.org/privacy/'>" + privacy_notice_name + "</a>"
       });
 
-      var btnClassStartCall = "btn btn-large btn-success " +
+      var btnClassStartCall = "btn btn-large btn-accept " +
                               loop.shared.utils.getTargetPlatform();
       var dropdownMenuClasses = React.addons.classSet({
         "native-dropdown-large-parent": true,

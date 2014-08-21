@@ -77,7 +77,7 @@ loop.conversation = (function(OT, mozL10n) {
 
     render: function() {
       /* jshint ignore:start */
-      var btnClassAccept = "btn btn-success btn-accept";
+      var btnClassAccept = "btn btn-accept";
       var btnClassDecline = "btn btn-error btn-decline";
       var conversationPanelClass = "incoming-call";
       var dropdownMenuClassesDecline = React.addons.classSet({
