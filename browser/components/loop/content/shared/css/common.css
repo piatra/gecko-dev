@@ -36,7 +36,7 @@ h1, h2, h3 {
 
 /* choose a sane default for paragraphs, since reset.css' 0px is not what we want */
 p {
-  margin: 1em 0px;
+  margin: 1em 0;
 }
 
 /* Helpers */
@@ -52,8 +52,8 @@ p {
  */
 .cf:before,
 .cf:after {
-  content: " ";   /* 1 */
-  display: table; /* 2 */
+  display: table; /* 1 */
+  content: " ";   /* 2 */
 }
 
 .cf:after {
@@ -142,19 +142,23 @@ p {
 }
 
 .btn-error,
-.btn-error + .btn-chevron {
+.btn-hangup,
+.btn-error + .btn-chevron,
+.btn-hangup {
   background-color: #d74345;
   border: 1px solid #d74345;
 }
 
   .btn-error:hover,
-  .btn-error + .btn-chevron:hover {
+  .btn-error + .btn-chevron:hover,
+  .btn-hangup:hover {
     background-color: #c53436;
     border: 1px solid #c53436;
   }
 
   .btn-error:active,
-  .btn-error + .btn-chevron:active {
+  .btn-error + .btn-chevron:active,
+  .btn-hangup:active {
     background-color: #ae2325;
     border: 1px solid #ae2325;
   }
@@ -372,9 +376,9 @@ p {
 /* Logos */
 
 .firefox-logo {
-  background: transparent url(../img/firefox-logo.png) no-repeat center center;
-  background-size: contain;
+  margin: 0 auto; /* horizontal block centering */
   width: 100px;
   height: 100px;
-  margin: 0px auto; /* horizontal block centering */
+  background: transparent url(../img/firefox-logo.png) no-repeat center center;
+  background-size: contain;
 }

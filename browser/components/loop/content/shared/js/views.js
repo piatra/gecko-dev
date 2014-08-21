@@ -180,7 +180,7 @@ loop.shared.views = (function(_, OT, l10n) {
 
     render: function() {
       /* jshint ignore:start */
-      var hangupButtonClasses = "btn btn-hangup btn-error";
+      var hangupButtonClasses = "btn btn-hangup";
       return (
         React.DOM.ul({className: "conversation-toolbar"}, 
           React.DOM.li(null, 
