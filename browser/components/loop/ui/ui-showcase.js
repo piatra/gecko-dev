@@ -122,26 +122,26 @@
             React.DOM.h3(null, "Desktop Conversation Window"), 
             React.DOM.div({className: "fx-embedded"}, 
               Example({summary: "Default (260x265)", dashed: "true"}, 
-                ConversationToolbar({video: {enabled: true}, audio: {enabled: true}})
+                ConversationToolbar({scope: "local", video: {enabled: true}, audio: {enabled: true}})
               ), 
               Example({summary: "Video muted"}, 
-                ConversationToolbar({video: {enabled: false}, audio: {enabled: true}})
+                ConversationToolbar({scope: "local", video: {enabled: false}, audio: {enabled: true}})
               ), 
               Example({summary: "Audio muted"}, 
-                ConversationToolbar({video: {enabled: true}, audio: {enabled: false}})
+                ConversationToolbar({scope: "local", video: {enabled: true}, audio: {enabled: false}})
               )
             ), 
 
             React.DOM.h3(null, "Standalone"), 
             React.DOM.div({className: "standalone"}, 
               Example({summary: "Default"}, 
-                ConversationToolbar({video: {enabled: true}, audio: {enabled: true}})
+                ConversationToolbar({scope: "remote", video: {enabled: true}, audio: {enabled: true}})
               ), 
               Example({summary: "Video muted"}, 
-                ConversationToolbar({video: {enabled: false}, audio: {enabled: true}})
+                ConversationToolbar({scope: "remote", video: {enabled: false}, audio: {enabled: true}})
               ), 
               Example({summary: "Audio muted"}, 
-                ConversationToolbar({video: {enabled: true}, audio: {enabled: false}})
+                ConversationToolbar({scope: "remote", video: {enabled: true}, audio: {enabled: false}})
               )
             )
           ), 
@@ -161,8 +161,9 @@
 
             Example({summary: "Desktop conversation window", dashed: "true", 
                      style: {width: "260px", height: "265px"}}, 
-              React.DOM.div({className: "conversation-window"}, 
+              React.DOM.div({className: "conversation-window fx-embedded"}, 
                 ConversationView({video: {enabled: true}, audio: {enabled: true}, 
+                                  scope: "local", 
                                   model: mockConversationModel})
               )
             ), 

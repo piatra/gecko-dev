@@ -18,13 +18,6 @@ body {
   background: #fbfbfb;
 }
 
-button {
-  /* Resetting default <button> font properties; eg. strangely enough, FF mac
-     wants to use Helvetica/12px whatever we define for parent elements */
-  font-family: "Lucida Grande", sans-serif;
-  font-size: 1em;
-}
-
 img {
   border: none;
 }
@@ -94,7 +87,7 @@ p {
   padding: 0;
   border: none;
   border-radius: 2px;
-  background: #a5a;
+  background: none;
   color: #fff;
   text-align: center;
   text-decoration: none;
@@ -226,6 +219,20 @@ p {
   border-top-right-radius: 0;
 }
 
+/*
+ * Allows for text inside of a button to
+ * get clipped sooner and make room for an icon
+ * */
+.overflow-text-ellipsis,
+.call-url,
+.standalone-call-btn-text,
+.fx-embedded-answer-btn-text {
+  display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 /* Alerts */
 .alert {
   background: #eee;
@@ -274,6 +281,10 @@ p {
   background: none;
   border: none;
   cursor: pointer;
+}
+
+.muted {
+  background-color: #0096DD;
 }
 
 /* Transitions */

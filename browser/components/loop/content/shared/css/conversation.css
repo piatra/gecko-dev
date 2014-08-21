@@ -19,8 +19,6 @@
 .conversation-toolbar {
   z-index: 999; /* required to have it superimposed to the video element */
   border: 1px solid #5a5a5a;
-  border-left: 0;
-  border-right: 0;
 }
 
 .conversation .conversation-toolbar {
@@ -47,8 +45,6 @@
 
 .conversation-toolbar li {
   float: left;
-  font-size: 0; /* prevents vertical bottom padding added to buttons in google
-                   chrome */
 }
 
 .standalone .conversation-toolbar li {
@@ -59,14 +55,13 @@
 
 .fx-embedded .conversation-toolbar li {
   border-right: 1px solid #5a5a5a;
+  font-size: 0; /* prevents vertical bottom padding added to buttons in google
+                   chrome */
 }
 
-  .fx-embedded .conversation-toolbar li:first-child {
-    border-left: 1px solid #5a5a5a;
-  }
-
-.fx-embedded-conversation-toolbar-btn,
-.standalone-conversation-toolbar-btn {
+.fx-embedded-toolbar-media-btn,
+.standalone-toolbar-media-btn,
+.conversation-toolbar .btn-hangup {
   /* dimensions according to spec
    * https://people.mozilla.org/~dhenein/labs/loop-link-spec/#video-call */
   width: 32px;
@@ -77,34 +72,28 @@
   background-repeat: no-repeat;
 }
 
-.standalone .conversation-toolbar .btn {
+.standalone-toolbar-media-btn {
   border-radius: 28px;
 }
 
-.standalone .conversation-toolbar-media-btn {
+.standalone-toolbar-media-btn {
   width: 36px;
   background-position: center;
   border-radius: 28px;
 }
 
-  .standalone .conversation-toolbar-media-btn:hover {
+  .standalone-toolbar-media-btn:hover,
+  .fx-embedded-toolbar-media-btn:hover {
     background-color: rgba(255,255,255,.35);
   }
 
-.fx-embedded .answer-btn-text {
-  display: inline-block;
+.fx-embedded-answer-btn-text {
   vertical-align: bottom;
-
   /* don't stretch the button of the localized text is too big */
   max-width: 85%;
-
-  /* instead, clip the text and use an ellipsis */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
-.fx-embedded .btn-icon-video {
+.fx-embedded-btn-icon-video {
   display: inline-block;
   width: .8rem;
   height: .8rem;
@@ -114,64 +103,49 @@
   cursor: pointer;
 }
 
-.standalone .conversation-toolbar .btn-hangup {
+.standalone .btn-hangup {
   width: auto;
-  font-size: 12px;
   border-radius: 2px;
-  padding: 0 20px;
+  padding: 0 1rem;
 }
 
-.fx-embedded .conversation-toolbar .btn-hangup {
+.fx-embedded .btn-hangup {
   background-image: url(../img/hangup-inverse-14x14.png);
 }
 @media (min-resolution: 2dppx) {
-  .fx-embedded .conversation-toolbar .btn-hangup {
+  .fx-embedded .btn-hangup {
     background-image: url(../img/hangup-inverse-14x14@2x.png);
   }
 }
 
-/* Common media control buttons behavior */
-.media-control {
-  background-color: transparent;
-  opacity: 1;
-}
-.media-control:hover {
-  background-color: rgba(255, 255, 255, .35);
-  opacity: 1;
-}
-.media-control.muted {
-  background-color: #0096DD;
-  opacity: 1;
-}
-
 /* Audio mute button */
-.local-media.btn-mute-audio {
+.btn-mute-audio {
   background-image: url(../img/audio-inverse-14x14.png);
 }
-.local-media.btn-mute-audio.muted {
+.btn-mute-audio.muted {
   background-image: url(../img/mute-inverse-14x14.png);
 }
 @media (min-resolution: 2dppx) {
-  .local-media.btn-mute-audio {
+  .btn-mute-audio {
     background-image: url(../img/audio-inverse-14x14@2x.png);
   }
-  .local-media.btn-mute-audio.muted {
+  .btn-mute-audio.muted {
     background-image: url(../img/mute-inverse-14x14@2x.png);
   }
 }
 
 /* Video mute button */
-.local-media.btn-mute-video {
+.btn-mute-video {
   background-image: url(../img/video-inverse-14x14.png);
 }
-.local-media.btn-mute-video.muted {
+.btn-mute-video.muted {
   background-image: url(../img/facemute-14x14.png);
 }
 @media (min-resolution: 2dppx) {
-  .local-media.btn-mute-video {
+  .btn-mute-video {
     background-image: url(../img/video-inverse-14x14@2x.png);
   }
-  .local-media.btn-mute-video.muted {
+  .btn-mute-video.muted {
     background-image: url(../img/facemute-14x14@2x.png);
   }
 }

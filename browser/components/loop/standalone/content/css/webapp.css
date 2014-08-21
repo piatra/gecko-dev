@@ -15,7 +15,6 @@ body,
   background: #fbfbfb;
   color: #666;
   text-align: center;
-  font-family: Open Sans,sans-serif;
 }
 
 .standalone-header {
@@ -93,15 +92,6 @@ body,
   background-size: contain;
   background-image: url("../shared/img/mozilla-logo.png");
   background-repeat: no-repeat;
-}
-
-.overflow-text-ellipsis,
-.call-url,
-.standalone-call-btn-text {
-  display: inline-block;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
 
 .loop-logo {

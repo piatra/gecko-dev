@@ -121,10 +121,9 @@ loop.shared.views = (function(_, OT, l10n) {
       // classes
       var classesObj = {
         "btn": true,
-        "media-control": true,
-        "local-media": this.props.scope === "local",
         "muted": !this.props.enabled,
-        "standalone-conversation-toolbar-media-btn": true
+        "standalone-toolbar-media-btn": this.props.scope !== "local",
+        "fx-embedded-toolbar-media-btn": this.props.scope === "local"
       };
       classesObj["btn-mute-" + this.props.type] = true;
       return cx(classesObj);
@@ -191,10 +190,10 @@ loop.shared.views = (function(_, OT, l10n) {
           ), 
           React.DOM.li(null, MediaControlButton({action: this.handleToggleVideo, 
                                   enabled: this.props.video.enabled, 
-                                  scope: "local", type: "video"})), 
+                                  scope: this.props.scope, type: "video"})), 
           React.DOM.li(null, MediaControlButton({action: this.handleToggleAudio, 
                                   enabled: this.props.audio.enabled, 
-                                  scope: "local", type: "audio"}))
+                                  scope: this.props.scope, type: "audio"}))
         )
       );
       /* jshint ignore:end */
@@ -356,6 +355,7 @@ loop.shared.views = (function(_, OT, l10n) {
             ConversationToolbar({video: this.state.video, 
                                  audio: this.state.audio, 
                                  publishStream: this.publishStream, 
+                                 scope: this.props.scope, 
                                  hangup: this.hangup}), 
             React.DOM.div({className: "media nested"}, 
               React.DOM.div({className: "video_wrapper remote_wrapper"}, 
