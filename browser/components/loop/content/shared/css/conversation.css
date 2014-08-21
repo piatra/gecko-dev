@@ -28,15 +28,14 @@
   left: 0;
   right: 0;
 }
-
 /* desktop version */
-.conversation-window .conversation-toolbar {
+.fx-embedded .conversation-toolbar {
   height: 26px;
   background: rgba(0,0,0,.70);
 }
 
 /* standalone version */
-.standalone .conversation .conversation-toolbar {
+.standalone .conversation-toolbar {
   bottom: 0;
 }
 
@@ -58,42 +57,41 @@
   margin-right: 16px;
 }
 
-.conversation-toolbar .btn {
-  /* height according to spec
-   * https://people.mozilla.org/~dhenein/labs/loop-link-spec/#video-call */
-  height: 24px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 40%;
-}
-
-.conversation-window li {
+.fx-embedded .conversation-toolbar li {
   border-right: 1px solid #5a5a5a;
 }
 
-  .conversation-window li:first-child {
+  .fx-embedded .conversation-toolbar li:first-child {
     border-left: 1px solid #5a5a5a;
   }
 
-.conversation-window .conversation-toolbar .btn {
+.fx-embedded-conversation-toolbar-btn,
+.standalone-conversation-toolbar-btn {
+  /* dimensions according to spec
+   * https://people.mozilla.org/~dhenein/labs/loop-link-spec/#video-call */
   width: 32px;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: 40%;
+  height: 24px;
   border-radius: 0;
+  background-position: center;
+  background-size: 40%;
+  background-repeat: no-repeat;
 }
 
-.standalone-conversation-toolbar-media-btn {
+.standalone .conversation-toolbar .btn {
+  border-radius: 28px;
+}
+
+.standalone .conversation-toolbar-media-btn {
   width: 36px;
   background-position: center;
   border-radius: 28px;
 }
 
-  .standalone-conversation-toolbar-media-btn:hover {
+  .standalone .conversation-toolbar-media-btn:hover {
     background-color: rgba(255,255,255,.35);
   }
 
-.fx-embedded-answer-btn-text {
+.fx-embedded .answer-btn-text {
   display: inline-block;
   vertical-align: bottom;
 
@@ -106,13 +104,13 @@
   white-space: nowrap;
 }
 
-.fx-embedded-btn-icon-video {
+.fx-embedded .btn-icon-video {
   display: inline-block;
-  vertical-align: top;
   width: .8rem;
   height: .8rem;
   background-image: url("../img/video-inverse-14x14.png");
   background-repeat: no-repeat;
+  vertical-align: top;
   cursor: pointer;
 }
 
@@ -123,57 +121,57 @@
   padding: 0 20px;
 }
 
-.conversation-window .conversation-toolbar .btn-hangup {
+.fx-embedded .conversation-toolbar .btn-hangup {
   background-image: url(../img/hangup-inverse-14x14.png);
 }
 @media (min-resolution: 2dppx) {
-  .conversation-window .conversation-toolbar .btn-hangup {
+  .fx-embedded .conversation-toolbar .btn-hangup {
     background-image: url(../img/hangup-inverse-14x14@2x.png);
   }
 }
 
 /* Common media control buttons behavior */
-.conversation-toolbar .media-control {
+.media-control {
   background-color: transparent;
   opacity: 1;
 }
-.conversation-toolbar .media-control:hover {
+.media-control:hover {
   background-color: rgba(255, 255, 255, .35);
   opacity: 1;
 }
-.conversation-toolbar .media-control.muted {
+.media-control.muted {
   background-color: #0096DD;
   opacity: 1;
 }
 
 /* Audio mute button */
-.conversation-toolbar .local-media.btn-mute-audio {
+.local-media.btn-mute-audio {
   background-image: url(../img/audio-inverse-14x14.png);
 }
-.conversation-toolbar .local-media.btn-mute-audio.muted {
+.local-media.btn-mute-audio.muted {
   background-image: url(../img/mute-inverse-14x14.png);
 }
 @media (min-resolution: 2dppx) {
-  .conversation-toolbar .local-media.btn-mute-audio {
+  .local-media.btn-mute-audio {
     background-image: url(../img/audio-inverse-14x14@2x.png);
   }
-  .conversation-toolbar .local-media.btn-mute-audio.muted {
+  .local-media.btn-mute-audio.muted {
     background-image: url(../img/mute-inverse-14x14@2x.png);
   }
 }
 
 /* Video mute button */
-.conversation-toolbar .local-media.btn-mute-video {
+.local-media.btn-mute-video {
   background-image: url(../img/video-inverse-14x14.png);
 }
-.conversation-toolbar .local-media.btn-mute-video.muted {
+.local-media.btn-mute-video.muted {
   background-image: url(../img/facemute-14x14.png);
 }
 @media (min-resolution: 2dppx) {
-  .conversation-toolbar .local-media.btn-mute-video {
+  .local-media.btn-mute-video {
     background-image: url(../img/video-inverse-14x14@2x.png);
   }
-  .conversation-toolbar .local-media.btn-mute-video.muted {
+  .local-media.btn-mute-video.muted {
     background-image: url(../img/facemute-14x14@2x.png);
   }
 }

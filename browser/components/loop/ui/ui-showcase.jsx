@@ -120,7 +120,7 @@
 
           <Section name="ConversationToolbar">
             <h3>Desktop Conversation Window</h3>
-            <div className="conversation-window">
+            <div className="fx-embedded">
               <Example summary="Default (260x265)" dashed="true">
                 <ConversationToolbar video={{enabled: true}} audio={{enabled: true}} />
               </Example>

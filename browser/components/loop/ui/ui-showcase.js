@@ -120,7 +120,7 @@
 
           Section({name: "ConversationToolbar"}, 
             React.DOM.h3(null, "Desktop Conversation Window"), 
-            React.DOM.div({className: "conversation-window"}, 
+            React.DOM.div({className: "fx-embedded"}, 
               Example({summary: "Default (260x265)", dashed: "true"}, 
                 ConversationToolbar({video: {enabled: true}, audio: {enabled: true}})
               ), 
