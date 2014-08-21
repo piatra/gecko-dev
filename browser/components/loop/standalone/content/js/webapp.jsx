@@ -244,7 +244,7 @@ loop.webapp = (function($, _, OT, webL10n) {
             <ConversationHeader
               urlCreationDateString={this.state.urlCreationDateString} />
 
-            <p className="large-font light-weight-font">
+            <p className="standalone-call-btn-label">
               {__("initiate_call_button_label")}
             </p>
 
@@ -252,7 +252,7 @@ loop.webapp = (function($, _, OT, webL10n) {
 
             <div className="btn-group">
               <div className="flex-padding-1"></div>
-              <div className="btn-chevron-menu-group">
+              <div className="standalone-btn-chevron-menu-group">
                 <div className="btn-group-chevron">
                   <div className="btn-group">
 

@@ -41,7 +41,8 @@ body,
 
   /* prevent the video conversation elements to occupy the whole available
    width hence the height while keeping aspect ratio */
-  width: 730px;
+  width: 30%;
+  min-width: 400px;
   height: 100%;
   align-items: center;
   justify-content: space-between;
@@ -112,14 +113,28 @@ body,
   background-repeat: no-repeat;
 }
 
+.standalone-header-title,
+.standalone-call-btn-label {
+  font-weight: lighter;
+}
+
 .standalone-header-title {
   font-size: 1.8rem;
-  font-weight: lighter;
+}
+
+.standalone-call-btn-label {
+  font-size: 1.2rem;
 }
 
 .light-color-font {
   opacity: .4;
   font-weight: normal;
+}
+
+.standalone-btn-chevron-menu-group {
+  display: flex;
+  justify-content: space-between;
+  flex: 2;
 }
 
 .standalone-call-audio-menuitem,
@@ -147,12 +162,18 @@ body,
   background-image: url("../shared/img/video-inverse-14x14.png");
   display: inline-block;
   background-size: 1.2rem;
+  margin-left: .5rem;
 }
 
 /* Ellipsed text content of audio-video call btn */
 .standalone-call-btn-text {
   /* make some room for the video icon */
   max-width: 90%;
+}
+
+.standalone-call-btn-text,
+.standalone-call-btn-video-icon {
+  vertical-align: bottom;
 }
 
 @media (min-resolution: 2dppx) {
@@ -171,7 +192,7 @@ body,
   /* Dimensions from spec
    * https://people.mozilla.org/~dhenein/labs/loop-link-spec/#call-start */
   font-size: 1rem;
-  padding: .5rem;
+  padding: .3em .5rem;
 }
 
   .btn-large + .btn-chevron {

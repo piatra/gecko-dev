@@ -244,7 +244,7 @@ loop.webapp = (function($, _, OT, webL10n) {
             ConversationHeader({
               urlCreationDateString: this.state.urlCreationDateString}), 
 
-            React.DOM.p({className: "large-font light-weight-font"}, 
+            React.DOM.p({className: "standalone-call-btn-label"}, 
               __("initiate_call_button_label")
             ), 
 
@@ -252,7 +252,7 @@ loop.webapp = (function($, _, OT, webL10n) {
 
             React.DOM.div({className: "btn-group"}, 
               React.DOM.div({className: "flex-padding-1"}), 
-              React.DOM.div({className: "btn-chevron-menu-group"}, 
+              React.DOM.div({className: "standalone-btn-chevron-menu-group"}, 
                 React.DOM.div({className: "btn-group-chevron"}, 
                   React.DOM.div({className: "btn-group"}, 
 
@@ -263,7 +263,7 @@ loop.webapp = (function($, _, OT, webL10n) {
                       React.DOM.span({className: "standalone-call-btn-text"}, 
                         __("initiate_audio_video_call_button")
                       ), 
-                      React.DOM.span({className: "start-audio-video-call"})
+                      React.DOM.span({className: "standalone-call-btn-video-icon"})
                     ), 
 
                     React.DOM.div({className: "btn-chevron", 

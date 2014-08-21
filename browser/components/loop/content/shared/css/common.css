@@ -335,38 +335,14 @@ p {
   font-family: 'Segoe';
 }
 
-  .windows p {
-    font-size: 12px;
-  }
-
-  .windows h1 {
-    font-family: 'Segoe Bold';
-  }
-
 .mac {
   font-family: 'Lucida Grande';
 }
-
-  .mac p {
-    font-size: 11.5px;
-  }
-
-  .mac h1 {
-    font-family: 'Lucida Grande Bold';
-  }
 
 .linux {
   /* XXX requires fallbacks */
   font-family: 'Ubuntu', sans-serif;
 }
-
-  .linux p {
-    font-size: 12px;
-  }
-
-  .linux h1 {
-    font-family: 'Ubuntu Bold';
-  }
 
 /* Web panel */
 
