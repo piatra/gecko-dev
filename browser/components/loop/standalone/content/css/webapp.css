@@ -168,12 +168,12 @@ body,
 /* Ellipsed text content of audio-video call btn */
 .standalone-call-btn-text {
   /* make some room for the video icon */
-  max-width: 90%;
+  max-width: 85%;
+  vertical-align: bottom;
 }
 
-.standalone-call-btn-text,
 .standalone-call-btn-video-icon {
-  vertical-align: bottom;
+  vertical-align: top;
 }
 
 @media (min-resolution: 2dppx) {
