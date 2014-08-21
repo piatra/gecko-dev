@@ -89,6 +89,9 @@ loop.conversation = (function(OT, mozL10n) {
         React.DOM.div({className: conversationPanelClass}, 
           React.DOM.h2(null, __("incoming_call")), 
           React.DOM.div({className: "btn-group incoming-call-action-group"}, 
+
+            React.DOM.div({className: "fx-embedded-incoming-call-button-spacer"}), 
+
             React.DOM.div({className: "btn-chevron-menu-group"}, 
               React.DOM.div({className: "btn-group-chevron"}, 
                 React.DOM.div({className: "btn-group"}, 
@@ -111,6 +114,8 @@ loop.conversation = (function(OT, mozL10n) {
               )
             ), 
 
+            React.DOM.div({className: "fx-embedded-incoming-call-button-spacer"}), 
+
             React.DOM.div({className: "btn-chevron-menu-group"}, 
               React.DOM.div({className: "btn-group"}, 
                 React.DOM.button({className: btnClassAccept, 
@@ -126,7 +131,10 @@ loop.conversation = (function(OT, mozL10n) {
                      title: __("incoming_call_answer_audio_only_tooltip")}
                 )
               )
-            )
+            ), 
+
+            React.DOM.div({className: "fx-embedded-incoming-call-button-spacer"})
+
           )
         )
       );

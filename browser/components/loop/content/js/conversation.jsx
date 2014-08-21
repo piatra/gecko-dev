@@ -89,6 +89,9 @@ loop.conversation = (function(OT, mozL10n) {
         <div className={conversationPanelClass}>
           <h2>{__("incoming_call")}</h2>
           <div className="btn-group incoming-call-action-group">
+
+            <div className="fx-embedded-incoming-call-button-spacer"></div>
+
             <div className="btn-chevron-menu-group">
               <div className="btn-group-chevron">
                 <div className="btn-group">
@@ -111,6 +114,8 @@ loop.conversation = (function(OT, mozL10n) {
               </div>
             </div>
 
+            <div className="fx-embedded-incoming-call-button-spacer"></div>
+
             <div className="btn-chevron-menu-group">
               <div className="btn-group">
                 <button className={btnClassAccept}
@@ -127,6 +132,9 @@ loop.conversation = (function(OT, mozL10n) {
                 </div>
               </div>
             </div>
+
+            <div className="fx-embedded-incoming-call-button-spacer"></div>
+
           </div>
         </div>
       );

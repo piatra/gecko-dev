@@ -52,18 +52,20 @@
                    chrome */
 }
 
-  .conversation-window li:first-child {
-    border-left: 1px solid #5a5a5a;
-  }
-
-  .conversation-window li {
-    border-right: 1px solid #5a5a5a;
-  }
-
   .standalone .conversation-toolbar li {
     /* XXX Might make sense to use relative units here.
      */
     margin-right: 16px;
+  }
+
+.conversation-toolbar-btn-box {
+  border-right: 1px solid #5a5a5a;
+}
+
+  .standalone .conversation-toolbar-btn-box {
+    /* overwrite the style for standalone
+     * because we reuse the same component */
+    border: none;
   }
 
 .conversation-toolbar .btn {
@@ -272,6 +274,11 @@
   /* compensate for reset.css overriding this; values borrowed from
      Firefox Mac html.css */
   margin: 0.83em 0;
+}
+
+.fx-embedded-incoming-call-button-spacer {
+  display: flex;
+  flex: 1;
 }
 
 .call-audio-only {
