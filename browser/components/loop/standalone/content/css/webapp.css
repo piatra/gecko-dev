@@ -95,15 +95,6 @@ body,
   background-repeat: no-repeat;
 }
 
-.overflow-text-ellipsis,
-.call-url,
-.standalone-call-btn-text {
-  display: inline-block;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
 .loop-logo {
   width: 100px;
   height: 100px;

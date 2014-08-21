@@ -36,7 +36,7 @@
 }
 
 /* standalone version */
-.standalone .conversation .conversation-toolbar {
+.standalone .conversation-toolbar {
   bottom: 0;
 }
 
@@ -52,38 +52,31 @@
                    chrome */
 }
 
-.standalone .conversation-toolbar li {
-  /* XXX Might make sense to use relative units here.
-   */
-  margin-right: 16px;
-}
-
-.conversation-toolbar .btn {
-  /* height according to spec
-   * https://people.mozilla.org/~dhenein/labs/loop-link-spec/#video-call */
-  height: 24px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 40%;
-}
-
-.conversation-window li {
-  border-right: 1px solid #5a5a5a;
-}
-
   .conversation-window li:first-child {
     border-left: 1px solid #5a5a5a;
   }
 
-.conversation-window .conversation-toolbar .btn {
+  .conversation-window li {
+    border-right: 1px solid #5a5a5a;
+  }
+
+  .standalone .conversation-toolbar li {
+    /* XXX Might make sense to use relative units here.
+     */
+    margin-right: 16px;
+  }
+
+.conversation-toolbar .btn {
+  /* dimensions according to spec
+   * https://people.mozilla.org/~dhenein/labs/loop-link-spec/#video-call */
   width: 32px;
-  background-position: center center;
-  background-repeat: no-repeat;
+  height: 24px;
+  background-position: center;
   background-size: 40%;
-  border-radius: 0;
+  background-repeat: no-repeat;
 }
 
-.standalone-conversation-toolbar-media-btn {
+.standalone .media-control {
   width: 36px;
   background-position: center;
   border-radius: 28px;
@@ -94,16 +87,9 @@
   }
 
 .fx-embedded-answer-btn-text {
-  display: inline-block;
   vertical-align: bottom;
-
   /* don't stretch the button of the localized text is too big */
   max-width: 85%;
-
-  /* instead, clip the text and use an ellipsis */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .fx-embedded-btn-icon-video {
@@ -116,7 +102,7 @@
   cursor: pointer;
 }
 
-.standalone .conversation-toolbar .btn-hangup {
+.standalone .btn-hangup {
   width: auto;
   font-size: 12px;
   border-radius: 2px;
@@ -147,33 +133,33 @@
 }
 
 /* Audio mute button */
-.conversation-toolbar .local-media.btn-mute-audio {
+.btn-mute-audio {
   background-image: url(../img/audio-inverse-14x14.png);
 }
-.conversation-toolbar .local-media.btn-mute-audio.muted {
+.btn-mute-audio.muted {
   background-image: url(../img/mute-inverse-14x14.png);
 }
 @media (min-resolution: 2dppx) {
-  .conversation-toolbar .local-media.btn-mute-audio {
+  .btn-mute-audio {
     background-image: url(../img/audio-inverse-14x14@2x.png);
   }
-  .conversation-toolbar .local-media.btn-mute-audio.muted {
+  .btn-mute-audio.muted {
     background-image: url(../img/mute-inverse-14x14@2x.png);
   }
 }
 
 /* Video mute button */
-.conversation-toolbar .local-media.btn-mute-video {
+.btn-mute-video {
   background-image: url(../img/video-inverse-14x14.png);
 }
-.conversation-toolbar .local-media.btn-mute-video.muted {
+.btn-mute-video.muted {
   background-image: url(../img/facemute-14x14.png);
 }
 @media (min-resolution: 2dppx) {
-  .conversation-toolbar .local-media.btn-mute-video {
+  .btn-mute-video {
     background-image: url(../img/video-inverse-14x14@2x.png);
   }
-  .conversation-toolbar .local-media.btn-mute-video.muted {
+  .btn-mute-video.muted {
     background-image: url(../img/facemute-14x14@2x.png);
   }
 }
@@ -273,7 +259,7 @@
 
 .incoming-call-action-group .btn-group-chevron,
 .incoming-call-action-group .btn-group {
-  max-width: 120px;
+  width: 100%;
 }
 
 /* XXX Once we get the incoming call avatar, bug 1047435, the H2 should

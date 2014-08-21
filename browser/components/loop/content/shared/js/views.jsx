@@ -123,8 +123,7 @@ loop.shared.views = (function(_, OT, l10n) {
         "btn": true,
         "media-control": true,
         "local-media": this.props.scope === "local",
-        "muted": !this.props.enabled,
-        "standalone-conversation-toolbar-media-btn": true
+        "muted": !this.props.enabled
       };
       classesObj["btn-mute-" + this.props.type] = true;
       return cx(classesObj);

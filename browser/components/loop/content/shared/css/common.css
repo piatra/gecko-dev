@@ -93,7 +93,6 @@ p {
   margin: 0;
   padding: 0;
   border: none;
-  border-radius: 2px;
   background: #a5a;
   color: #fff;
   text-align: center;
@@ -183,6 +182,8 @@ p {
   display: flex;
   justify-content: space-between;
   flex: 0 1 auto;
+  min-width: 120px;
+  max-width: 120px;
 }
 
 .btn-group-chevron .btn {
@@ -255,6 +256,17 @@ p {
 }
 
 /* Misc */
+
+.call-url,
+.overflow-text-ellipsis,
+.standalone-call-btn-text,
+.fx-embedded-answer-btn-text {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 
 .close {
   float: right;
