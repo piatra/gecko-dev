@@ -96,6 +96,20 @@
   background-size: contain;
 }
 
-.conversation .media.nested .local {
+/* TODO add comment here */
+.standalone {
+  overflow: hidden;
+}
+
+.local-stream {
   background-image: url("sample-img/video-screen-local.png");
+  background-repeat: no-repeat;
+}
+
+.conversation-window .local-stream {
+  background-size: cover;
+}
+
+.standalone .local-stream {
+  background-size: contain;
 }

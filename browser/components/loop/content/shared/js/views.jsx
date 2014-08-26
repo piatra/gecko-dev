@@ -357,7 +357,7 @@ loop.shared.views = (function(_, OT, l10n) {
           <div className="conversation">
             <div className="media nested">
               <div className="video_wrapper remote_wrapper">
-                {/*<div className="video_inner remote"></div>*/}
+                <div className="video_inner remote"></div>
               </div>
               <div className="local local-stream"></div>
             </div>
