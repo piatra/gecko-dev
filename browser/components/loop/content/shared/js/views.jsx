@@ -355,16 +355,16 @@ loop.shared.views = (function(_, OT, l10n) {
       return (
         <div className="video-layout-wrapper">
           <div className="conversation">
+            <div className="media nested">
+              <div className="video_wrapper remote_wrapper">
+                {/*<div className="video_inner remote"></div>*/}
+              </div>
+              <div className="local standalone-local-stream"></div>
+            </div>
             <ConversationToolbar video={this.state.video}
                                  audio={this.state.audio}
                                  publishStream={this.publishStream}
                                  hangup={this.hangup} />
-            <div className="media nested">
-              <div className="video_wrapper remote_wrapper">
-                <div className="video_inner remote"></div>
-              </div>
-              <div className="local"></div>
-            </div>
           </div>
         </div>
       );

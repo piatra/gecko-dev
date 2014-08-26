@@ -355,16 +355,16 @@ loop.shared.views = (function(_, OT, l10n) {
       return (
         React.DOM.div({className: "video-layout-wrapper"}, 
           React.DOM.div({className: "conversation"}, 
+            React.DOM.div({className: "media nested"}, 
+              React.DOM.div({className: "video_wrapper remote_wrapper"}
+                /*<div className="video_inner remote"></div>*/
+              ), 
+              React.DOM.div({className: "local standalone-local-stream"})
+            ), 
             ConversationToolbar({video: this.state.video, 
                                  audio: this.state.audio, 
                                  publishStream: this.publishStream, 
-                                 hangup: this.hangup}), 
-            React.DOM.div({className: "media nested"}, 
-              React.DOM.div({className: "video_wrapper remote_wrapper"}, 
-                React.DOM.div({className: "video_inner remote"})
-              ), 
-              React.DOM.div({className: "local"})
-            )
+                                 hangup: this.hangup})
           )
         )
       );

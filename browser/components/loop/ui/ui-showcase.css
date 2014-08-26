@@ -3,7 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 .showcase {
-  width: 730px;
+  width: 100%;
+  min-width: 430px;
   margin: 0 auto;
 }
 
@@ -68,13 +69,28 @@
   font-weight: bold;
 }
 
-/* Images as fake videos for conversation view */
-.conversation .media.nested .remote,
-.conversation .media.nested .local {
-  background-size: contain;
+@media screen and (min-width:750px) {
+  /* Images as fake videos for conversation view */
+  .conversation .media.nested .remote,
+  .conversation .media.nested .local {
+    background-size: contain;
+  }
 }
 
-.conversation .media.nested .remote {
+@media screen and (max-width:640px) {
+  .standalone-local-stream,
+  .conversation .media.nested .remote {
+    background-size: contain;
+    background-position: center;
+  }
+
+  .standalone .remote_wrapper {
+    background-size: cover;
+    background-position: center;
+  }
+}
+
+.remote_wrapper {
   background-image: url("sample-img/video-screen-remote.png");
   background-repeat: no-repeat;
 }
