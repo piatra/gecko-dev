@@ -161,7 +161,7 @@
 
             <Example summary="Desktop conversation window" dashed="true"
                      style={{width: "260px", height: "265px"}}>
-              <div className="conversation-window">
+              <div className="conversation-window fx-embedded">
                 <ConversationView video={{enabled: true}} audio={{enabled: true}}
                                   model={mockConversationModel} />
               </div>
