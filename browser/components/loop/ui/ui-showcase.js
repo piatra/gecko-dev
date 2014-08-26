@@ -122,26 +122,26 @@
             React.DOM.h3(null, "Desktop Conversation Window"), 
             React.DOM.div({className: "conversation-window"}, 
               Example({summary: "Default (260x265)", dashed: "true"}, 
-                ConversationToolbar({video: {enabled: true}, audio: {enabled: true}})
+                ConversationToolbar({instanceType: "fx-embedded", video: {enabled: true}, audio: {enabled: true}})
               ), 
               Example({summary: "Video muted"}, 
-                ConversationToolbar({video: {enabled: false}, audio: {enabled: true}})
+                ConversationToolbar({instanceType: "fx-embedded", video: {enabled: false}, audio: {enabled: true}})
               ), 
               Example({summary: "Audio muted"}, 
-                ConversationToolbar({video: {enabled: true}, audio: {enabled: false}})
+                ConversationToolbar({instanceType: "fx-embedded", video: {enabled: true}, audio: {enabled: false}})
               )
             ), 
 
             React.DOM.h3(null, "Standalone"), 
             React.DOM.div({className: "standalone"}, 
               Example({summary: "Default"}, 
-                ConversationToolbar({video: {enabled: true}, audio: {enabled: true}})
+                ConversationToolbar({instanceType: "standalone", video: {enabled: true}, audio: {enabled: true}})
               ), 
               Example({summary: "Video muted"}, 
-                ConversationToolbar({video: {enabled: false}, audio: {enabled: true}})
+                ConversationToolbar({instanceType: "standalone", video: {enabled: false}, audio: {enabled: true}})
               ), 
               Example({summary: "Audio muted"}, 
-                ConversationToolbar({video: {enabled: true}, audio: {enabled: false}})
+                ConversationToolbar({instanceType: "standalone", video: {enabled: true}, audio: {enabled: false}})
               )
             )
           ), 
@@ -162,13 +162,13 @@
             Example({summary: "Desktop conversation window", dashed: "true", 
                      style: {width: "260px", height: "265px"}}, 
               React.DOM.div({className: "conversation-window"}, 
-                ConversationView({video: {enabled: true}, audio: {enabled: true}, 
+                ConversationView({instanceType: "fx-embedded", video: {enabled: true}, audio: {enabled: true}, 
                                   model: mockConversationModel})
               )
             ), 
             Example({summary: "Standalone version"}, 
               React.DOM.div({className: "standalone"}, 
-                ConversationView({video: {enabled: true}, audio: {enabled: true}, 
+                ConversationView({instanceType: "standalone", video: {enabled: true}, audio: {enabled: true}, 
                                   model: mockConversationModel})
               )
             )

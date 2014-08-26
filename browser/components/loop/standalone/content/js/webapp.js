@@ -277,7 +277,7 @@ loop.webapp = (function($, _, OT, webL10n) {
                       /*
                        Button required for disabled state.
                        */
-                      React.DOM.button({className: "standalone-call-audio-menuitem",
+                      React.DOM.button({className: "start-audio-only-call", 
                               onClick: this._initiateOutgoingCall("audio"), 
                               disabled: this.state.disableCallButton}, 
                         __("initiate_audio_call_button")
@@ -505,7 +505,8 @@ loop.webapp = (function($, _, OT, webL10n) {
       this.loadReactComponent(sharedViews.ConversationView({
         sdk: OT,
         model: this._conversation,
-        video: {enabled: this._conversation.hasVideoStream("outgoing")}
+        video: {enabled: this._conversation.hasVideoStream("outgoing")},
+        instanceType: "standalone"
       }));
     }
   });

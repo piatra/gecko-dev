@@ -40,6 +40,8 @@
 
 .showcase > section .comp {
   margin: 0 auto; /* width is usually set programmatically */
+  position: relative;
+  min-height: 70px;
 }
 
 .showcase > section .comp.dashed {

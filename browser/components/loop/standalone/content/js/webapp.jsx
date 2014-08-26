@@ -505,7 +505,8 @@ loop.webapp = (function($, _, OT, webL10n) {
       this.loadReactComponent(sharedViews.ConversationView({
         sdk: OT,
         model: this._conversation,
-        video: {enabled: this._conversation.hasVideoStream("outgoing")}
+        video: {enabled: this._conversation.hasVideoStream("outgoing")},
+        instanceType: "standalone"
       }));
     }
   });

@@ -154,7 +154,10 @@ loop.shared.views = (function(_, OT, l10n) {
     getDefaultProps: function() {
       return {
         video: {enabled: true},
-        audio: {enabled: true}
+        audio: {enabled: true},
+        /* This component is used both for standalone and desktop
+        * On instantiation the type (standalone|fx-embedded) gets passed in*/
+        instanceType: "standalone"
       };
     },
 
@@ -162,7 +165,8 @@ loop.shared.views = (function(_, OT, l10n) {
       video: React.PropTypes.object.isRequired,
       audio: React.PropTypes.object.isRequired,
       hangup: React.PropTypes.func.isRequired,
-      publishStream: React.PropTypes.func.isRequired
+      publishStream: React.PropTypes.func.isRequired,
+      instanceType: React.PropTypes.string.isRequired
     },
 
     handleClickHangup: function() {
@@ -178,21 +182,22 @@ loop.shared.views = (function(_, OT, l10n) {
     },
 
     render: function() {
+      var instanceType = this.props.instanceType;
       /* jshint ignore:start */
       return (
-        <ul className="conversation-toolbar">
-          <li className="conversation-toolbar-btn-box">
+        <ul className={instanceType + "-toolbar"}>
+          <li className={instanceType + "-toolbar-btn-box"}>
             <button className="btn btn-hangup" onClick={this.handleClickHangup}
                     title={l10n.get("hangup_button_title")}>
               {l10n.get("hangup_button_caption")}
             </button>
           </li>
-          <li className="conversation-toolbar-btn-box">
+          <li className={instanceType + "-toolbar-btn-box"}>
             <MediaControlButton action={this.handleToggleVideo}
                                 enabled={this.props.video.enabled}
                                 scope="local" type="video" />
           </li>
-          <li className="conversation-toolbar-btn-box">
+          <li className={instanceType + "-toolbar-btn-box"}>
             <MediaControlButton action={this.handleToggleAudio}
                                 enabled={this.props.audio.enabled}
                                 scope="local" type="audio" />
@@ -208,7 +213,8 @@ loop.shared.views = (function(_, OT, l10n) {
 
     propTypes: {
       sdk: React.PropTypes.object.isRequired,
-      model: React.PropTypes.object.isRequired
+      model: React.PropTypes.object.isRequired,
+      instanceType: React.PropTypes.string.isRequired
     },
 
     // height set to 100%" to fix video layout on Google Chrome
@@ -227,7 +233,8 @@ loop.shared.views = (function(_, OT, l10n) {
     getInitialProps: function() {
       return {
         video: {enabled: true},
-        audio: {enabled: true}
+        audio: {enabled: true},
+        instanceType: "standalone"
       };
     },
 
@@ -351,6 +358,7 @@ loop.shared.views = (function(_, OT, l10n) {
     },
 
     render: function() {
+      console.log(this.props.instanceType);
       /* jshint ignore:start */
       return (
         <div className="video-layout-wrapper">
@@ -358,6 +366,7 @@ loop.shared.views = (function(_, OT, l10n) {
             <ConversationToolbar video={this.state.video}
                                  audio={this.state.audio}
                                  publishStream={this.publishStream}
+                                 instanceType={this.props.instanceType}
                                  hangup={this.hangup} />
             <div className="media nested">
               <div className="video_wrapper remote_wrapper">

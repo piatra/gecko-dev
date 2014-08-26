@@ -122,26 +122,26 @@
             <h3>Desktop Conversation Window</h3>
             <div className="conversation-window">
               <Example summary="Default (260x265)" dashed="true">
-                <ConversationToolbar video={{enabled: true}} audio={{enabled: true}} />
+                <ConversationToolbar instanceType="fx-embedded" video={{enabled: true}} audio={{enabled: true}} />
               </Example>
               <Example summary="Video muted">
-                <ConversationToolbar video={{enabled: false}} audio={{enabled: true}} />
+                <ConversationToolbar instanceType="fx-embedded" video={{enabled: false}} audio={{enabled: true}} />
               </Example>
               <Example summary="Audio muted">
-                <ConversationToolbar video={{enabled: true}} audio={{enabled: false}} />
+                <ConversationToolbar instanceType="fx-embedded" video={{enabled: true}} audio={{enabled: false}} />
               </Example>
             </div>
 
             <h3>Standalone</h3>
             <div className="standalone">
               <Example summary="Default">
-                <ConversationToolbar video={{enabled: true}} audio={{enabled: true}} />
+                <ConversationToolbar instanceType="standalone" video={{enabled: true}} audio={{enabled: true}} />
               </Example>
               <Example summary="Video muted">
-                <ConversationToolbar video={{enabled: false}} audio={{enabled: true}} />
+                <ConversationToolbar instanceType="standalone" video={{enabled: false}} audio={{enabled: true}} />
               </Example>
               <Example summary="Audio muted">
-                <ConversationToolbar video={{enabled: true}} audio={{enabled: false}} />
+                <ConversationToolbar instanceType="standalone" video={{enabled: true}} audio={{enabled: false}} />
               </Example>
             </div>
           </Section>
@@ -162,13 +162,13 @@
             <Example summary="Desktop conversation window" dashed="true"
                      style={{width: "260px", height: "265px"}}>
               <div className="conversation-window">
-                <ConversationView video={{enabled: true}} audio={{enabled: true}}
+                <ConversationView instanceType="fx-embedded" video={{enabled: true}} audio={{enabled: true}}
                                   model={mockConversationModel} />
               </div>
             </Example>
             <Example summary="Standalone version">
               <div className="standalone">
-                <ConversationView video={{enabled: true}} audio={{enabled: true}}
+                <ConversationView instanceType="standalone" video={{enabled: true}} audio={{enabled: true}}
                                   model={mockConversationModel} />
               </div>
             </Example>

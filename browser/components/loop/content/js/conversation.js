@@ -301,7 +301,8 @@ loop.conversation = (function(OT, mozL10n) {
       this.loadReactComponent(sharedViews.ConversationView({
         sdk: OT,
         model: this._conversation,
-        video: {enabled: videoStream}
+        video: {enabled: videoStream},
+        instanceType: "fx-embedded"
       }));
     },
 
