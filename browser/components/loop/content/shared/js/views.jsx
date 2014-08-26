@@ -359,7 +359,7 @@ loop.shared.views = (function(_, OT, l10n) {
               <div className="video_wrapper remote_wrapper">
                 {/*<div className="video_inner remote"></div>*/}
               </div>
-              <div className="local standalone-local-stream"></div>
+              <div className="local local-stream"></div>
             </div>
             <ConversationToolbar video={this.state.video}
                                  audio={this.state.audio}

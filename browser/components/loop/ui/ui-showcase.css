@@ -78,7 +78,7 @@
 }
 
 @media screen and (max-width:640px) {
-  .standalone-local-stream,
+  .local-stream,
   .conversation .media.nested .remote {
     background-size: contain;
     background-position: center;
@@ -93,6 +93,7 @@
 .remote_wrapper {
   background-image: url("sample-img/video-screen-remote.png");
   background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .conversation .media.nested .local {

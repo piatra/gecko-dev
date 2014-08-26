@@ -359,7 +359,7 @@ loop.shared.views = (function(_, OT, l10n) {
               React.DOM.div({className: "video_wrapper remote_wrapper"}
                 /*<div className="video_inner remote"></div>*/
               ), 
-              React.DOM.div({className: "local standalone-local-stream"})
+              React.DOM.div({className: "local local-stream"})
             ), 
             ConversationToolbar({video: this.state.video, 
                                  audio: this.state.audio, 
