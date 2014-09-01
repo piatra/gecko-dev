@@ -155,16 +155,16 @@
   }
 }
 
-.fx-embedded .remote_wrapper {
-  position: relative;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-  display: inline-block;
-  padding-bottom: 75%;
-  width: 100%;
-}
+/*.fx-embedded .remote_wrapper {*/
+  /*position: relative;*/
+  /*top: 0px;*/
+  /*right: 0px;*/
+  /*bottom: 0px;*/
+  /*left: 0px;*/
+  /*display: inline-block;*/
+  /*padding-bottom: 75%;*/
+  /*width: 100%;*/
+/*}*/
 
 .standalone .local-stream {
   /* required to have it superimposed to the control toolbar */
@@ -547,6 +547,7 @@
 
   .standalone .video_wrapper.remote_wrapper {
     /* Because of OT markup we need to set a high flex value */
+    flex: 10;
     width: 100%;
     position: relative;
   }
