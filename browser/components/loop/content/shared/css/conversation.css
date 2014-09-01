@@ -452,6 +452,10 @@
   right: 0;
 }
 
+/*
+ * XXX this approach is fragile because it makes assumptions
+ * about the generated OT markup, any change will break it
+ */
 .local-stream.local-stream-audio,
 .standalone .OT_subscriber .OT_video-poster,
 .fx-embedded .OT_video-container .OT_video-poster,

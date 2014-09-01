@@ -130,7 +130,7 @@
 
           <Section name="ConversationToolbar">
             <h3>Desktop Conversation Window</h3>
-            <div className="conversation-window fx-embedded override-position">
+            <div className="fx-embedded override-position">
               <Example summary="Default (260x265)" dashed="true">
                 <ConversationToolbar video={{enabled: true}}
                                      audio={{enabled: true}}
@@ -180,7 +180,7 @@
 
             <Example summary="Desktop conversation window" dashed="true"
                      style={{width: "260px", height: "265px"}}>
-              <div className="conversation-window fx-embedded">
+              <div className="fx-embedded">
                 <ConversationView sdk={{}}
                                   video={{enabled: true}}
                                   audio={{enabled: true}}
