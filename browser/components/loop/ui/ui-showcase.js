@@ -188,10 +188,41 @@
               )
             ), 
 
+            Example({summary: "Desktop conversation window local audio stream", 
+                     dashed: "true", style: {width: "260px", height: "265px"}}, 
+              React.DOM.div({className: "fx-embedded"}, 
+                ConversationView({video: {enabled: false}, audio: {enabled: true}, 
+                                  model: mockConversationModel})
+              )
+            ), 
+
             Example({summary: "Standalone version"}, 
               React.DOM.div({className: "standalone"}, 
-                ConversationView({video: {enabled: true}, audio: {enabled: true}, 
-                                  model: mockConversationModel})
+                ConversationView({sdk: {}, 
+                                  model: mockConversationModel, 
+                                  video: {enabled: true}, 
+                                  audio: {enabled: true}})
+              )
+            )
+          ), 
+
+          Section({name: "ConversationView-640"}, 
+            Example({summary: "640px breakpoint for conversation view"}, 
+              React.DOM.div({className: "breakpoint", style: {"text-align":"center"}}, 
+                React.DOM.div({className: "standalone"}, 
+                  ConversationView({video: {enabled: true}, audio: {enabled: true}, 
+                    model: mockConversationModel})
+                ), 
+                React.DOM.iframe({style: {"width":"400px","height":"600px"}})
+              )
+            )
+          ), 
+
+          Section({name: "ConversationView-LocalAudio"}, 
+            Example({summary: "Local stream is audio only"}, 
+              React.DOM.div({className: "standalone"}, 
+                ConversationView({video: {enabled: false}, audio: {enabled: true}, 
+                  model: mockConversationModel})
               )
             )
           ), 

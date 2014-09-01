@@ -518,7 +518,7 @@
   }
 
   .standalone .media.nested {
-    min-height: 400px;
+    min-height: 500px;
   }
 
   .fx-embedded .media.nested {
@@ -528,6 +528,8 @@
   .standalone .local-stream {
     flex: 1;
     min-width: 120px;
+    min-height: 150px;
+    width: 100%;
     box-shadow: none;
   }
 

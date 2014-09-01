@@ -188,10 +188,41 @@
               </div>
             </Example>
 
+            <Example summary="Desktop conversation window local audio stream"
+                     dashed="true" style={{width: "260px", height: "265px"}}>
+              <div className="fx-embedded">
+                <ConversationView video={{enabled: false}} audio={{enabled: true}}
+                                  model={mockConversationModel} />
+              </div>
+            </Example>
+
             <Example summary="Standalone version">
               <div className="standalone">
-                <ConversationView video={{enabled: true}} audio={{enabled: true}}
-                                  model={mockConversationModel} />
+                <ConversationView sdk={{}}
+                                  model={mockConversationModel}
+                                  video={{enabled: true}}
+                                  audio={{enabled: true}} />
+              </div>
+            </Example>
+          </Section>
+
+          <Section name="ConversationView-640">
+            <Example summary="640px breakpoint for conversation view">
+              <div className="breakpoint" style={{"text-align":"center"}}>
+                <div className="standalone">
+                  <ConversationView video={{enabled: true}} audio={{enabled: true}}
+                    model={mockConversationModel} />
+                </div>
+                <iframe style={{"width":"400px","height":"600px"}}></iframe>
+              </div>
+            </Example>
+          </Section>
+
+          <Section name="ConversationView-LocalAudio">
+            <Example summary="Local stream is audio only">
+              <div className="standalone">
+                <ConversationView video={{enabled: false}} audio={{enabled: true}}
+                  model={mockConversationModel} />
               </div>
             </Example>
           </Section>

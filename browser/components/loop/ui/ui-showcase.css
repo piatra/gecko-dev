@@ -77,6 +77,11 @@
   position: relative !important;
 }
 
+/* Just for the showcase to look sane */
+.showcase .fx-embedded .local-stream {
+  position: absolute;
+}
+
 .showcase p.note > strong {
   font-weight: bold;
 }
