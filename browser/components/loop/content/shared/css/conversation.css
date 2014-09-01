@@ -164,7 +164,6 @@
   display: inline-block;
   padding-bottom: 75%;
   width: 100%;
-  height: 200px;
 }
 
 .standalone .local-stream {
@@ -486,8 +485,8 @@
     bottom: 15px;
     width: 20%;
     height: 20%;
-    max-width: 300px;
-    max-height: 200px;
+    max-width: 400px;
+    max-height: 300px;
   }
 
   /* Nested video elements */
@@ -548,7 +547,6 @@
 
   .standalone .video_wrapper.remote_wrapper {
     /* Because of OT markup we need to set a high flex value */
-    flex: 10;
     width: 100%;
     position: relative;
   }

@@ -122,7 +122,7 @@
 
           <Section name="IncomingCallView-ActiveState">
             <Example summary="Default" dashed="true" style={{width: "280px"}}>
-              <div className="fx-embedded" data-trigger-click="btn-chevron">
+              <div className="fx-embedded" data-triggerClick="btn-chevron">
                 <IncomingCallView />
               </div>
             </Example>
@@ -276,10 +276,14 @@
   });
 
   /**
-   * Simulate events and enable active state for component showcase
+   * UI showcase should catch regressions for parts of UI that are hidden
+   * until a user action (active components, like a dropdown).
+   * Mark out such components with data-trigger-click & value set to the
+   * className of the elements you have to click on. This function will
+   * simulate click events on these elements.
    * */
   function _triggerActiveComponents() {
-    var components = document.querySelectorAll('[data-trigger-click]');
+    var components = document.querySelectorAll('[data-triggerClick]');
     [].forEach.call(components, function(comp) {
       var className = comp.dataset.triggerClick;
       var triggerClick = simulateClick.bind(null, comp);
