@@ -155,16 +155,13 @@
   }
 }
 
-/*.fx-embedded .remote_wrapper {*/
-  /*position: relative;*/
-  /*top: 0px;*/
-  /*right: 0px;*/
-  /*bottom: 0px;*/
-  /*left: 0px;*/
-  /*display: inline-block;*/
-  /*padding-bottom: 75%;*/
-  /*width: 100%;*/
-/*}*/
+.fx-embedded .remote_wrapper {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}
 
 .standalone .local-stream {
   /* required to have it superimposed to the control toolbar */
@@ -466,6 +463,10 @@
   background-position: center;
 }
 
+.fx-embedded .media.nested {
+  min-height: 200px;
+}
+
 @media screen and (min-width:640px) {
 
   .standalone .conversation-toolbar {
@@ -522,10 +523,6 @@
 
   .standalone .media.nested {
     min-height: 500px;
-  }
-
-  .fx-embedded .media.nested {
-    min-height: 200px;
   }
 
   .standalone .local-stream {

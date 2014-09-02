@@ -141,11 +141,15 @@ loop.webapp = (function($, _, OT, webL10n) {
      *
      */
 
+    getInitialProps: function() {
+      return {showCallOptionsMenu: false};
+    },
+
     getInitialState: function() {
       return {
         urlCreationDateString: '',
         disableCallButton: false,
-        showCallOptionsMenu: false
+        showCallOptionsMenu: this.props.showCallOptionsMenu
       };
     },
 
@@ -270,7 +274,7 @@ loop.webapp = (function($, _, OT, webL10n) {
                     </button>
 
                     <div className="btn-chevron"
-                      onClick={this._toggleCallOptionsMenu}>
+                         onClick={this._toggleCallOptionsMenu}>
                     </div>
 
                   </div>

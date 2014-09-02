@@ -122,8 +122,8 @@
 
           <Section name="IncomingCallView-ActiveState">
             <Example summary="Default" dashed="true" style={{width: "280px"}}>
-              <div className="fx-embedded" data-triggerClick="btn-chevron">
-                <IncomingCallView />
+              <div className="fx-embedded" >
+                <IncomingCallView showDeclineMenu={true} />
               </div>
             </Example>
           </Section>
@@ -170,7 +170,8 @@
             <Example summary="Start conversation view" dashed="true">
               <div className="standalone">
                 <StartConversationView model={mockConversationModel}
-                  client={mockClient} />
+                                       client={mockClient}
+                                       showCallOptionsMenu={true} />
               </div>
             </Example>
 
@@ -208,12 +209,15 @@
 
           <Section name="ConversationView-640">
             <Example summary="640px breakpoint for conversation view">
-              <div className="breakpoint" style={{"text-align":"center"}}>
+              <div className="breakpoint"
+                   style={{"text-align":"center"}}
+                   data-breakpoint-width="400px"
+                   data-breakpoint-height="600px">
                 <div className="standalone">
-                  <ConversationView video={{enabled: true}} audio={{enabled: true}}
-                    model={mockConversationModel} />
+                  <ConversationView video={{enabled: true}}
+                                    audio={{enabled: true}}
+                                    model={mockConversationModel} />
                 </div>
-                <iframe style={{"width":"400px","height":"600px"}}></iframe>
               </div>
             </Example>
           </Section>
@@ -276,34 +280,6 @@
   });
 
   /**
-   * UI showcase should catch regressions for parts of UI that are hidden
-   * until a user action (active components, like a dropdown).
-   * Mark out such components with data-trigger-click & value set to the
-   * className of the elements you have to click on. This function will
-   * simulate click events on these elements.
-   * */
-  function _triggerActiveComponents() {
-    var components = document.querySelectorAll('[data-triggerClick]');
-    [].forEach.call(components, function(comp) {
-      var className = comp.dataset.triggerClick;
-      var triggerClick = simulateClick.bind(null, comp);
-      var multipleNodes = className.split(' ');
-      if (multipleNodes.length > 1) { // if multiple nodes
-        multipleNodes.forEach(triggerClick);
-      } else {
-        triggerClick(className);
-      }
-    });
-
-    function simulateClick(parentComponent, sel) {
-      var node = parentComponent.querySelector("." + sel);
-      if (node) {
-        React.addons.TestUtils.Simulate.click(node);
-      }
-    }
-  }
-
-  /**
    * Render components that have different styles across
    * CSS media rules in their own iframe to mimic the viewport
    * */
@@ -319,7 +295,14 @@
     function appendChildInIframe(parent) {
       var styles     = document.querySelector('head').children;
       var component  = parent.children[0];
-      var iframe     = parent.children[1];
+      var iframe     = document.createElement('iframe');
+      var width      = parent.dataset.breakpointWidth;
+      var height     = parent.dataset.breakpointHeight;
+
+      iframe.style.width  = width;
+      iframe.style.height = height;
+
+      parent.appendChild(iframe);
       iframe.src    = "about:blank";
       // Workaround for bug 297685
       iframe.onload = function () {
@@ -349,7 +332,6 @@
       console.log(e);
     }
 
-    _triggerActiveComponents();
     _renderComponentsInIframes();
   });
 

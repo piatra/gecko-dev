@@ -340,6 +340,10 @@ p {
   line-height: 16px;
 }
 
+/* Using star selector to override
+ * the specificity of other selectors
+ * if performance is an issue we could
+ * explicitely list all the elements */
 .windows * {
   font-family: 'Segoe';
 }

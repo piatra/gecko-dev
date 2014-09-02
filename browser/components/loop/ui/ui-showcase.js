@@ -122,15 +122,15 @@
 
           Section({name: "IncomingCallView-ActiveState"}, 
             Example({summary: "Default", dashed: "true", style: {width: "280px"}}, 
-              React.DOM.div({className: "fx-embedded", 'data-trigger-click': "btn-chevron"}, 
-                IncomingCallView(null)
+              React.DOM.div({className: "fx-embedded"}, 
+                IncomingCallView({showDeclineMenu: true})
               )
             )
           ), 
 
           Section({name: "ConversationToolbar"}, 
             React.DOM.h3(null, "Desktop Conversation Window"), 
-            React.DOM.div({className: "conversation-window fx-embedded override-position"}, 
+            React.DOM.div({className: "fx-embedded override-position"}, 
               Example({summary: "Default (260x265)", dashed: "true"}, 
                 ConversationToolbar({video: {enabled: true}, 
                                      audio: {enabled: true}, 
@@ -170,7 +170,8 @@
             Example({summary: "Start conversation view", dashed: "true"}, 
               React.DOM.div({className: "standalone"}, 
                 StartConversationView({model: mockConversationModel, 
-                  client: mockClient})
+                                       client: mockClient, 
+                                       showCallOptionsMenu: true})
               )
             )
 
@@ -180,7 +181,7 @@
 
             Example({summary: "Desktop conversation window", dashed: "true", 
                      style: {width: "260px", height: "265px"}}, 
-              React.DOM.div({className: "conversation-window fx-embedded"}, 
+              React.DOM.div({className: "fx-embedded"}, 
                 ConversationView({sdk: {}, 
                                   video: {enabled: true}, 
                                   audio: {enabled: true}, 
@@ -208,12 +209,15 @@
 
           Section({name: "ConversationView-640"}, 
             Example({summary: "640px breakpoint for conversation view"}, 
-              React.DOM.div({className: "breakpoint", style: {"text-align":"center"}}, 
+              React.DOM.div({className: "breakpoint", 
+                   style: {"text-align":"center"}, 
+                   'data-breakpoint-width': "400px", 
+                   'data-breakpoint-height': "600px"}, 
                 React.DOM.div({className: "standalone"}, 
-                  ConversationView({video: {enabled: true}, audio: {enabled: true}, 
-                    model: mockConversationModel})
-                ), 
-                React.DOM.iframe({style: {"width":"400px","height":"600px"}})
+                  ConversationView({video: {enabled: true}, 
+                                    audio: {enabled: true}, 
+                                    model: mockConversationModel})
+                )
               )
             )
           ), 
@@ -276,30 +280,6 @@
   });
 
   /**
-   * Simulate events and enable active state for component showcase
-   * */
-  function _triggerActiveComponents() {
-    var components = document.querySelectorAll('[data-trigger-click]');
-    [].forEach.call(components, function(comp) {
-      var className = comp.dataset.triggerClick;
-      var triggerClick = simulateClick.bind(null, comp);
-      var multipleNodes = className.split(' ');
-      if (multipleNodes.length > 1) { // if multiple nodes
-        multipleNodes.forEach(triggerClick);
-      } else {
-        triggerClick(className);
-      }
-    });
-
-    function simulateClick(parentComponent, sel) {
-      var node = parentComponent.querySelector("." + sel);
-      if (node) {
-        React.addons.TestUtils.Simulate.click(node);
-      }
-    }
-  }
-
-  /**
    * Render components that have different styles across
    * CSS media rules in their own iframe to mimic the viewport
    * */
@@ -315,7 +295,14 @@
     function appendChildInIframe(parent) {
       var styles     = document.querySelector('head').children;
       var component  = parent.children[0];
-      var iframe     = parent.children[1];
+      var iframe     = document.createElement('iframe');
+      var width      = parent.dataset.breakpointWidth;
+      var height     = parent.dataset.breakpointHeight;
+
+      iframe.style.width  = width;
+      iframe.style.height = height;
+
+      parent.appendChild(iframe);
       iframe.src    = "about:blank";
       // Workaround for bug 297685
       iframe.onload = function () {
@@ -345,7 +332,6 @@
       console.log(e);
     }
 
-    _triggerActiveComponents();
     _renderComponentsInIframes();
   });
 
