@@ -858,8 +858,8 @@ notification[value="translation"] {
 chatbox {
   -moz-binding: url("chrome://browser/content/socialchat.xml#chatbox");
   transition: height 150ms ease-out, width 150ms ease-out;
-  height: 585px;
-  width: 800px; /* CHAT_WIDTH_OPEN in socialchat.xml */
+  height: 285px;
+  width: 260px; /* CHAT_WIDTH_OPEN in socialchat.xml */
 }
 
 chatbox[minimized="true"] {

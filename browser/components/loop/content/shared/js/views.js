@@ -254,17 +254,14 @@ loop.shared.views = (function(_, OT, l10n) {
 
       this.props.model.startSession();
 
-      window.addEventListener("resize", this.handleMediaChange);
+      window.addEventListener('orientationchange', this.updateVideoContainer());
     },
 
-    handleMediaChange: function(qList) {
-      var mql = window.matchMedia("(max-width: 640px)");
-      if (mql.matches) {
+    updateVideoContainer: function(qList) {
         var localStreamParent = document.querySelector('.local-stream .OT_publisher');
         var remoteStreamParent = document.querySelector('.remote .OT_subscriber');
         localStreamParent.style.width = "100%";
         remoteStreamParent.style.height = "100%";
-      }
     },
 
     componentWillUnmount: function() {
