@@ -253,6 +253,18 @@ loop.shared.views = (function(_, OT, l10n) {
                                        this.stopPublishing);
 
       this.props.model.startSession();
+
+      window.addEventListener("resize", this.handleMediaChange);
+    },
+
+    handleMediaChange: function(qList) {
+      var mql = window.matchMedia("(max-width: 640px)");
+      if (mql.matches) {
+        var localStreamParent = document.querySelector('.local-stream .OT_publisher');
+        var remoteStreamParent = document.querySelector('.remote .OT_subscriber');
+        localStreamParent.style.width = "100%";
+        remoteStreamParent.style.height = "100%";
+      }
     },
 
     componentWillUnmount: function() {
@@ -743,11 +755,6 @@ loop.shared.views = (function(_, OT, l10n) {
     },
 
     /**
-     * Adds a l10n rror notification to the stack and renders it.
-     *
-     * @param  {String} messageId L10n message id
-     */
-    errorL10n: function(messageId) {
       this.error(l10n.get(messageId));
     },
 

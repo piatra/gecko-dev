@@ -34,6 +34,8 @@
     return false;
   }
 
+  function noop() {}
+
   // Feedback API client configured to send data to the stage input server,
   // which is available at https://input.allizom.org
   var stageFeedbackApiClient = new loop.FeedbackAPIClient(
@@ -186,6 +188,18 @@
                                   video={{enabled: true}}
                                   audio={{enabled: true}}
                                   model={mockConversationModel} />
+              </div>
+            </Example>
+
+            <Example summary="Desktop conversation window large" dashed="true">
+              <div className="breakpoint" data-breakpoint-width="800px"
+                data-breakpoint-height="600px">
+                <div className="fx-embedded">
+                  <ConversationView sdk={{}}
+                    video={{enabled: true}}
+                    audio={{enabled: true}}
+                    model={mockConversationModel} />
+                </div>
               </div>
             </Example>
 

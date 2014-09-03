@@ -469,6 +469,12 @@
 
 @media screen and (min-width:640px) {
 
+  html, body, #main,
+  .video-layout-wrapper,
+  .conversation {
+    height: 100%;
+  }
+
   .standalone .conversation-toolbar {
     position: absolute;
     bottom: 0;
@@ -493,6 +499,8 @@
   /* Nested video elements */
   .conversation .media.nested {
     position: relative;
+    height: 100%;
+    background: #f05;
   }
 
   .standalone .remote_wrapper {
@@ -512,13 +520,18 @@
 }
 
 @media screen and (max-width:640px) {
-  /* Forcefuly break the preservation of aspect ratio
-   * Even if video gets somewhat cropped it ends up
-   * looking better on a small screen
-   **/
-  .standalone .conversation .media video {
-    height: auto;
-    max-height: 500px;
+  .standalone .video-layout-wrapper,
+  .standalone .conversation {
+    height: 100%;
+  }
+
+  .standalone .media {
+    height: 90%;
+  }
+
+  .standalone .OT_subscriber {
+    height: 100%;
+    width: auto;
   }
 
   .standalone .media.nested {
