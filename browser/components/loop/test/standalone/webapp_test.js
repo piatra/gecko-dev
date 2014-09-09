@@ -140,12 +140,12 @@ describe("loop.webapp", function() {
 
         expect(btn).to.not.eql(null);
       });
-      it("should disable retry button when you click it", function() {
+     it("should disable retry button when you click it", function() {
         var btn = view.getDOMNode().querySelector('.standalone-btn-retry-call');
 
         React.addons.TestUtils.Simulate.click(btn);
 
-        expect(view.state.disableCallRetryButton).to.eql(true);
+        expect(btn.disabled).to.eql(true);
       });
       it("should remove error message when you click the retry button",
          function() {

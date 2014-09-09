@@ -152,10 +152,9 @@ loop.webapp = (function($, _, OT, mozL10n) {
     getInitialState: function() {
       return {
         urlCreationDateString: '',
-        disableCallButton: false,
         callFailed: this.props.callFailed,
+        disableCallButton: false,
         errorSoundNotification: false,
-        disableCallRetryButton: false,
         seenToS: localStorage.getItem("has-seen-tos")
       };
     },
@@ -194,8 +193,7 @@ loop.webapp = (function($, _, OT, mozL10n) {
       this.setState({
         // Display call failed error message
         callFailed: true,
-        // Enable the retry button
-        disableCallRetryButton: false
+        disableCallButton: false
       });
       this.state.errorSoundNotification.play();
     },
@@ -221,7 +219,7 @@ loop.webapp = (function($, _, OT, mozL10n) {
     initiateOutgoingCall: function(callType) {
       return function() {
         this.props.model.set("selectedCallType", callType);
-        this.setState({disableCallButton: true});
+        this.setState({"disableCallButton": true});
         this.props.model.setupOutgoingCall();
       }.bind(this);
     },
@@ -232,10 +230,9 @@ loop.webapp = (function($, _, OT, mozL10n) {
     retryCall: function() {
       this.props.notifier.clear();
       this.setState({
-        // Disable the retry button
-        disableCallRetryButton: true,
         // Remove the call failed message
-        callFailed: false
+        callFailed: false,
+        disableCallButton: true
       });
       this.props.model.setupOutgoingCall();
     },
@@ -294,7 +291,8 @@ loop.webapp = (function($, _, OT, mozL10n) {
             <div className={displayCallFailedMsgClasses}>
               <div className="standalone-call-loading-failed"></div>
               <p className="standalone-call-btn-label">
-                {mozL10n.get("generic_failure_title")} {mozL10n.get("generic_failure_no_reason2")}
+                {mozL10n.get("generic_failure_title")}
+                 {mozL10n.get("generic_failure_no_reason2")}
               </p>
             </div>
 
@@ -302,13 +300,13 @@ loop.webapp = (function($, _, OT, mozL10n) {
 
             <ConversationViewCallBtn showMenu={this.state.showMenu}
                           initiateCall={this.initiateOutgoingCall}
-                          disableBtn={this.state.disableCallButton}
+                          disableCallButton={this.state.disableCallButton}
                           showDropdownMenu={this.showDropdownMenu}
                           callFailed={this.state.callFailed} />
 
             <ConversationViewRetryBtn retryCall={this.retryCall}
-                          disableRetryBtn={this.state.disableCallRetryBtn}
-                          callFailed={this.state.callFailed} />
+                            callFailed={this.state.callFailed}
+                            disableCallButton={this.state.disableCallButton} />
 
             <p className={tosClasses}
                dangerouslySetInnerHTML={{__html: tosHTML}}>
@@ -327,9 +325,10 @@ loop.webapp = (function($, _, OT, mozL10n) {
 
     propTypes: {
       initiateCall: React.PropTypes.func.isRequired,
-      disableBtn: React.PropTypes.bool.isRequired,
       showDropdownMenu: React.PropTypes.func.isRequired,
-      showMenu: React.PropTypes.bool.isRequired
+      showMenu: React.PropTypes.bool.isRequired,
+      disableCallButton: React.PropTypes.bool.isRequired,
+      callFailed: React.PropTypes.bool.isRequired
     },
 
     render: function() {
@@ -352,7 +351,7 @@ loop.webapp = (function($, _, OT, mozL10n) {
 
                 <button className="btn btn-large btn-accept"
                   onClick={this.props.initiateCall("audio-video")}
-                  disabled={this.props.disableBtn}
+                  disabled={this.props.disableCallButton}
                   title={mozL10n.get("initiate_audio_video_call_tooltip2")} >
                   <span className="standalone-call-btn-text">
                     {mozL10n.get("initiate_audio_video_call_button2")}
@@ -371,7 +370,7 @@ loop.webapp = (function($, _, OT, mozL10n) {
                   {/* Button required for disabled state */}
                   <button className="start-audio-only-call"
                     onClick={this.props.initiateCall("audio")}
-                    disabled={this.props.disableBtn} >
+                    disabled={this.props.disableCallButton} >
                     {mozL10n.get("initiate_audio_call_button2")}
                   </button>
                 </li>
@@ -389,8 +388,8 @@ loop.webapp = (function($, _, OT, mozL10n) {
 
     propTypes: {
       retryCall: React.PropTypes.func.isRequired,
-      disableRetryBtn: React.PropTypes.bool.isRequired,
-      callFailed: React.PropTypes.bool.isRequired
+      callFailed: React.PropTypes.bool.isRequired,
+      disableCallButton: React.PropTypes.bool.isRequired
     },
 
     render: function() {
@@ -403,7 +402,7 @@ loop.webapp = (function($, _, OT, mozL10n) {
         <div className={retryBtnClasses}>
           <div className="flex-padding-1"></div>
           <button className="standalone-btn-retry-call btn-accept"
-            disabled={this.props.disableRetryBtn}
+            disabled={this.props.disableCallButton}
             onClick={this.props.retryCall} >
             {mozL10n.get("retry_call_button")}
           </button>
