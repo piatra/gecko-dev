@@ -253,7 +253,6 @@
   });
 
   textChatStore.setStoreState({
-    // XXX Disabled until we start sorting out some of the layouts.
     textChatEnabled: false
   });
 
@@ -971,6 +970,21 @@
                     isFirefox: true, 
                     localPosterUrl: "sample-img/video-screen-local.png", 
                     remotePosterUrl: "sample-img/video-screen-remote.png"})
+                )
+            ), 
+
+            React.createElement(FramedExample, {width: 600, height: 480, 
+                           onContentsRendered: updatingSharingRoomStore.forcedUpdate, 
+              summary: "Standalone room convo (has-participants, receivingScreenShare, 600x480)"}, 
+                React.createElement("div", {className: "standalone", cssClass: "standalone"}, 
+                  React.createElement(StandaloneRoomView, {
+                    dispatcher: dispatcher, 
+                    activeRoomStore: updatingSharingRoomStore, 
+                    roomState: ROOM_STATES.HAS_PARTICIPANTS, 
+                    isFirefox: true, 
+                    localPosterUrl: "sample-img/video-screen-local.png", 
+                    remotePosterUrl: "sample-img/video-screen-remote.png", 
+                    screenSharePosterUrl: "sample-img/video-screen-terminal.png"})
                 )
             )
           ), 
