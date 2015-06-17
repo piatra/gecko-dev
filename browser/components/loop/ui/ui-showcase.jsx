@@ -371,7 +371,8 @@
       width: React.PropTypes.number,
       height: React.PropTypes.number,
       onContentsRendered: React.PropTypes.func,
-      dashed: React.PropTypes.bool
+      dashed: React.PropTypes.bool,
+      cssClass: React.PropTypes.string
     },
 
     makeId: function(prefix) {
@@ -398,7 +399,8 @@
           <div className="comp">
             <Frame width={width} height={height}
                    onContentsRendered={this.props.onContentsRendered}
-                   className={cx({dashed: this.props.dashed})}>
+                   className={cx({dashed: this.props.dashed})}
+                   cssClass={this.props.cssClass}>
               {this.props.children}
             </Frame>
           </div>

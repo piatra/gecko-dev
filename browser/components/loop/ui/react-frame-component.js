@@ -70,7 +70,7 @@ window.Frame = React.createClass({
         if (isStyleSheet(parentHeadNode)) {
           // and it has a class different from the one that this frame does,
           // return immediately instead of appending it.
-          if (parentHeadNode.hasAttribute("class") &&
+          if (parentHeadNode.hasAttribute("class") && this.props.cssClass &&
             parentHeadNode.getAttribute("class") !== this.props.cssClass) {
             return;
           }
@@ -85,7 +85,7 @@ window.Frame = React.createClass({
         this.props.children
       );
 
-      React.render(contents, childDoc.body, this.fireOnContentsRendered.bind(this));
+      React.render(contents, childDoc.body, this.fireOnContentsRendered);
 
       // Set the RTL mode. We assume for now that rtl is the only query parameter.
       //
@@ -100,7 +100,7 @@ window.Frame = React.createClass({
       if (window.queuedFrames.indexOf(this) === -1) {
         window.queuedFrames.push(this);
       }
-      setTimeout(this.renderFrameContents.bind(this), 0);
+      setTimeout(this.renderFrameContents, 0);
     }
   },
   /**
