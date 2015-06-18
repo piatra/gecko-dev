@@ -179,6 +179,12 @@
     remoteVideoEnabled: false
   });
 
+  var loadingRemoteVideoRoomStore = makeActiveRoomStore({
+    mediaConnected: false,
+    roomState: ROOM_STATES.HAS_PARTICIPANTS,
+    remoteSrcVideoObject: false
+  });
+
   var readyRoomStore = makeActiveRoomStore({
     mediaConnected: false,
     roomState: ROOM_STATES.READY
@@ -204,6 +210,15 @@
     receivingScreenShare: true
   });
 
+  var loadingScreenSharingRoomStore = makeActiveRoomStore({
+    roomState: ROOM_STATES.HAS_PARTICIPANTS
+  });
+  /* Set up the store for pending screen sharing */
+  loadingScreenSharingRoomStore.receivingScreenShare({
+    receiving: true,
+    srcVideoObject: false
+  });
+
   var fullActiveRoomStore = makeActiveRoomStore({
     roomState: ROOM_STATES.FULL
   });
@@ -217,8 +232,24 @@
     roomUsed: true
   });
 
-  var roomStore = new loop.store.RoomStore(dispatcher, {
+  var invitationRoomStore = new loop.store.RoomStore(dispatcher, {
     mozLoop: navigator.mozLoop
+  });
+
+  var roomStore = new loop.store.RoomStore(dispatcher, {
+    mozLoop: navigator.mozLoop,
+    activeRoomStore: makeActiveRoomStore({
+      roomState: ROOM_STATES.HAS_PARTICIPANTS
+    })
+  });
+
+  var desktopRoomStoreLoading = new loop.store.RoomStore(dispatcher, {
+    mozLoop: navigator.mozLoop,
+    activeRoomStore: makeActiveRoomStore({
+      roomState: ROOM_STATES.HAS_PARTICIPANTS,
+      mediaConnected: false,
+      remoteSrcVideoObject: false
+    })
   });
 
   var desktopLocalFaceMuteActiveRoomStore = makeActiveRoomStore({
@@ -782,11 +813,26 @@
               summary="Desktop room conversation (invitation)">
               <div className="fx-embedded">
                 <DesktopRoomConversationView
-                  roomStore={roomStore}
+                  roomStore={invitationRoomStore}
                   dispatcher={dispatcher}
                   mozLoop={navigator.mozLoop}
                   localPosterUrl="sample-img/video-screen-local.png"
                   roomState={ROOM_STATES.INIT} />
+              </div>
+            </FramedExample>
+
+            <FramedExample width={298} height={254}
+              summary="Desktop room conversation (loading)">
+              {/* Hide scrollbars here. Rotating loading div overflows and causes
+               scrollbars to appear */}
+              <div className="fx-embedded overflow-hidden">
+                <DesktopRoomConversationView
+                  roomStore={desktopRoomStoreLoading}
+                  dispatcher={dispatcher}
+                  mozLoop={navigator.mozLoop}
+                  localPosterUrl="sample-img/video-screen-local.png"
+                  remotePosterUrl="sample-img/video-screen-remote.png"
+                  roomState={ROOM_STATES.HAS_PARTICIPANTS} />
               </div>
             </FramedExample>
 
@@ -853,6 +899,19 @@
             </FramedExample>
 
             <FramedExample width={644} height={483} dashed={true}
+              summary="Standalone room conversation (loading remote)"
+              cssClass="standalone"
+              onContentsRendered={joinedRoomStore.forcedUpdate}>
+              <div className="standalone">
+                <StandaloneRoomView
+                  dispatcher={dispatcher}
+                  activeRoomStore={loadingRemoteVideoRoomStore}
+                  localPosterUrl="sample-img/video-screen-local.png"
+                  isFirefox={true} />
+              </div>
+            </FramedExample>
+
+            <FramedExample width={644} height={483} dashed={true}
                            cssClass="standalone"
                            onContentsRendered={updatingActiveRoomStore.forcedUpdate}
                            summary="Standalone room conversation (has-participants, 644x483)">
@@ -893,6 +952,25 @@
                   localPosterUrl="sample-img/video-screen-local.png"
                   remotePosterUrl="sample-img/video-screen-remote.png" />
               </div>
+            </FramedExample>
+
+            <FramedExample width={800} height={660} dashed={true}
+                           cssClass="standalone"
+                           onContentsRendered={updatingSharingRoomStore.forcedUpdate}
+              summary="Standalone room convo (has-participants, loading screen share, 800x660)">
+              {/* Hide scrollbars here. Rotating loading div overflows and causes
+               scrollbars to appear */}
+               <div className="standalone overflow-hidden">
+                  <StandaloneRoomView
+                    dispatcher={dispatcher}
+                    activeRoomStore={loadingScreenSharingRoomStore}
+                    roomState={ROOM_STATES.HAS_PARTICIPANTS}
+                    isFirefox={true}
+                    localPosterUrl="sample-img/video-screen-local.png"
+                    remotePosterUrl="sample-img/video-screen-remote.png"
+                    screenSharePosterUrl="sample-img/video-screen-baz.png"
+                  />
+                </div>
             </FramedExample>
 
             <FramedExample width={800} height={660} dashed={true}

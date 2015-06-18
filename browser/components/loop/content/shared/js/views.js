@@ -689,6 +689,17 @@ loop.shared.views = (function(_, l10n) {
     }
   });
 
+  /*
+   * Renders a loading spinner for when video content is not yet available.
+   */
+  var LoadingView = React.createClass({displayName: "LoadingView",
+    mixins: [React.addons.PureRenderMixin],
+
+    render: function() {
+        return React.createElement("div", {className: "loading-stream"});
+    }
+  });
+
   /**
    * Renders a url that's part of context on the display.
    *
@@ -788,6 +799,7 @@ loop.shared.views = (function(_, l10n) {
 
     PropTypes: {
       displayAvatar: React.PropTypes.bool.isRequired,
+      isLoading: React.PropTypes.bool.isRequired,
       posterUrl: React.PropTypes.string,
       // Expecting "local" or "remote".
       mediaType: React.PropTypes.string.isRequired,
@@ -841,7 +853,8 @@ loop.shared.views = (function(_, l10n) {
         // src is for Chrome.
         attrName = "src";
       } else {
-        console.error("Error attaching stream to element - no supported attribute found");
+        console.error("Error attaching stream to element - no supported" +
+                      "attribute found");
         return;
       }
 
@@ -853,6 +866,10 @@ loop.shared.views = (function(_, l10n) {
     },
 
     render: function() {
+      if (this.props.isLoading) {
+        return React.createElement(LoadingView, null);
+      }
+
       if (this.props.displayAvatar) {
         return React.createElement(AvatarView, null);
       }
@@ -893,6 +910,7 @@ loop.shared.views = (function(_, l10n) {
     ConversationToolbar: ConversationToolbar,
     MediaControlButton: MediaControlButton,
     MediaView: MediaView,
+    LoadingView: LoadingView,
     ScreenShareControlButton: ScreenShareControlButton,
     NotificationListView: NotificationListView
   };

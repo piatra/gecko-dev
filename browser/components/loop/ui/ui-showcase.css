@@ -9,6 +9,13 @@ body {
   overflow: visible;
 }
 
+/*
+ * Some situations where this is needed. Explained in the code
+ */
+.overflow-hidden {
+  overflow: hidden;
+}
+
 .showcase {
   width: 100%;
   margin: 0 auto;

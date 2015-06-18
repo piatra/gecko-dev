@@ -553,6 +553,37 @@
   width: 100%;
 }
 
+/*
+ * Used to center the loading spinner
+ */
+.focus-stream {
+  position: relative;
+}
+
+.loading-stream {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -50px;
+  margin-top: -50px;
+  background-image: url("../img/spinner.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 50%;
+  width: 100px;
+  height: 100px;
+  animation: rotate-spinner 1s steps(12, end) infinite;
+}
+
+@keyframes rotate-spinner {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .conversation .local .avatar {
   position: absolute;
   z-index: 1;

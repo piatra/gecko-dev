@@ -316,6 +316,9 @@ loop.standaloneRoomViews = (function(mozL10n) {
      * room state and other flags.
      *
      * @return {Boolean} True if remote video should be rended.
+     *
+     * XXX Refactor shouldRenderRemoteVideo & shouldRenderLoading into one fn
+     *     that returns an enum
      */
     shouldRenderRemoteVideo: function() {
       switch(this.state.roomState) {
@@ -354,6 +357,17 @@ loop.standaloneRoomViews = (function(mozL10n) {
       }
     },
 
+    shouldRenderLoading: function() {
+      return {
+        local: this.state.roomState === ROOM_STATES.MEDIA_WAIT &&
+               !this.state.localSrcVideoObject,
+        remote: this.state.roomState === ROOM_STATES.HAS_PARTICIPANTS &&
+                !this.state.remoteSrcVideoObject && !this.state.mediaConnected,
+        screenShare: this.state.receivingScreenShare &&
+                     !this.state.screenShareVideoObject
+      };
+    },
+
     render: function() {
       var displayScreenShare = this.state.receivingScreenShare ||
         this.props.screenSharePosterUrl;
@@ -375,6 +389,8 @@ loop.standaloneRoomViews = (function(mozL10n) {
           this.props.localPosterUrl
       });
 
+      var renderLoading = this.shouldRenderLoading();
+
       return (
         React.createElement("div", {className: "room-conversation-wrapper"}, 
           React.createElement("div", {className: "beta-logo"}), 
@@ -393,12 +409,14 @@ loop.standaloneRoomViews = (function(mozL10n) {
               React.createElement("div", {className: remoteStreamClasses}, 
                 React.createElement(sharedViews.MediaView, {displayAvatar: !this.shouldRenderRemoteVideo(), 
                   posterUrl: this.props.remotePosterUrl, 
+                  isLoading: renderLoading.remote, 
                   mediaType: "remote", 
                   srcVideoObject: this.state.remoteSrcVideoObject})
               ), 
               React.createElement("div", {className: screenShareStreamClasses}, 
                 React.createElement(sharedViews.MediaView, {displayAvatar: false, 
                   posterUrl: this.props.screenSharePosterUrl, 
+                  isLoading: renderLoading.screenShare, 
                   mediaType: "screen-share", 
                   srcVideoObject: this.state.screenShareVideoObject})
               ), 
@@ -409,6 +427,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
               React.createElement("div", {className: "local"}, 
                 React.createElement(sharedViews.MediaView, {displayAvatar: this.state.videoMuted, 
                   posterUrl: this.props.localPosterUrl, 
+                  isLoading: renderLoading.local, 
                   mediaType: "local", 
                   srcVideoObject: this.state.localSrcVideoObject})
               )

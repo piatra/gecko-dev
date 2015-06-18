@@ -290,7 +290,7 @@ loop.shared.actions = (function() {
      * Used to notify that a shared screen is being received (or not).
      *
      * XXX this is going to need to be split into two actions so when
-     * can display a spinner when the screen share is pending (bug 1171933)
+     * can display a spinner when the screen share is pending
      */
     ReceivingScreenShare: Action.define("receivingScreenShare", {
       receiving: Boolean

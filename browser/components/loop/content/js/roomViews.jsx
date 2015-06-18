@@ -647,6 +647,9 @@ loop.roomViews = (function(mozL10n) {
      * room state and other flags.
      *
      * @return {Boolean} True if remote video should be rended.
+     *
+     * XXX Refactor shouldRenderRemoteVideo & shouldRenderLoading into one fn
+     *     that returns an enum
      */
     shouldRenderRemoteVideo: function() {
       switch(this.state.roomState) {
@@ -676,6 +679,15 @@ loop.roomViews = (function(mozL10n) {
       }
     },
 
+    shouldRenderLoading: function() {
+      return {
+        local: this.state.roomState === ROOM_STATES.MEDIA_WAIT &&
+               !this.state.localSrcVideoObject,
+        remote: this.state.roomState === ROOM_STATES.HAS_PARTICIPANTS &&
+                !this.state.remoteSrcVideoObject && !this.state.mediaConnected
+      };
+    },
+
     render: function() {
       if (this.state.roomName) {
         this.setTitle(this.state.roomName);
@@ -696,6 +708,7 @@ loop.roomViews = (function(mozL10n) {
       var shouldRenderInvitationOverlay = this._shouldRenderInvitationOverlay();
       var shouldRenderContextView = this._shouldRenderContextView();
       var roomData = this.props.roomStore.getStoreState("activeRoom");
+      var renderLoading = this.shouldRenderLoading();
 
       switch(this.state.roomState) {
         case ROOM_STATES.FAILED:
@@ -734,6 +747,7 @@ loop.roomViews = (function(mozL10n) {
                       <div className="video_inner remote focus-stream">
                         <sharedViews.MediaView displayAvatar={!this.shouldRenderRemoteVideo()}
                           posterUrl={this.props.remotePosterUrl}
+                          isLoading={renderLoading.remote}
                           mediaType="remote"
                           srcVideoObject={this.state.remoteSrcVideoObject} />
                       </div>
@@ -741,6 +755,7 @@ loop.roomViews = (function(mozL10n) {
                     <div className={localStreamClasses}>
                       <sharedViews.MediaView displayAvatar={this.state.videoMuted}
                         posterUrl={this.props.localPosterUrl}
+                        isLoading={renderLoading.local}
                         mediaType="local"
                         srcVideoObject={this.state.localSrcVideoObject} />
                     </div>
