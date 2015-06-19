@@ -87,7 +87,9 @@
   var mockSDK = _.extend({
     sendTextChatMessage: function(message) {
       dispatcher.dispatch(new loop.shared.actions.ReceivedTextChatMessage({
-        message: message
+        message: message.message,
+        contentType: message.contentType,
+        receivedTimestamp: message.sentTimestamp
       }));
     }
   }, Backbone.Events);
@@ -309,17 +311,20 @@
 
   dispatcher.dispatch(new sharedActions.SendTextChatMessage({
     contentType: loop.store.CHAT_CONTENT_TYPES.TEXT,
-    message: "Rheet!"
+    message: "Rheet!",
+    sentTimestamp: "2015-06-23T22:21:45.590Z"
   }));
   dispatcher.dispatch(new sharedActions.ReceivedTextChatMessage({
     contentType: loop.store.CHAT_CONTENT_TYPES.TEXT,
-    message: "Hi there"
+    message: "Hi there",
+    receivedTimestamp: "2015-06-23T22:21:45.590Z"
   }));
   dispatcher.dispatch(new sharedActions.SendTextChatMessage({
     contentType: loop.store.CHAT_CONTENT_TYPES.TEXT,
     message: "Check out this menu from DNA Pizza:" +
     " http://example.com/DNA/pizza/menu/lots-of-different-kinds-of-pizza/" +
-    "%8D%E0%B8%88%E0%B8%A1%E0%B8%A3%E0%8D%E0%B8%88%E0%B8%A1%E0%B8%A3%E0%"
+    "%8D%E0%B8%88%E0%B8%A1%E0%B8%A3%E0%8D%E0%B8%88%E0%B8%A1%E0%B8%A3%E0%",
+    sentTimestamp: "2015-06-23T22:23:45.590Z"
   }));
   dispatcher.dispatch(new sharedActions.SendTextChatMessage({
     contentType: loop.store.CHAT_CONTENT_TYPES.TEXT,
@@ -328,11 +333,18 @@
   }));
   dispatcher.dispatch(new sharedActions.ReceivedTextChatMessage({
     contentType: loop.store.CHAT_CONTENT_TYPES.TEXT,
-    message: "That avocado monkey-brains pie sounds tasty!"
+    message: "That avocado monkey-brains pie sounds tasty!",
+    receivedTimestamp: "2015-06-23T22:25:45.590Z"
   }));
   dispatcher.dispatch(new sharedActions.SendTextChatMessage({
     contentType: loop.store.CHAT_CONTENT_TYPES.TEXT,
-    message: "What time should we meet?"
+    message: "What time should we meet?",
+    sentTimestamp: "2015-06-23T22:27:45.590Z"
+  }));
+  dispatcher.dispatch(new sharedActions.SendTextChatMessage({
+    contentType: loop.store.CHAT_CONTENT_TYPES.TEXT,
+    message: "Cool",
+    sentTimestamp: "2015-06-23T22:27:45.590Z"
   }));
 
   loop.store.StoreMixin.register({

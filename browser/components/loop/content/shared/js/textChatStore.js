@@ -96,11 +96,12 @@ loop.store.TextChatStore = (function() {
         type: type,
         contentType: messageData.contentType,
         message: messageData.message,
-        extraData: messageData.extraData
+        extraData: messageData.extraData,
+        sentTimestamp: messageData.sentTimestamp,
+        receivedTimestamp: messageData.receivedTimestamp
       };
       var newList = this._storeState.messageList.concat(message);
       this.setStoreState({ messageList: newList });
-
       // Notify MozLoopService if appropriate that a message has been appended
       // and it should therefore check if we need a different sized window or not.
       if (type != CHAT_MESSAGE_TYPES.SPECIAL) {
@@ -119,6 +120,9 @@ loop.store.TextChatStore = (function() {
       if (actionData.contentType != CHAT_CONTENT_TYPES.TEXT) {
         return;
       }
+
+      /* Append the timestamp. This is the time that gets shown. */
+      actionData.receivedTimestamp = (new Date()).toISOString();
 
       this._appendTextChatMessage(CHAT_MESSAGE_TYPES.RECEIVED, actionData);
     },

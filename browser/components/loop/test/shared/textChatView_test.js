@@ -120,6 +120,76 @@ describe("loop.shared.views.TextChatView", function () {
     });
   });
 
+  describe("TextChatEntry", function() {
+    var view;
+
+    function mountTestComponent(extraProps) {
+      var props = _.extend({
+        dispatcher: dispatcher
+      }, extraProps);
+      return TestUtils.renderIntoDocument(
+        React.createElement(loop.shared.views.TextChatEntry, props));
+    }
+
+    beforeEach(function() {
+    });
+
+    it.skip("should not render a timestamp", function() {
+      view = mountTestComponent({
+        showTimestamp: false,
+        timestamp: "2015-06-23T22:48:39.738Z"
+      });
+      var node = view.getDOMNode();
+
+      expect(node.querySelector(".text-chat-entry-timestamp")).to.not.eql(null);
+    });
+
+    it.skip("should render a timestamp", function() {
+      view = mountTestComponent({
+        showTimestamp: true,
+        timestamp: "2015-06-23T22:48:39.738Z"
+      });
+      var node = view.getDOMNode();
+
+      expect(node.querySelector(".text-chat-entry-timestamp")).to.eql(null);
+    });
+  });
+
+  describe("TextChatEntriesView", function() {
+    var view, node;
+
+    function mountTestComponent(extraProps) {
+      var props = _.extend({
+        dispatcher: dispatcher
+      }, extraProps);
+      return TestUtils.renderIntoDocument(
+        React.createElement(loop.shared.views.TextChatEntriesView, props));
+    }
+
+    beforeEach(function() {
+      store.setStoreState({ textChatEnabled: true });
+    });
+
+    it.skip("should show timestamps 1 minute apart", function() {
+      store.receivedTextChatMessage({
+        contentType: CHAT_CONTENT_TYPES.TEXT,
+        message: "Hello!",
+        timestamp: "2015-06-24T18:55:00.614Z"
+      });
+      store.sendTextChatMessage({
+        contentType: CHAT_CONTENT_TYPES.TEXT,
+        message: "Is it me you're looking for?",
+        timestamp: "2015-06-24T18:56:00.614Z"
+      });
+
+      view = mountTestComponent();
+      node = view.getDOMNode();
+
+      expect(node.querySelector(".text-chat-entry-timestamp").length)
+          .to.eql(2);
+    });
+  });
+
   describe("TextChatView", function() {
     var view;
 
@@ -171,6 +241,52 @@ describe("loop.shared.views.TextChatView", function () {
       expect(node.querySelector(".text-chat-box")).not.eql(null);
       expect(node.querySelector(".text-chat-entries")).eql(null);
     });
+
+    it("should render message entries when message were sent/ received", function() {
+      view = mountTestComponent();
+
+      store.receivedTextChatMessage({
+        contentType: CHAT_CONTENT_TYPES.TEXT,
+        message: "Hello!"
+      });
+      store.sendTextChatMessage({
+        contentType: CHAT_CONTENT_TYPES.TEXT,
+        message: "Is it me you're looking for?"
+      });
+
+      var node = view.getDOMNode();
+      expect(node.querySelector(".text-chat-entries")).to.not.eql(null);
+
+      var entries = node.querySelectorAll(".text-chat-entry");
+      expect(entries.length).to.eql(2);
+      expect(entries[0].classList.contains("received")).to.eql(true);
+      expect(entries[1].classList.contains("received")).to.not.eql(true);
+    });
+
+    it("should add `sent` CSS class selector to msg of type SENT", function() {
+      var node = mountTestComponent().getDOMNode();
+
+      store.sendTextChatMessage({
+        contentType: CHAT_CONTENT_TYPES.TEXT,
+        message: "Foo",
+        timestamp: 0
+      });
+
+      expect(node.querySelector(".sent")).to.not.eql(null);
+    });
+
+    it("should add `received` CSS class selector to msg of type RECEIVED",
+       function() {
+         var node = mountTestComponent().getDOMNode();
+
+         store.receivedTextChatMessage({
+           contentType: CHAT_CONTENT_TYPES.TEXT,
+           message: "Foo",
+           timestamp: 0
+         });
+
+         expect(node.querySelector(".received")).to.not.eql(null);
+     });
 
     it("should render a room name special entry", function() {
       view = mountTestComponent({
@@ -233,7 +349,8 @@ describe("loop.shared.views.TextChatView", function () {
       sinon.assert.calledWithExactly(dispatcher.dispatch,
         new sharedActions.SendTextChatMessage({
           contentType: CHAT_CONTENT_TYPES.TEXT,
-          message: "Hello!"
+          message: "Hello!",
+          timestamp: "1970-01-01T00:00:00.000Z"
         }));
     });
 

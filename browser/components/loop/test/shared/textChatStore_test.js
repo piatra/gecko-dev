@@ -70,14 +70,16 @@ describe("loop.store.TextChatStore", function () {
 
       store.receivedTextChatMessage({
         contentType: CHAT_CONTENT_TYPES.TEXT,
-        message: message
+        message: message,
+        timestamp: 0
       });
 
       expect(store.getStoreState("messageList")).eql([{
         type: CHAT_MESSAGE_TYPES.RECEIVED,
         contentType: CHAT_CONTENT_TYPES.TEXT,
         message: message,
-        extraData: undefined
+        extraData: undefined,
+        timestamp: 0
       }]);
     });
 
@@ -118,7 +120,8 @@ describe("loop.store.TextChatStore", function () {
     it("should add the message to the list", function() {
       var messageData = {
         contentType: CHAT_CONTENT_TYPES.TEXT,
-        message: "It's awesome!"
+        message: "It's awesome!",
+        timestamp: 0
       };
 
       store.sendTextChatMessage(messageData);
@@ -127,7 +130,8 @@ describe("loop.store.TextChatStore", function () {
         type: CHAT_MESSAGE_TYPES.SENT,
         contentType: messageData.contentType,
         message: messageData.message,
-        extraData: undefined
+        extraData: undefined,
+        timestamp: 0
       }]);
     });
 
@@ -155,7 +159,8 @@ describe("loop.store.TextChatStore", function () {
         type: CHAT_MESSAGE_TYPES.SPECIAL,
         contentType: CHAT_CONTENT_TYPES.ROOM_NAME,
         message: "Let's share!",
-        extraData: undefined
+        extraData: undefined,
+        timestamp: undefined
       }]);
     });
 
@@ -176,11 +181,13 @@ describe("loop.store.TextChatStore", function () {
           type: CHAT_MESSAGE_TYPES.SPECIAL,
           contentType: CHAT_CONTENT_TYPES.ROOM_NAME,
           message: "Let's share!",
-          extraData: undefined
+          extraData: undefined,
+          timestamp: undefined
         }, {
           type: CHAT_MESSAGE_TYPES.SPECIAL,
           contentType: CHAT_CONTENT_TYPES.CONTEXT,
           message: "A wonderful event",
+          timestamp: undefined,
           extraData: {
             location: "http://wonderful.invalid",
             thumbnail: "fake"

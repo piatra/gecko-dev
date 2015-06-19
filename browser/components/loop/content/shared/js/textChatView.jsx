@@ -21,13 +21,22 @@ loop.shared.views.chat = (function(mozL10n) {
     propTypes: {
       contentType: React.PropTypes.string.isRequired,
       message: React.PropTypes.string.isRequired,
-      type: React.PropTypes.string.isRequired
+      type: React.PropTypes.string.isRequired,
+      timestamp: React.PropTypes.string.isRequired,
+      showTimestamp: React.PropTypes.bool.isRequired
+    },
+
+    getDefaultProps: function() {
+      return {
+        timestamp: (new Date()).toISOString()
+      };
     },
 
     render: function() {
       var classes = React.addons.classSet({
         "text-chat-entry": true,
         "received": this.props.type === CHAT_MESSAGE_TYPES.RECEIVED,
+        "sent": this.props.type === CHAT_MESSAGE_TYPES.SENT,
         "special": this.props.type === CHAT_MESSAGE_TYPES.SPECIAL,
         "room-name": this.props.contentType === CHAT_CONTENT_TYPES.ROOM_NAME
       });
@@ -35,8 +44,27 @@ loop.shared.views.chat = (function(mozL10n) {
       return (
         <div className={classes}>
           <p>{this.props.message}</p>
+          <span className="text-chat-arrow" />
+          {this.props.showTimestamp ? this._renderTimestamp() : null}
         </div>
       );
+    },
+
+    /**
+     * Pretty print timestamp. From time in milliseconds to HH:MM
+     */
+    _renderTimestamp: function() {
+      var date = new Date(this.props.timestamp);
+      var minutes = date.getMinutes();
+
+      /* Date.getMinutes returns single digit when value is < 10 */
+      if (minutes < 10) {
+        minutes = "0" + minutes;
+      }
+
+      return <span className="text-chat-entry-timestamp">
+        {date.getHours()}:{minutes}
+      </span>;
     }
   });
 
@@ -66,6 +94,10 @@ loop.shared.views.chat = (function(mozL10n) {
       React.addons.PureRenderMixin,
       sharedMixins.AudioMixin
     ],
+
+    statics: {
+      ONE_MINUTE: 60
+    },
 
     propTypes: {
       dispatcher: React.PropTypes.instanceOf(loop.Dispatcher).isRequired,
@@ -114,6 +146,9 @@ loop.shared.views.chat = (function(mozL10n) {
     },
 
     render: function() {
+      /* Keep track of the last printed timestamp. */
+      var lastTimestamp = 0;
+
       if (!this.props.messageList.length) {
         return null;
       }
@@ -141,23 +176,76 @@ loop.shared.views.chat = (function(mozL10n) {
                         </div>
                       );
                     default:
-                      console.error("Unsupported contentType", entry.contentType);
+                      console.error("Unsupported contentType",
+                                    entry.contentType);
                       return null;
                   }
                 }
 
-                return (
-                  <TextChatEntry
-                    contentType={entry.contentType}
-                    key={i}
-                    message={entry.message}
-                    type={entry.type} />
-                );
+                var timeDiff = this._isOneMinDelta(entry.receivedTimestamp,
+                                                   lastTimestamp);
+                var shouldShowTimestamp = this._shouldShowTimestamp(i,
+                                                                    timeDiff);
+
+                if (shouldShowTimestamp) {
+                  lastTimestamp = entry.receivedTimestamp;
+                }
+
+                return <TextChatEntry key={i}
+                                      contentType={entry.contentType}
+                                      message={entry.message}
+                                      timestamp={entry.receivedTimestamp}
+                                      showTimestamp={shouldShowTimestamp}
+                                      type={entry.type} />;
               }, this)
             }
           </div>
         </div>
       );
+    },
+
+    /**
+     * Decide to show timestamp or not on a message.
+     * If the time difference between two consecutive messages is bigger than
+     * one minute or if message types are different.
+     *
+     * @param {number} idx       Index of message in the messageList.
+     * @param {boolean} timeDiff If difference between consecutive messages is
+     *                           bigger than one minute.
+     */
+    _shouldShowTimestamp: function(idx, timeDiff) {
+      if (!idx) {
+        return true;
+      }
+
+      /* If consecutive messages are from different senders */
+      if (this.props.messageList[idx].type !==
+          this.props.messageList[idx - 1].type) {
+        return true;
+      }
+
+      return timeDiff;
+    },
+
+    /**
+     * Determines if difference between the two timestamp arguments
+     * is bigger that 60 (1 minute)
+     *
+     * Timestamps are using ISO8601 format.
+     *
+     * @param {string} currTime Timestamp of message yet to be rendered.
+     * @param {string} prevTime Last timestamp printed in the chat view.
+     */
+    _isOneMinDelta: function(currTime, prevTime) {
+      var date1 = new Date(currTime);
+      var date2 = new Date(prevTime);
+      var delta = date1 - date2;
+
+      if (delta / 1000 > this.constructor.ONE_MINUTE) {
+        return true;
+      }
+
+      return false;
     }
   });
 
@@ -214,7 +302,8 @@ loop.shared.views.chat = (function(mozL10n) {
 
       this.props.dispatcher.dispatch(new sharedActions.SendTextChatMessage({
         contentType: CHAT_CONTENT_TYPES.TEXT,
-        message: this.state.messageDetail
+        message: this.state.messageDetail,
+        sentTimestamp: (new Date()).toISOString()
       }));
 
       // Reset the form to empty, ready for the next message.
