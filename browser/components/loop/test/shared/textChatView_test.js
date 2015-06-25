@@ -128,30 +128,30 @@ describe("loop.shared.views.TextChatView", function () {
         dispatcher: dispatcher
       }, extraProps);
       return TestUtils.renderIntoDocument(
-        React.createElement(loop.shared.views.TextChatEntry, props));
+        React.createElement(loop.shared.views.chat.TextChatEntry, props));
     }
 
     beforeEach(function() {
     });
 
-    it.skip("should not render a timestamp", function() {
+    it("should not render a timestamp", function() {
       view = mountTestComponent({
         showTimestamp: false,
         timestamp: "2015-06-23T22:48:39.738Z"
       });
       var node = view.getDOMNode();
 
-      expect(node.querySelector(".text-chat-entry-timestamp")).to.not.eql(null);
+      expect(node.querySelector(".text-chat-entry-timestamp")).to.eql(null);
     });
 
-    it.skip("should render a timestamp", function() {
+    it("should render a timestamp", function() {
       view = mountTestComponent({
         showTimestamp: true,
         timestamp: "2015-06-23T22:48:39.738Z"
       });
       var node = view.getDOMNode();
 
-      expect(node.querySelector(".text-chat-entry-timestamp")).to.eql(null);
+      expect(node.querySelector(".text-chat-entry-timestamp")).to.not.eql(null);
     });
   });
 
@@ -163,30 +163,67 @@ describe("loop.shared.views.TextChatView", function () {
         dispatcher: dispatcher
       }, extraProps);
       return TestUtils.renderIntoDocument(
-        React.createElement(loop.shared.views.TextChatEntriesView, props));
+        React.createElement(loop.shared.views.chat.TextChatEntriesView, props));
     }
 
     beforeEach(function() {
       store.setStoreState({ textChatEnabled: true });
     });
 
-    it.skip("should show timestamps 1 minute apart", function() {
-      store.receivedTextChatMessage({
-        contentType: CHAT_CONTENT_TYPES.TEXT,
-        message: "Hello!",
-        timestamp: "2015-06-24T18:55:00.614Z"
+    it("should show timestamps that are 1 minute apart", function() {
+      view = mountTestComponent({
+        messageList: [{
+          type: CHAT_MESSAGE_TYPES.RECEIVED,
+          contentType: CHAT_CONTENT_TYPES.TEXT,
+          message: "Hello!"
+        }, {
+          type: CHAT_MESSAGE_TYPES.SENT,
+          contentType: CHAT_CONTENT_TYPES.TEXT,
+          message: "Is it me you're looking for?"
+        }]
       });
-      store.sendTextChatMessage({
-        contentType: CHAT_CONTENT_TYPES.TEXT,
-        message: "Is it me you're looking for?",
-        timestamp: "2015-06-24T18:56:00.614Z"
-      });
-
-      view = mountTestComponent();
       node = view.getDOMNode();
 
-      expect(node.querySelector(".text-chat-entry-timestamp").length)
+      expect(node.querySelectorAll(".text-chat-entry-timestamp").length)
           .to.eql(2);
+    });
+
+    it("should not show messages sent in the same minute", function() {
+      view = mountTestComponent({
+        messageList: [{
+          type: CHAT_MESSAGE_TYPES.RECEIVED,
+          contentType: CHAT_CONTENT_TYPES.TEXT,
+          message: "Hello!"
+        }, {
+          type: CHAT_MESSAGE_TYPES.RECEIVED,
+          contentType: CHAT_CONTENT_TYPES.TEXT,
+          message: "Is it me you're looking for?"
+        }]
+      });
+      node = view.getDOMNode();
+
+      expect(node.querySelectorAll(".text-chat-entry-timestamp").length)
+          .to.eql(1);
+    });
+
+    it("should have a correctly formatted timestamp", function() {
+      view = mountTestComponent({
+        messageList: [{
+          type: CHAT_MESSAGE_TYPES.RECEIVED,
+          contentType: CHAT_CONTENT_TYPES.TEXT,
+          message: "Hello!"
+        }, {
+          type: CHAT_MESSAGE_TYPES.RECEIVED,
+          contentType: CHAT_CONTENT_TYPES.TEXT,
+          message: "Is it me you're looking for?"
+        }]
+      });
+      node = view.getDOMNode();
+
+      var content = node.querySelector(".text-chat-entry-timestamp").textContent;
+      var regex = /[0-9]{2}:[0-9]{2}/;
+
+      expect(content.match(regex)).to.not.eql(null);
     });
   });
 
@@ -350,7 +387,7 @@ describe("loop.shared.views.TextChatView", function () {
         new sharedActions.SendTextChatMessage({
           contentType: CHAT_CONTENT_TYPES.TEXT,
           message: "Hello!",
-          timestamp: "1970-01-01T00:00:00.000Z"
+          sentTimestamp: "1970-01-01T00:00:00.000Z"
         }));
     });
 

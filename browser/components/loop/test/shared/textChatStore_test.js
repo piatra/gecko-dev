@@ -71,7 +71,9 @@ describe("loop.store.TextChatStore", function () {
       store.receivedTextChatMessage({
         contentType: CHAT_CONTENT_TYPES.TEXT,
         message: message,
-        timestamp: 0
+        extraData: undefined,
+        sentTimestamp: "2015-06-24T23:58:53.848Z",
+        receivedTimestamp: "1970-01-01T00:00:00.000Z"
       });
 
       expect(store.getStoreState("messageList")).eql([{
@@ -79,7 +81,8 @@ describe("loop.store.TextChatStore", function () {
         contentType: CHAT_CONTENT_TYPES.TEXT,
         message: message,
         extraData: undefined,
-        timestamp: 0
+        sentTimestamp: "2015-06-24T23:58:53.848Z",
+        receivedTimestamp: "1970-01-01T00:00:00.000Z"
       }]);
     });
 
@@ -121,7 +124,8 @@ describe("loop.store.TextChatStore", function () {
       var messageData = {
         contentType: CHAT_CONTENT_TYPES.TEXT,
         message: "It's awesome!",
-        timestamp: 0
+        sentTimestamp: "2015-06-24T23:58:53.848Z",
+        receivedTimestamp: "2015-06-24T23:58:53.848Z"
       };
 
       store.sendTextChatMessage(messageData);
@@ -131,7 +135,8 @@ describe("loop.store.TextChatStore", function () {
         contentType: messageData.contentType,
         message: messageData.message,
         extraData: undefined,
-        timestamp: 0
+        sentTimestamp: "2015-06-24T23:58:53.848Z",
+        receivedTimestamp: "2015-06-24T23:58:53.848Z"
       }]);
     });
 
@@ -160,7 +165,8 @@ describe("loop.store.TextChatStore", function () {
         contentType: CHAT_CONTENT_TYPES.ROOM_NAME,
         message: "Let's share!",
         extraData: undefined,
-        timestamp: undefined
+        sentTimestamp: undefined,
+        receivedTimestamp: undefined
       }]);
     });
 
@@ -182,12 +188,14 @@ describe("loop.store.TextChatStore", function () {
           contentType: CHAT_CONTENT_TYPES.ROOM_NAME,
           message: "Let's share!",
           extraData: undefined,
-          timestamp: undefined
+          sentTimestamp: undefined,
+          receivedTimestamp: undefined
         }, {
           type: CHAT_MESSAGE_TYPES.SPECIAL,
           contentType: CHAT_CONTENT_TYPES.CONTEXT,
           message: "A wonderful event",
-          timestamp: undefined,
+          sentTimestamp: undefined,
+          receivedTimestamp: undefined,
           extraData: {
             location: "http://wonderful.invalid",
             thumbnail: "fake"

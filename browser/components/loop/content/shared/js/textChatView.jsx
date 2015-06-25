@@ -56,14 +56,18 @@ loop.shared.views.chat = (function(mozL10n) {
     _renderTimestamp: function() {
       var date = new Date(this.props.timestamp);
       var minutes = date.getMinutes();
+      var hours   = date.getHours();
 
-      /* Date.getMinutes returns single digit when value is < 10 */
+      /* getMinutes/getHours returns single digit when value is < 10 */
       if (minutes < 10) {
         minutes = "0" + minutes;
       }
+      if (hours < 10) {
+        hours = "0" + hours;
+      }
 
       return <span className="text-chat-entry-timestamp">
-        {date.getHours()}:{minutes}
+        {hours}:{minutes}
       </span>;
     }
   });
@@ -398,6 +402,7 @@ loop.shared.views.chat = (function(mozL10n) {
 
   return {
     TextChatEntriesView: TextChatEntriesView,
+    TextChatEntry: TextChatEntry,
     TextChatView: TextChatView
   };
 })(navigator.mozL10n || document.mozL10n);
