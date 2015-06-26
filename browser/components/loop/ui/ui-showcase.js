@@ -29,6 +29,7 @@
   var UnsupportedBrowserView  = loop.webapp.UnsupportedBrowserView;
   var UnsupportedDeviceView   = loop.webapp.UnsupportedDeviceView;
   var StandaloneRoomView      = loop.standaloneRoomViews.StandaloneRoomView;
+  var FeedbackViewX           = loop.feedbackViews.FeedbackView;
 
   // 3. Shared components
   var ConversationToolbar = loop.shared.views.ConversationToolbar;
@@ -864,6 +865,11 @@
             React.createElement("p", {className: "note"}, 
               React.createElement("strong", null, "Note:"), " For the useable demo, you can access submitted data at ", 
               React.createElement("a", {href: "https://input.allizom.org/"}, "input.allizom.org"), "."
+            ), 
+            React.createElement(Example, {dashed: true, 
+                     style: {width: "300px", height: "272px"}, 
+                     summary: "Default (useable demo)"}, 
+              React.createElement(FeedbackViewX, null)
             ), 
             React.createElement(Example, {dashed: true, 
                      style: {width: "300px", height: "272px"}, 

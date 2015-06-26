@@ -29,6 +29,7 @@
   var UnsupportedBrowserView  = loop.webapp.UnsupportedBrowserView;
   var UnsupportedDeviceView   = loop.webapp.UnsupportedDeviceView;
   var StandaloneRoomView      = loop.standaloneRoomViews.StandaloneRoomView;
+  var FeedbackViewX           = loop.feedbackViews.FeedbackView;
 
   // 3. Shared components
   var ConversationToolbar = loop.shared.views.ConversationToolbar;
@@ -865,6 +866,11 @@
               <strong>Note:</strong> For the useable demo, you can access submitted data at&nbsp;
               <a href="https://input.allizom.org/">input.allizom.org</a>.
             </p>
+            <Example dashed={true}
+                     style={{width: "300px", height: "272px"}}
+                     summary="Default (useable demo)">
+              <FeedbackViewX />
+            </Example>
             <Example dashed={true}
                      style={{width: "300px", height: "272px"}}
                      summary="Default (useable demo)">
