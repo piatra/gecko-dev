@@ -438,8 +438,16 @@
 .feedback-button-container {
   order: 0;
   flex: 0 1 auto;
-  align-self: center;
   margin: 30px;
+  align-self: center;
+}
+
+.feedback-button-container button {
+  border: none;
+  color: #fff;
+  background: #339DC7;
+  padding: .5em 2em;
+  margin: 0 30px;
 }
 
 .feedback {

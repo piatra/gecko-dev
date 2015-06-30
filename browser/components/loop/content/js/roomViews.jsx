@@ -12,6 +12,7 @@ loop.roomViews = (function(mozL10n) {
   var sharedMixins = loop.shared.mixins;
   var sharedUtils = loop.shared.utils;
   var sharedViews = loop.shared.views;
+  var feedbackViews = loop.feedbackViews;
 
   /**
    * ActiveRoomStore mixin.
@@ -590,6 +591,10 @@ loop.roomViews = (function(mozL10n) {
       sharedMixins.WindowCloseMixin
     ],
 
+    statics: {
+      feedbackPeriod: 15770000 * 1000 // 6 months
+    },
+
     propTypes: {
       dispatcher: React.PropTypes.instanceOf(loop.Dispatcher).isRequired,
       // The poster URLs are for UI-showcase testing and development.
@@ -717,6 +722,51 @@ loop.roomViews = (function(mozL10n) {
              !this.state.mediaConnected;
     },
 
+    /**
+     * Update the time feedback view was displayed
+     *
+     * @private
+     */
+    _setFeedbackTimestamp: function() {
+      this.props.mozLoop.setLoopPref("feedback.timestamp",
+                                     (new Date()).toISOString());
+    },
+
+    /**
+     * We only show the feedback for once every 6 months.
+     *
+     * @returns {boolean}
+     * @private
+     */
+    _shouldRenderFeedbackView: function() {
+      var delta;
+      var timestamp = this.props.mozLoop.getLoopPref("feedback.timestamp");
+
+      if (timestamp === "0") {
+        // Set the pref for the first time.
+        this._setFeedbackTimestamp();
+        delta = 0;
+      } else {
+        delta = (new Date()) - (new Date(timestamp));
+      }
+
+      // Show timestamp if never displayed before or 6 months passed.
+      if (delta === 0 || delta >= this.constructor.feedbackPeriod) {
+        this._setFeedbackTimestamp();
+        return true;
+      }
+
+      return false;
+    },
+
+    componentDidUpdate: function(prevProps, prevState) {
+      // If the feedback form is not rendered go ahead and close the window.
+      if (prevState.roomState === ROOM_STATES.ENDED &&
+          !this._shouldRenderFeedbackView()) {
+        this.closeWindow();
+      }
+    },
+
     render: function() {
       if (this.state.roomName) {
         this.setTitle(this.state.roomName);
@@ -737,6 +787,7 @@ loop.roomViews = (function(mozL10n) {
       var shouldRenderInvitationOverlay = this._shouldRenderInvitationOverlay();
       var shouldRenderContextView = this._shouldRenderContextView();
       var roomData = this.props.roomStore.getStoreState("activeRoom");
+      var shouldRenderFeedbackView = this._shouldRenderFeedbackView();
 
       switch(this.state.roomState) {
         case ROOM_STATES.FAILED:
@@ -750,10 +801,15 @@ loop.roomViews = (function(mozL10n) {
           );
         }
         case ROOM_STATES.ENDED: {
-          return (
-            <sharedViews.FeedbackView
-              onAfterFeedbackReceived={this.closeWindow} />
-          );
+          if (shouldRenderFeedbackView) {
+            return (
+              <feedbackViews.FeedbackView
+                onAfterFeedbackReceived={this.closeWindow}
+                openURL={mozL10n.openURL} />
+            );
+          }
+
+          return null;
         }
         default: {
 

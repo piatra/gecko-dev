@@ -6,21 +6,25 @@ var loop = loop || {};
 loop.feedbackViews = (function(mozL10n) {
   "use strict";
 
-  var sharedMixins = loop.shared.mixins;
-
   var FeedbackView = React.createClass({
-    mixins: [
-      Backbone.Events,
-      sharedMixins.WindowCloseMixin
-    ],
+    propTypes: {
+      onAfterFeedbackReceived: React.PropTypes.func.isRequired,
+      openURL: React.PropTypes.func.isRequired
+    },
+
+    onFeedbackButtonClick: function() {
+      this.props.openURL("http://mozilla.com");
+      this.props.onAfterFeedbackReceived();
+    },
 
     render: function() {
       return (
         <div className="feedback-view-container">
           <div className="feedback-hello-logo" />
           <div className="feedback-button-container">
-            <button>
-              {mozL10n.get("feedback_leave_button")}
+            <button onClick={this.onFeedbackButtonClick}
+                    ref="feedbackFormBtn">
+              {mozL10n.get("feedback_request_button")}
             </button>
           </div>
         </div>

@@ -9,6 +9,7 @@ describe("loop.roomViews", function () {
   var sharedActions = loop.shared.actions;
   var sharedUtils = loop.shared.utils;
   var sharedViews = loop.shared.views;
+  var sharedMixins = loop.shared.mixins;
   var ROOM_STATES = loop.store.ROOM_STATES;
   var SCREEN_SHARE_STATES = loop.shared.utils.SCREEN_SHARE_STATES;
 
@@ -333,13 +334,14 @@ describe("loop.roomViews", function () {
       sandbox.stub(dispatcher, "dispatch");
     });
 
-    function mountTestComponent() {
+    function mountTestComponent(props) {
+      props = _.extend({
+        dispatcher: dispatcher,
+        roomStore: roomStore,
+        mozLoop: fakeMozLoop
+      }, props);
       return TestUtils.renderIntoDocument(
-        React.createElement(loop.roomViews.DesktopRoomConversationView, {
-          dispatcher: dispatcher,
-          roomStore: roomStore,
-          mozLoop: fakeMozLoop
-        }));
+        React.createElement(loop.roomViews.DesktopRoomConversationView, props));
     }
 
     it("should dispatch a setMute action when the audio mute button is pressed",
@@ -515,18 +517,84 @@ describe("loop.roomViews", function () {
             loop.roomViews.DesktopRoomConversationView);
         });
 
-      it("should render the FeedbackView if roomState is `ENDED`",
-        function() {
+      it("should render the FeedbackView if roomState is `ENDED` and feedback" +
+           "timestamp is older than 6 months",
+      function() {
+          var date = new Date(new Date() - 15770000 * 1000);
+          var stub = sinon.stub().returns(date.toISOString());
           activeRoomStore.setStoreState({
             roomState: ROOM_STATES.ENDED,
             used: true
           });
 
-          view = mountTestComponent();
+          view = mountTestComponent({
+            mozLoop: {
+              getLoopPref: stub,
+              setLoopPref: sinon.stub()
+            }
+          });
 
           TestUtils.findRenderedComponentWithType(view,
-            loop.shared.views.FeedbackView);
+            loop.feedbackViews.FeedbackView);
         });
+
+      it("should set new feedback.timestamp when FeedbackView is rendered",
+         function() {
+           var date = new Date(new Date() - 15770000 * 1000);
+           var getStub = sinon.stub().returns(date.toISOString());
+           var setStub = sinon.stub();
+           activeRoomStore.setStoreState({
+             roomState: ROOM_STATES.ENDED,
+             used: true
+           });
+
+           view = mountTestComponent({
+             mozLoop: {
+               getLoopPref: getStub,
+               setLoopPref: setStub
+             }
+           });
+
+           sinon.assert.calledOnce(setStub);
+           sinon.assert.calledWith(setStub, "feedback.timestamp");
+        });
+
+      it("should not render the feedback view if feedback timestamp is less " +
+         "than 6 months", function() {
+          var stub = sinon.stub().returns((new Date()).toISOString());
+          activeRoomStore.setStoreState({
+            roomState: ROOM_STATES.ENDED,
+            used: true
+          });
+
+          view = mountTestComponent({
+            mozLoop: {
+              getLoopPref: stub,
+              setLoopPref: sinon.stub()
+            }
+          });
+
+          expect(view.getDOMNode()).to.eql(null);
+      });
+
+      it("should call closeWindow if FeedbackView is not rendered", function() {
+          var stub = sinon.stub().returns((new Date()).toISOString());
+          activeRoomStore.setStoreState({
+            roomState: ROOM_STATES.ENDED,
+            used: true
+          });
+
+          view = mountTestComponent({
+            mozLoop: {
+              getLoopPref: stub,
+              setLoopPref: sinon.stub()
+            }
+          });
+          var closeWindowStub = sandbox.stub(view, "closeWindow");
+          view.setState({foo: "bar"});
+
+          sinon.assert.calledOnce(closeWindowStub);
+      });
 
       it("should display loading spinner when localSrcVideoObject is null",
          function() {

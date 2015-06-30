@@ -71,6 +71,7 @@ loop.standaloneRoomViews = (function(mozL10n) {
 
     render: function() {
       switch(this.props.roomState) {
+        case ROOM_STATES.ENDED:
         case ROOM_STATES.INIT:
         case ROOM_STATES.READY: {
           // XXX: In ENDED state, we should rather display the feedback form.
@@ -125,22 +126,6 @@ loop.standaloneRoomViews = (function(mozL10n) {
               React.createElement("p", null, this._renderCallToActionLink())
             )
           );
-        }
-        case ROOM_STATES.ENDED: {
-          if (this.props.roomUsed) {
-            return (
-              React.createElement("div", {className: "ended-conversation"}, 
-                React.createElement(sharedViews.FeedbackView, {
-                  noCloseText: true, 
-                  onAfterFeedbackReceived: this.onFeedbackSent})
-              )
-            );
-          }
-
-          // In case the room was not used (no one was here), we
-          // bypass the feedback form.
-          this.onFeedbackSent();
-          return null;
         }
         case ROOM_STATES.FAILED: {
           return (

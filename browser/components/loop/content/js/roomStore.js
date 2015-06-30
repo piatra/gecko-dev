@@ -135,6 +135,7 @@ loop.store = loop.store || {};
      * Updates active room store state.
      */
     _onActiveRoomStoreChange: function() {
+      console.log("xxx room change", arguments);
       this.setStoreState({activeRoom: this.activeRoomStore.getStoreState()});
     },
 
@@ -162,6 +163,7 @@ loop.store = loop.store || {};
      * @param {Object} updatedRoomData The updated room data.
      */
     _onRoomUpdated: function(eventName, updatedRoomData) {
+      console.log("xxx room updated");
       this.dispatchAction(new sharedActions.UpdateRoomList({
         roomList: this._storeState.rooms.map(function(room) {
           return room.roomToken === updatedRoomData.roomToken ?
@@ -177,6 +179,7 @@ loop.store = loop.store || {};
      * @param {Object} removedRoomData The removed room data.
      */
     _onRoomRemoved: function(eventName, removedRoomData) {
+      console.log("xxx room removed");
       this.dispatchAction(new sharedActions.UpdateRoomList({
         roomList: this._storeState.rooms.filter(function(room) {
           return room.roomToken !== removedRoomData.roomToken;
