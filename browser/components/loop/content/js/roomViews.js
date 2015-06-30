@@ -742,16 +742,15 @@ loop.roomViews = (function(mozL10n) {
       var delta;
       var timestamp = this.props.mozLoop.getLoopPref("feedback.timestamp");
 
+      // 0 is default value for pref. Always show feedback form on first use.
       if (timestamp === "0") {
-        // Set the pref for the first time.
-        this._setFeedbackTimestamp();
-        delta = 0;
-      } else {
-        delta = (new Date()) - (new Date(timestamp));
+        return true;
       }
 
-      // Show timestamp if never displayed before or 6 months passed.
-      if (delta === 0 || delta >= this.constructor.feedbackPeriod) {
+      delta = (new Date()) - (new Date(timestamp));
+
+      // Show timestamp if feedback period (6 months) passed.
+      if (delta >= this.constructor.feedbackPeriod) {
         this._setFeedbackTimestamp();
         return true;
       }
@@ -760,10 +759,17 @@ loop.roomViews = (function(mozL10n) {
     },
 
     componentDidUpdate: function(prevProps, prevState) {
-      // If the feedback form is not rendered go ahead and close the window.
+      // Handle timestamp and window closing only when the call has terminated.
       if (prevState.roomState === ROOM_STATES.ENDED &&
-          !this._shouldRenderFeedbackView()) {
-        this.closeWindow();
+          this.state.roomState === ROOM_STATES.ENDED) {
+        var timestamp = this.props.mozLoop.getLoopPref("feedback.timestamp");
+
+        // 0 is default value for pref. Set the timestamp for the first time.
+        if (timestamp === "0") {
+          this._setFeedbackTimestamp();
+        } else if (!this._shouldRenderFeedbackView()) {
+          this.closeWindow();
+        }
       }
     },
 
@@ -805,7 +811,7 @@ loop.roomViews = (function(mozL10n) {
             return (
               React.createElement(feedbackViews.FeedbackView, {
                 onAfterFeedbackReceived: this.closeWindow, 
-                openURL: mozL10n.openURL})
+                openURL: this.props.mozLoop.openURL})
             );
           }
 

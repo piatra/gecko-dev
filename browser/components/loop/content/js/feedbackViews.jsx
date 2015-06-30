@@ -18,6 +18,7 @@ loop.feedbackViews = (function(mozL10n) {
     },
 
     render: function() {
+      console.log(this.props.openURL);
       return (
         <div className="feedback-view-container">
           <div className="feedback-hello-logo" />
