@@ -673,12 +673,6 @@ html[dir="rtl"] .generate-url-spinner {
   color: #888;
 }
 
-.footer-signin-separator {
-  border-right: 1px solid #aaa;
-  height: 16px;
-  margin: 0 1em;
-}
-
 /* Settings (gear) menu */
 
 .button-settings {
@@ -765,9 +759,8 @@ html[dir="rtl"] .settings-menu .dropdown-menu {
   align-content: stretch;
   align-items: center;
   font-size: 1em;
-  border-top: 1px solid #D1D1D1;
-  background-color: #eaeaea;
-  color: #7f7f7f;
+  background-color: #fff;
+  color: #4a4a4a;
   padding: .5rem 1rem;
 }
 

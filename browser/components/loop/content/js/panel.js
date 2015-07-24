@@ -443,8 +443,13 @@ loop.panel = (function(_, mozL10n) {
   /**
    * FxA sign in/up link component.
    */
-  var AuthLink = React.createClass({displayName: "AuthLink",
+  var AccountLink = React.createClass({displayName: "AccountLink",
     mixins: [sharedMixins.WindowCloseMixin],
+
+    propTypes: {
+      fxAEnabled: React.PropTypes.bool.isRequired,
+      userProfile: React.PropTypes.object.isRequired
+    },
 
     handleSignUpLinkClick: function() {
       navigator.mozLoop.logInToFxA();
@@ -452,9 +457,14 @@ loop.panel = (function(_, mozL10n) {
     },
 
     render: function() {
-      if (!navigator.mozLoop.fxAEnabled || navigator.mozLoop.userProfile) {
+      if (!this.props.fxAEnabled) {
         return null;
       }
+
+      if (this.props.userProfile) {
+        return React.createElement("div", null, this.props.userProfile.email);
+      }
+
       return (
         React.createElement("p", {className: "signin-link"}, 
           React.createElement("a", {href: "#", onClick: this.handleSignUpLinkClick}, 
@@ -622,7 +632,7 @@ loop.panel = (function(_, mozL10n) {
       dispatcher: React.PropTypes.instanceOf(loop.Dispatcher).isRequired,
       mozLoop: React.PropTypes.object.isRequired,
       store: React.PropTypes.instanceOf(loop.store.RoomStore).isRequired,
-      userDisplayName: React.PropTypes.string.isRequired  // for room creation
+      userProfile: React.PropTypes.object.isRequired  // for room creation
     },
 
     getInitialState: function() {
@@ -663,6 +673,11 @@ loop.panel = (function(_, mozL10n) {
       return mozL10n.get("rooms_list_current_conversations", {num: numRooms});
     },
 
+    _getUserDisplayName: function() {
+      return this.props.userProfile && this.props.userProfile.email ||
+        mozL10n.get("display_name_guest");
+    },
+
     render: function() {
       if (this.state.error) {
         // XXX Better end user reporting of errors.
@@ -687,7 +702,7 @@ loop.panel = (function(_, mozL10n) {
             mozLoop: this.props.mozLoop, 
             pendingOperation: this.state.pendingCreation ||
               this.state.pendingInitialRetrieval, 
-            userDisplayName: this.props.userDisplayName})
+            userDisplayName: this._getUserDisplayName()})
         )
       );
     }
@@ -917,11 +932,6 @@ loop.panel = (function(_, mozL10n) {
       window.removeEventListener("UIAction", this._UIActionHandler);
     },
 
-    _getUserDisplayName: function() {
-      return this.state.userProfile && this.state.userProfile.email ||
-             mozL10n.get("display_name_guest");
-    },
-
     render: function() {
       var NotificationListView = sharedViews.NotificationListView;
 
@@ -961,7 +971,7 @@ loop.panel = (function(_, mozL10n) {
               React.createElement(RoomList, {dispatcher: this.props.dispatcher, 
                         mozLoop: this.props.mozLoop, 
                         store: this.props.roomStore, 
-                        userDisplayName: this._getUserDisplayName()}), 
+                        userProfile: this.state.userProfile}), 
               React.createElement(ToSView, null)
             ), 
             React.createElement(Tab, {name: "contacts"}, 
@@ -991,12 +1001,11 @@ loop.panel = (function(_, mozL10n) {
           ), 
           React.createElement("div", {className: "footer"}, 
             React.createElement("div", {className: "user-details"}, 
-              React.createElement(UserIdentity, {displayName: this._getUserDisplayName()}), 
               React.createElement(AvailabilityDropdown, null)
             ), 
             React.createElement("div", {className: "signin-details"}, 
-              React.createElement(AuthLink, null), 
-              React.createElement("div", {className: "footer-signin-separator"}), 
+              React.createElement(AccountLink, {userProfile: this.state.userProfile, 
+                           fxAEnabled: this.props.mozLoop.fxAEnabled}), 
               React.createElement(SettingsDropdown, {mozLoop: this.props.mozLoop})
             )
           )
@@ -1004,6 +1013,8 @@ loop.panel = (function(_, mozL10n) {
       );
     }
   });
+
+  //<UserIdentity displayName={this._getUserDisplayName()} />
 
   /**
    * Panel initialisation.
@@ -1038,7 +1049,7 @@ loop.panel = (function(_, mozL10n) {
 
   return {
     init: init,
-    AuthLink: AuthLink,
+    AccountLink: AccountLink,
     AvailabilityDropdown: AvailabilityDropdown,
     GettingStartedView: GettingStartedView,
     NewRoomView: NewRoomView,
