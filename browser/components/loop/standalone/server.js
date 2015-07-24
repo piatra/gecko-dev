@@ -60,7 +60,10 @@ app.get("/content/c/config.js", getConfigFile);
 // /ui - for the ui showcase
 // /content - for the standalone files.
 
+// TODO path.join()
 app.use("/ui", express.static(__dirname + "/../ui"));
+app.use("/ui/loop/", express.static(__dirname + "/../content/"));
+app.use("/ui/shared/", express.static(__dirname + "/../content/shared/"));
 
 // This exists exclusively for the unit tests. They are served the
 // whole loop/ directory structure and expect some files in the standalone directory.

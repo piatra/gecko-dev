@@ -161,18 +161,18 @@ loop.panel = (function(_, mozL10n) {
       return (
         <div className="dropdown">
           <p className="dnd-status" onClick={this.toggleDropdownMenu} ref="menu-button">
+            <img src="loop/shared/img/status_available.svg" />
             <span>{availabilityText}</span>
-            <i className={availabilityStatus}></i>
           </p>
           <ul className={availabilityDropdown}>
             <li className="dropdown-menu-item dnd-make-available"
                 onClick={this.changeAvailability("available")}>
-              <i className="status status-available"></i>
+            <img src="loop/shared/img/status_available.svg" />
               <span>{mozL10n.get("display_name_available_status")}</span>
             </li>
             <li className="dropdown-menu-item dnd-make-unavailable"
                 onClick={this.changeAvailability("do-not-disturb")}>
-              <i className="status status-dnd"></i>
+            <img src="loop/shared/img/status_available.svg" />
               <span>{mozL10n.get("display_name_dnd_status")}</span>
             </li>
           </ul>

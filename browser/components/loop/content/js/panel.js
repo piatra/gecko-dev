@@ -161,18 +161,18 @@ loop.panel = (function(_, mozL10n) {
       return (
         React.createElement("div", {className: "dropdown"}, 
           React.createElement("p", {className: "dnd-status", onClick: this.toggleDropdownMenu, ref: "menu-button"}, 
-            React.createElement("span", null, availabilityText), 
-            React.createElement("i", {className: availabilityStatus})
+            React.createElement("img", {src: "loop/shared/img/status_available.svg"}), 
+            React.createElement("span", null, availabilityText)
           ), 
           React.createElement("ul", {className: availabilityDropdown}, 
             React.createElement("li", {className: "dropdown-menu-item dnd-make-available", 
                 onClick: this.changeAvailability("available")}, 
-              React.createElement("i", {className: "status status-available"}), 
+            React.createElement("img", {src: "loop/shared/img/status_available.svg"}), 
               React.createElement("span", null, mozL10n.get("display_name_available_status"))
             ), 
             React.createElement("li", {className: "dropdown-menu-item dnd-make-unavailable", 
                 onClick: this.changeAvailability("do-not-disturb")}, 
-              React.createElement("i", {className: "status status-dnd"}), 
+            React.createElement("img", {src: "loop/shared/img/status_available.svg"}), 
               React.createElement("span", null, mozL10n.get("display_name_dnd_status"))
             )
           )
