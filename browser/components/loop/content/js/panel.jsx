@@ -448,7 +448,7 @@ loop.panel = (function(_, mozL10n) {
 
     propTypes: {
       fxAEnabled: React.PropTypes.bool.isRequired,
-      userProfile: React.PropTypes.object.isRequired
+      userProfile: React.PropTypes.object
     },
 
     handleSignUpLinkClick: function() {
@@ -632,7 +632,8 @@ loop.panel = (function(_, mozL10n) {
       dispatcher: React.PropTypes.instanceOf(loop.Dispatcher).isRequired,
       mozLoop: React.PropTypes.object.isRequired,
       store: React.PropTypes.instanceOf(loop.store.RoomStore).isRequired,
-      userProfile: React.PropTypes.object.isRequired  // for room creation
+      // for room creation
+      userProfile: React.PropTypes.object
     },
 
     getInitialState: function() {
@@ -829,7 +830,7 @@ loop.panel = (function(_, mozL10n) {
         React.PropTypes.instanceOf(loop.store.RoomStore).isRequired,
       selectedTab: React.PropTypes.string,
       // Used only for unit tests.
-      showTabButtons: React.PropTypes.bool,
+      showTabButtons: React.PropTypes.bool
     },
 
     getInitialState: function() {
