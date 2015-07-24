@@ -461,7 +461,7 @@ loop.panel = (function(_, mozL10n) {
         return null;
       }
 
-      if (this.props.userProfile) {
+      if (this.props.userProfile && this.props.userProfile.email) {
         return <div>{this.props.userProfile.email}</div>;
       }
 
@@ -830,14 +830,12 @@ loop.panel = (function(_, mozL10n) {
       selectedTab: React.PropTypes.string,
       // Used only for unit tests.
       showTabButtons: React.PropTypes.bool,
-      // Mostly used for UI components showcase and unit tests
-      userProfile: React.PropTypes.object
     },
 
     getInitialState: function() {
       return {
         hasEncryptionKey: this.props.mozLoop.hasEncryptionKey,
-        userProfile: this.props.userProfile || this.props.mozLoop.userProfile,
+        userProfile: this.props.mozLoop.userProfile,
         gettingStartedSeen: this.props.mozLoop.getLoopPref("gettingStarted.seen")
       };
     },

@@ -72,7 +72,8 @@ describe("loop.panel", function() {
       logOutFromFxA: sandbox.stub(),
       notifyUITour: sandbox.stub(),
       openURL: sandbox.stub(),
-      getSelectedTabMetadata: sandbox.stub()
+      getSelectedTabMetadata: sandbox.stub(),
+      userProfile: {}
     };
 
     document.mozL10n.initialize(navigator.mozLoop);
@@ -236,7 +237,6 @@ describe("loop.panel", function() {
     });
 
     describe("AccountLink", function() {
-
       beforeEach(function() {
         navigator.mozLoop.calls = { clearCallInProgress: function() {} };
       });
@@ -249,7 +249,6 @@ describe("loop.panel", function() {
 
       it("should trigger the FxA sign in/up process when clicking the link",
         function() {
-          navigator.mozLoop.loggedInToFxA = false;
           navigator.mozLoop.logInToFxA = sandbox.stub();
 
           var view = createTestPanelView();
@@ -277,7 +276,10 @@ describe("loop.panel", function() {
         function() {
           navigator.mozLoop.fxAEnabled = false;
           var view = TestUtils.renderIntoDocument(
-            React.createElement(loop.panel.AccountLink));
+            React.createElement(loop.panel.AccountLink, {
+              fxAEnabled: false,
+              userProfile: {}
+            }));
           expect(view.getDOMNode()).to.be.null;
       });
     });
@@ -300,17 +302,39 @@ describe("loop.panel", function() {
         navigator.mozLoop.fxAEnabled = true;
       });
 
-      it("should show a signin entry when user is not authenticated",
-        function() {
-          navigator.mozLoop.loggedInToFxA = false;
+      describe("UserLoggedOut", function() {
+        beforeEach(function() {
+          fakeMozLoop.userProfile = null;
+        });
 
+        it("should show a signin entry when user is not authenticated",
+           function() {
+             var view = mountTestComponent();
+
+             expect(view.getDOMNode().querySelectorAll(".icon-signout"))
+             .to.have.length.of(0);
+             expect(view.getDOMNode().querySelectorAll(".icon-signin"))
+             .to.have.length.of(1);
+           });
+
+        it("should hide any account entry when user is not authenticated",
+           function() {
+             var view = mountTestComponent();
+
+             expect(view.getDOMNode().querySelectorAll(".icon-account"))
+             .to.have.length.of(0);
+           });
+
+        it("should sign in the user on click when unauthenticated", function() {
+          navigator.mozLoop.loggedInToFxA = false;
           var view = mountTestComponent();
 
-          expect(view.getDOMNode().querySelectorAll(".icon-signout"))
-            .to.have.length.of(0);
-          expect(view.getDOMNode().querySelectorAll(".icon-signin"))
-            .to.have.length.of(1);
+          TestUtils.Simulate.click(
+            view.getDOMNode().querySelector(".icon-signin"));
+
+            sinon.assert.calledOnce(navigator.mozLoop.logInToFxA);
         });
+      });
 
       it("should show a signout entry when user is authenticated", function() {
         navigator.mozLoop.userProfile = {email: "test@example.com"};
@@ -341,26 +365,6 @@ describe("loop.panel", function() {
           view.getDOMNode().querySelector(".icon-account"));
 
         sinon.assert.calledOnce(navigator.mozLoop.openFxASettings);
-      });
-
-      it("should hide any account entry when user is not authenticated",
-        function() {
-          navigator.mozLoop.loggedInToFxA = false;
-
-          var view = mountTestComponent();
-
-          expect(view.getDOMNode().querySelectorAll(".icon-account"))
-            .to.have.length.of(0);
-        });
-
-      it("should sign in the user on click when unauthenticated", function() {
-        navigator.mozLoop.loggedInToFxA = false;
-        var view = mountTestComponent();
-
-        TestUtils.Simulate.click(
-          view.getDOMNode().querySelector(".icon-signin"));
-
-        sinon.assert.calledOnce(navigator.mozLoop.logInToFxA);
       });
 
       it("should sign out the user on click when authenticated", function() {
@@ -724,7 +728,8 @@ describe("loop.panel", function() {
           store: roomStore,
           dispatcher: dispatcher,
           userDisplayName: fakeEmail,
-          mozLoop: fakeMozLoop
+          mozLoop: fakeMozLoop,
+          userProfile: {}
         }));
     }
 
