@@ -1004,8 +1004,8 @@ loop.panel = (function(_, mozL10n) {
               React.createElement(AvailabilityDropdown, null)
             ), 
             React.createElement("div", {className: "signin-details"}, 
-              React.createElement(AccountLink, {userProfile: this.state.userProfile, 
-                           fxAEnabled: this.props.mozLoop.fxAEnabled}), 
+              React.createElement(AccountLink, {fxAEnabled: this.props.mozLoop.fxAEnabled, 
+                           userProfile: this.state.userProfile}), 
               React.createElement(SettingsDropdown, {mozLoop: this.props.mozLoop})
             )
           )

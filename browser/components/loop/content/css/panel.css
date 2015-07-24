@@ -631,7 +631,7 @@ html[dir="rtl"] .generate-url-spinner {
   /* Undo the start border + padding so that unhovered dnd-status is aligned
      as if there was no additional spacing. */
   -moz-margin-start: calc(-1px + -4px);
-  font-size: .9em;
+  font-size: 0.6rem;
   cursor: pointer;
   border-radius: 3px;
 }
@@ -667,10 +667,11 @@ html[dir="rtl"] .generate-url-spinner {
   text-align: right;
 }
 
-.signin-link a {
-  font-size: .9em;
+.signin-link > a {
+  font-size: 0.6rem;
+  font-weight: 500;
   text-decoration: none;
-  color: #888;
+  color: #00A9DC;
 }
 
 /* Settings (gear) menu */

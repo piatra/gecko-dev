@@ -1004,8 +1004,8 @@ loop.panel = (function(_, mozL10n) {
               <AvailabilityDropdown />
             </div>
             <div className="signin-details">
-              <AccountLink userProfile={this.state.userProfile}
-                           fxAEnabled={this.props.mozLoop.fxAEnabled} />
+              <AccountLink fxAEnabled={this.props.mozLoop.fxAEnabled}
+                           userProfile={this.state.userProfile}/>
               <SettingsDropdown mozLoop={this.props.mozLoop}/>
             </div>
           </div>
