@@ -448,7 +448,7 @@ loop.panel = (function(_, mozL10n) {
 
     propTypes: {
       fxAEnabled: React.PropTypes.bool.isRequired,
-      userProfile: React.PropTypes.object
+      userProfile: userProfileValidator
     },
 
     handleSignUpLinkClick: function() {
@@ -622,6 +622,13 @@ loop.panel = (function(_, mozL10n) {
     }
   });
 
+  function userProfileValidator(props, propName, componentName) {
+    if (typeof props[propName] !== "object") {
+      return new Error("Required prop `" + propName +
+        "` was not correctly specified in `" + componentName + "`.");
+    }
+  }
+
   /**
    * Room list.
    */
@@ -633,7 +640,7 @@ loop.panel = (function(_, mozL10n) {
       mozLoop: React.PropTypes.object.isRequired,
       store: React.PropTypes.instanceOf(loop.store.RoomStore).isRequired,
       // for room creation
-      userProfile: React.PropTypes.object
+      userProfile: userProfileValidator
     },
 
     getInitialState: function() {
