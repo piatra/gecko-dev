@@ -347,7 +347,11 @@
 
   // Local mocks
 
-  var mockMozLoopRooms = _.extend({}, navigator.mozLoop);
+  var mockMozLoopLoggedIn = _.cloneDeep(navigator.mozLoop);
+  mockMozLoopLoggedIn.userProfile = {
+    email: "text@example.com",
+    uid: "0354b278a381d3cb408bb46ffc01266"
+  };
 
   var mockContact = {
     name: ["Mr Smith"],
@@ -610,25 +614,23 @@
               <strong>Note:</strong> 332px wide.
             </p>
             <Example dashed={true} style={{width: "332px"}} summary="Re-sign-in view">
-              <SignInRequestView mozLoop={mockMozLoopRooms} />
+              <SignInRequestView mozLoop={mockMozLoopLoggedIn} />
             </Example>
             <Example dashed={true} style={{width: "332px"}} summary="Room list tab">
               <PanelView client={mockClient}
                          dispatcher={dispatcher}
-                         mozLoop={mockMozLoopRooms}
+                         mozLoop={mockMozLoopLoggedIn}
                          notifications={notifications}
                          roomStore={roomStore}
-                         selectedTab="rooms"
-                         userProfile={{email: "test@example.com"}} />
+                         selectedTab="rooms" />
             </Example>
             <Example dashed={true} style={{width: "332px"}} summary="Contact list tab">
               <PanelView client={mockClient}
                          dispatcher={dispatcher}
-                         mozLoop={mockMozLoopRooms}
+                         mozLoop={mockMozLoopLoggedIn}
                          notifications={notifications}
                          roomStore={roomStore}
-                         selectedTab="contacts"
-                         userProfile={{email: "test@example.com"}} />
+                         selectedTab="contacts" />
             </Example>
             <Example dashed={true} style={{width: "332px"}} summary="Error Notification">
               <PanelView client={mockClient}
@@ -640,26 +642,23 @@
             <Example dashed={true} style={{width: "332px"}} summary="Error Notification - authenticated">
               <PanelView client={mockClient}
                          dispatcher={dispatcher}
-                         mozLoop={navigator.mozLoop}
+                         mozLoop={mockMozLoopLoggedIn}
                          notifications={errNotifications}
-                         roomStore={roomStore}
-                         userProfile={{email: "test@example.com"}} />
+                         roomStore={roomStore} />
             </Example>
             <Example dashed={true} style={{width: "332px"}} summary="Contact import success">
               <PanelView dispatcher={dispatcher}
-                         mozLoop={mockMozLoopRooms}
+                         mozLoop={mockMozLoopLoggedIn}
                          notifications={new loop.shared.models.NotificationCollection([{level: "success", message: "Import success"}])}
                          roomStore={roomStore}
-                         selectedTab="contacts"
-                         userProfile={{email: "test@example.com"}} />
+                         selectedTab="contacts" />
             </Example>
             <Example dashed={true} style={{width: "332px"}} summary="Contact import error">
               <PanelView dispatcher={dispatcher}
-                         mozLoop={mockMozLoopRooms}
+                         mozLoop={mockMozLoopLoggedIn}
                          notifications={new loop.shared.models.NotificationCollection([{level: "error", message: "Import error"}])}
                          roomStore={roomStore}
-                         selectedTab="contacts"
-                         userProfile={{email: "test@example.com"}} />
+                         selectedTab="contacts" />
             </Example>
           </Section>
 
@@ -670,7 +669,7 @@
                 <AcceptCallView callType={CALL_TYPES.AUDIO_VIDEO}
                                 callerId="Mr Smith"
                                 dispatcher={dispatcher}
-                                mozLoop={mockMozLoopRooms} />
+                                mozLoop={mockMozLoopLoggedIn} />
               </div>
             </Example>
 
@@ -680,7 +679,7 @@
                 <AcceptCallView callType={CALL_TYPES.AUDIO_ONLY}
                                 callerId="Mr Smith"
                                 dispatcher={dispatcher}
-                                mozLoop={mockMozLoopRooms} />
+                                mozLoop={mockMozLoopLoggedIn} />
               </div>
             </Example>
           </Section>
@@ -692,7 +691,7 @@
                 <AcceptCallView callType={CALL_TYPES.AUDIO_VIDEO}
                                 callerId="Mr Smith"
                                 dispatcher={dispatcher}
-                                mozLoop={mockMozLoopRooms}
+                                mozLoop={mockMozLoopLoggedIn}
                                 showMenu={true} />
               </div>
             </Example>

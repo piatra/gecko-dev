@@ -235,7 +235,7 @@ describe("loop.panel", function() {
       });
     });
 
-    describe("AuthLink", function() {
+    describe("AccountLink", function() {
 
       beforeEach(function() {
         navigator.mozLoop.calls = { clearCallInProgress: function() {} };
@@ -255,7 +255,7 @@ describe("loop.panel", function() {
           var view = createTestPanelView();
 
           TestUtils.Simulate.click(
-            view.getDOMNode().querySelector(".signin-link a"));
+            view.getDOMNode().querySelector(".signin-link > a"));
 
           sinon.assert.calledOnce(navigator.mozLoop.logInToFxA);
         });
@@ -268,7 +268,7 @@ describe("loop.panel", function() {
           var view = createTestPanelView();
 
           TestUtils.Simulate.click(
-            view.getDOMNode().querySelector(".signin-link a"));
+            view.getDOMNode().querySelector(".signin-link > a"));
 
           sinon.assert.calledOnce(fakeWindow.close);
         });
@@ -277,7 +277,7 @@ describe("loop.panel", function() {
         function() {
           navigator.mozLoop.fxAEnabled = false;
           var view = TestUtils.renderIntoDocument(
-            React.createElement(loop.panel.AuthLink));
+            React.createElement(loop.panel.AccountLink));
           expect(view.getDOMNode()).to.be.null;
       });
     });
